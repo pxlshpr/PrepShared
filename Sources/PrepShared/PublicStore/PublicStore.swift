@@ -236,7 +236,7 @@ func fetchUpdatedRecords(
     _ type: RecordType,
     _ desiredKeys: [CKRecord.FieldKey]?,
     _ context: NSManagedObjectContext,
-    _ persistRecordHandler: @escaping (CKRecord) -> ()
+    _ persistRecordHandler: @escaping (CKRecord) async throws -> ()
 ) async throws -> Date? {
     
     var latestModificationDate: Date? = nil
@@ -258,7 +258,7 @@ func fetchUpdatedRecords(
             for result in results {
                 switch result.1 {
                 case .success(let record):
-                    persistRecordHandler(record)
+                    try await persistRecordHandler(record)
                 case .failure(let error):
                     throw error
                 }
@@ -285,33 +285,4 @@ func fetchUpdatedRecords(
     let query = CKQuery.updatedRecords(of: type)
     try await processRecords(for: query)
     return latestModificationDate
-}
-
-extension Array where Element == CKRecord {
-    var latestModifiedDate: Date? {
-        self.compactMap { $0.modificationDate }
-            .sorted()
-            .last
-    }
-}
-
-extension Array where Element == (CKRecord.ID, Result<CKRecord, Error>) {
-    var records: [CKRecord] {
-        self.compactMap {
-            switch $0.1 {
-            case .success(let record):
-                return record
-            case .failure:
-                return nil
-            }
-        }
-    }
-    
-    func latestModificationDate(ifAfter date: Date?) -> Date? {
-        guard let latestModificationDate = records.latestModifiedDate else {
-            return date
-        }
-        guard let date else { return latestModificationDate }
-        return latestModificationDate > date ? latestModificationDate : date
-    }
 }

@@ -1,6 +1,69 @@
 import CoreData
 import SwiftSugar
+import OSLog
 
+//MARK: New Methods
+
+let coreDataLogger = Logger(subsystem: "CoreData", category: "Background")
+
+public extension NSManagedObjectContext {
+    func performAndMergeWith(
+        _ mainContext: NSManagedObjectContext,
+        _ block: @escaping () -> ()
+    ) async throws {
+        try await performInBackgroundContext(
+            self,
+            mainContext: mainContext,
+            performBlock: block
+        )
+    }
+}
+
+public func performInBackgroundContext(
+    _ context: NSManagedObjectContext,
+    mainContext: NSManagedObjectContext,
+    performBlock: @escaping () throws -> ()
+) async throws {
+    try await withCheckedThrowingContinuation { continuation in
+        do {
+            try performInBackgroundContext(
+                context,
+                mainContext: mainContext,
+                performBlock: performBlock
+            ) {
+                continuation.resume()
+            }
+        } catch {
+            continuation.resume(throwing: error)
+        }
+    }
+}
+
+public func performInBackgroundContext(
+    _ context: NSManagedObjectContext,
+    mainContext: NSManagedObjectContext,
+    performBlock: @escaping () throws -> (),
+    completion: @escaping () -> ()
+) throws {
+    
+    try performBlock()
+
+    let observer = NotificationCenter.default.addObserver(
+        forName: .NSManagedObjectContextDidSave,
+        object: context,
+        queue: .main
+    ) { (notification) in
+        mainContext.mergeChanges(fromContextDidSave: notification)
+        completion()
+    }
+    
+    try context.performAndWait {
+        try context.save()
+    }
+    NotificationCenter.default.removeObserver(observer)
+}
+
+//MARK: _ Legacy
 public extension NSManagedObjectContext {
     func performInBackgroundAndMergeWithMainContext(
         mainContext: NSManagedObjectContext,
@@ -39,14 +102,14 @@ public func performInBackgroundContextAndMergeWithMainContext(
     mainContext: NSManagedObjectContext,
     performBlock: @escaping () throws -> (),
     didSaveHandler: @escaping () -> (),
-    errorHandler: (() -> ())? = nil
+    errorHandler: ((Error) -> ())? = nil
 ) async {
     await bgContext.perform {
         
         do {
             try performBlock()
         } catch {
-            errorHandler?()
+            errorHandler?(error)
         }
         
         do {
@@ -66,6 +129,7 @@ public func performInBackgroundContextAndMergeWithMainContext(
 
         } catch {
             //TODO: Handle CoreData error here
+            errorHandler?(error)
         }
     }
 }

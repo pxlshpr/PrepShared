@@ -44,9 +44,10 @@ public extension PublicEntity {
         _ context: NSManagedObjectContext,
         _ desiredKeys: [CKRecord.FieldKey]?
     ) async throws -> Date? {
-        func persistHandler(record: CKRecord) {
-            @Sendable
-            func performChanges() {
+        
+        func persist(record: CKRecord) async throws {
+            
+            try await context.performAndMergeWith(PublicStore.mainContext) {
                 if let existing = Self.object(matching: record, context: context) as? Self {
                     existing.merge(with: record, context: context)
                 } else {
@@ -56,16 +57,17 @@ public extension PublicEntity {
                     context.insert(entity)
                 }
             }
-            
-            Task {
-                await context.performInBackgroundAndMergeWithMainContext(
-                    mainContext: PublicStore.mainContext,
-                    posting: notificationName,
-                    performBlock: performChanges
-                )
-            }
+
+            //MARK: Remove after testing
+//            Task {
+//                await context.performInBackgroundAndMergeWithMainContext(
+//                    mainContext: PublicStore.mainContext,
+//                    posting: notificationName,
+//                    performBlock: performChanges
+//                )
+//            }
         }
         
-        return try await fetchUpdatedRecords(recordType, desiredKeys, context, persistHandler)
+        return try await fetchUpdatedRecords(recordType, desiredKeys, context, persist)
     }
 }

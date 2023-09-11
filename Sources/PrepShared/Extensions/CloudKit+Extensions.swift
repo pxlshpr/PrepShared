@@ -148,3 +148,32 @@ public extension NSPredicate {
         NSPredicate(format: "id == %@", id.uuidString)
     }
 }
+
+public extension Array where Element == CKRecord {
+    var latestModifiedDate: Date? {
+        self.compactMap { $0.modificationDate }
+            .sorted()
+            .last
+    }
+}
+
+public extension Array where Element == (CKRecord.ID, Result<CKRecord, Error>) {
+    var records: [CKRecord] {
+        self.compactMap {
+            switch $0.1 {
+            case .success(let record):
+                return record
+            case .failure:
+                return nil
+            }
+        }
+    }
+    
+    func latestModificationDate(ifAfter date: Date?) -> Date? {
+        guard let latestModificationDate = records.latestModifiedDate else {
+            return date
+        }
+        guard let date else { return latestModificationDate }
+        return latestModificationDate > date ? latestModificationDate : date
+    }
+}
