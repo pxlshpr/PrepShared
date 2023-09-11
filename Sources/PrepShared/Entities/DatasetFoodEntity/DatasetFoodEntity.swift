@@ -312,3 +312,9 @@ public extension DatasetFoodEntity {
         isTrashed = food.isTrashed
     }
 }
+
+public extension DatasetFoodEntity {
+    var fullName: String {
+        Food(self).fullName
+    }
+}

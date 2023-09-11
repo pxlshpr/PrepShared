@@ -42,3 +42,9 @@ public extension FoodDensity {
         return WeightQuantity(value: weightAmount, unit: weightUnit)
     }
 }
+
+public extension FoodDensity {
+    var description: String {
+        "\(volumeAmount.cleanAmount) \(volumeUnit.abbreviation) = \(weightAmount.cleanAmount) \(weightUnit.abbreviation)"
+    }
+}

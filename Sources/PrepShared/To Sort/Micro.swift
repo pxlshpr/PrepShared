@@ -502,3 +502,16 @@ public extension Micro {
         }
     }
 }
+
+public extension Micro {
+    func convertToRDApercentage(amount: Double, unit: NutrientUnit) -> Double? {
+        guard supportsPercentages,
+              let dailyValue = dailyValue,
+              let rdaUnit = dailyValue.1.foodLabelUnit
+        else { return nil }
+        let rdaValue = dailyValue.0
+        
+        let converted = unit.convert(amount, to: rdaUnit)
+        return (converted * 100.0) / rdaValue
+    }
+}
