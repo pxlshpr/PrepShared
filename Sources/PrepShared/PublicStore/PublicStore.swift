@@ -246,14 +246,16 @@ func fetchUpdatedRecords(
     func processRecords(for query: CKQuery? = nil, continuing cursor: CKQueryOperation.Cursor? = nil) async throws {
         let logger = Logger(subsystem: "Fetch", category: "")
         do {
-            
+
+            logger.info("Fetching updated records for \(type.name)")
+
             let (results, cursor) = if let query {
                 try await PublicDatabase.records(matching: query, desiredKeys: desiredKeys)
             } else {
                 try await PublicDatabase.records(continuingMatchFrom: cursor!)
             }
             
-            logger.debug("Fetched \(results.count) records")
+            logger.info("Fetched \(results.count) \(type.name) records")
             
             latestModificationDate = results.latestModificationDate(ifAfter: latestModificationDate)
             
@@ -267,15 +269,15 @@ func fetchUpdatedRecords(
             }
             
             if let cursor {
-                logger.info("Received a cursor, running a new query with that")
+                logger.trace("Cursor received for \(type.name), running a new query with that")
                 try await processRecords(continuing: cursor)
             } else {
-                logger.info("✅ Looks like we're done with a lastModifiedDate of: \(String(describing: latestModificationDate))")
+                logger.info("✅ Fetch is complete since no cursor received for \(type.name). Latest modification date was \(String(describing: latestModificationDate))")
             }
             
         } catch let error as CKError {
             if error.code == .unknownItem {
-                logger.info("Fetch failed with unknownItem error, treating as success")
+                logger.warning("Fetch failed for \(type.name) with unknownItem error. This indicates that the Record does not exist on CloudKit yet. Continuing without throwing an error.")
             } else {
                 throw error
             }

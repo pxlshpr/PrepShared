@@ -20,7 +20,6 @@ extension PublicStore {
     private func fetchChanges(_ params: [FetchParam]) async {
         let context = PublicStore.newBackgroundContext()
         do {
-//            var dates: [Date?] = []
             for param in params {
                 
                 /// If UserDefaults does not have a date set, and we have a preset available, set that

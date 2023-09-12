@@ -1,5 +1,6 @@
 import Foundation
 import CloudKit
+import OSLog
 
 public let PublicDatabase = CKContainer.prepPublicDatabase
 
@@ -87,7 +88,8 @@ public extension CKDatabase {
             return results.compactMap {
                 switch $0.1 {
                 case .failure(let error):
-                    PublicStore.logger.error("Error fetching record: \(error.localizedDescription)")
+                    let logger = Logger(subsystem: "CKDatabase", category: "Query")
+                    logger.error("Error fetching record: \(error.localizedDescription)")
                     return nil
                 case .success(let record):
                     return record
@@ -133,13 +135,13 @@ public extension CKDatabase {
 public extension NSPredicate {
     static func recordsToDownload(for recordType: RecordType) -> NSPredicate {
         if let latestModificationDate = recordType.latestModificationDate {
-//            /// Always fetch records with a 15 minute buffer from the last fetched record's modification date to allow for CloudKit's indexing to complete
-//            let date = latestModificationDate.addingTimeInterval(-60 * 15)
+            /// Always fetch records 1/1000 of a second after the latest one to ensure we don't keep fetching that one
             let date = latestModificationDate.addingTimeInterval(0.001)
-            PublicStore.logger.debug("Getting records after: \(date)")
+            PublicStore.logger.debug("Fetching \(recordType.name) records modified after: \(date)")
             let predicate = NSPredicate(format: "modificationDate > %@", date as NSDate)
             return predicate
         } else {
+            PublicStore.logger.debug("Fetching all \(recordType.name) records")
             return NSPredicate(format: "TRUEPREDICATE")
         }
     }

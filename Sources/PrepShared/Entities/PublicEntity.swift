@@ -49,8 +49,10 @@ public extension PublicEntity {
             
             try await context.performAndMergeWith(PublicStore.mainContext) {
                 if let existing = Self.object(matching: record, context: context) as? Self {
+                    PublicStore.logger.trace("\(record.recordType) already exists, merging...")
                     existing.merge(with: record, context: context)
                 } else {
+                    PublicStore.logger.trace("\(record.recordType) does not exist, creating...")
                     let entity = Self(context: context)
                     entity.fill(with: record)
                     entity.isSynced = true
