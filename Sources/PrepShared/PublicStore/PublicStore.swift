@@ -82,3 +82,15 @@ extension PublicStore {
         }
     }
 }
+
+import UIKit
+
+public extension PublicStore {
+    static func imagesForVerifiedFood(with id: UUID) async -> [UIImage] {
+        let bgContext = newBackgroundContext()
+        guard let foodEntity = VerifiedFoodEntity.entity(in: bgContext, with: id) else {
+            fatalError()
+        }
+        return foodEntity.images
+    }
+}

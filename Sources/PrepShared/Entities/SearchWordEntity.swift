@@ -91,7 +91,7 @@ public extension SearchWordEntity {
         ]
         let predicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
 
-        return entities(predicate: predicate, in: context).first
+        return entities(in: context, predicate: predicate).first
     }
     
     static func fetch(
@@ -102,11 +102,11 @@ public extension SearchWordEntity {
         let sortDescriptors = [NSSortDescriptor(keyPath: \SearchWordEntity.singular, ascending: true)]
         
         return SearchWordEntity.entities(
+            in: context,
             predicate: fetchPredicate(matching: text),
             sortDescriptors: sortDescriptors,
             fetchLimit: FoodsPageSize,
-            fetchOffset: (page - 1) * FoodsPageSize,
-            in: context
+            fetchOffset: (page - 1) * FoodsPageSize
         )
     }
     
@@ -140,8 +140,8 @@ public extension SearchWordEntity {
 
     static func findWords(matching text: String, in context: NSManagedObjectContext) -> [SearchWordEntity] {
         SearchWordEntity.entities(
-            predicate: findPredicate(for: text),
-            in: context
+            in: context,
+            predicate: findPredicate(for: text)
         ).filter {
             $0.singular == text || $0.spellings.contains(text)
         }

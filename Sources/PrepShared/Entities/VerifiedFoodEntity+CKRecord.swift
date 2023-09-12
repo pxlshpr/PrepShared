@@ -8,7 +8,7 @@ public extension VerifiedFoodEntity {
     static var notificationName: Notification.Name { .didUpdateFood }
 
     static func entity(matching record: CKRecord, in context: NSManagedObjectContext) -> VerifiedFoodEntity? {
-        entity(with: record.id!, in: context)
+        entity(in: context, with: record.id!)
     }
     
     func fill(with record: CKRecord) {

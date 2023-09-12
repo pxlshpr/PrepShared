@@ -20,11 +20,11 @@ extension PublicStore.Container {
                 ]
                 
                 let results = DatasetFoodEntity.entities(
+                    in: bgContext,
                     predicate: predicate,
                     sortDescriptors: sortDescriptors,
                     fetchLimit: FoodsPageSize,
-                    fetchOffset: (page - 1) * FoodsPageSize,
-                    in: bgContext
+                    fetchOffset: (page - 1) * FoodsPageSize
                 )
                 
                 completion(results)
@@ -47,9 +47,9 @@ extension PublicStore.Container {
                 ]
                 
                 let results = DatasetFoodEntity.entities(
+                    in: bgContext,
                     predicate: predicate,
-                    sortDescriptors: sortDescriptors,
-                    in: bgContext
+                    sortDescriptors: sortDescriptors
                 )
                 
                 completion(results)
