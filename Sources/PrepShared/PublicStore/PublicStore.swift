@@ -22,6 +22,11 @@ let PresetModifiedDate = Date(timeIntervalSince1970: 1690830000) /// 1 Aug 2023
     var fetchTask: Task<Void, Error>? = nil
     
     var syncEntities: [SyncEntity] = []
+    
+    public static var syncEntities: [SyncEntity] {
+        get { shared.syncEntities }
+        set { shared.syncEntities = newValue }
+    }
 
     public convenience init() {
         self.init(container: Container())
