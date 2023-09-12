@@ -5,7 +5,7 @@ public let PublicDatabase = CKContainer.prepPublicDatabase
 
 public extension CKQuery {
     static func updatedRecords(of recordType: RecordType) -> CKQuery {
-        CKQuery(recordType: recordType.name, predicate: .recordsToDownload)
+        CKQuery(recordType: recordType.name, predicate: .recordsToDownload(for: recordType))
     }
     
     static func fetchRecord(id: UUID, recordType: RecordType) -> CKQuery {
@@ -131,8 +131,8 @@ public extension CKDatabase {
 }
 
 public extension NSPredicate {
-    static var recordsToDownload: NSPredicate {
-        if let latestModificationDate {
+    static func recordsToDownload(for recordType: RecordType) -> NSPredicate {
+        if let latestModificationDate = recordType.latestModificationDate {
 //            /// Always fetch records with a 15 minute buffer from the last fetched record's modification date to allow for CloudKit's indexing to complete
 //            let date = latestModificationDate.addingTimeInterval(-60 * 15)
             let date = latestModificationDate.addingTimeInterval(0.001)

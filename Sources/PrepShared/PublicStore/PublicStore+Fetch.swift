@@ -20,16 +20,27 @@ extension PublicStore {
     private func fetchChanges(_ params: [FetchParam]) async {
         let context = PublicStore.newBackgroundContext()
         do {
-            var dates: [Date?] = []
+//            var dates: [Date?] = []
             for param in params {
-                let date = try await param.type.fetchAndPersistUpdatedRecords(context, param.desiredKeys)
-                dates.append(date)
+                
+                /// If UserDefaults does not have a date set, and we have a preset available, set that
+                if let presetDate = param.presetModificationDate {
+                    param.recordType.setPresetModificationDateIfNeeded(presetDate)
+                }
+                
+                let latestDate = try await param.type.fetchAndPersistUpdatedRecords(
+                    context,
+                    param.desiredKeys
+                )
+                
+                /// If we fetched results and got returned the latest modification date, set that in the defaults
+                if let latestDate {
+                    param.recordType.setLatestModificationDate(latestDate)
+                }
+                
                 try Task.checkCancellation()
             }
             
-            if let latestDate = dates.latestDate {
-                setLatestModificationDate(latestDate)
-            }
         } catch {
             logger.error("Error during download: \(error.localizedDescription)")
         }

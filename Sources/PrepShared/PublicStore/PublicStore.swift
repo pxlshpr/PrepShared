@@ -83,10 +83,10 @@ import SwiftSugar
 
 extension PublicStore {
     public static func startUploadPoller() {
-        /// Set the preopulated `latestModificationDate` time if we have no version set (to ensure we don't redundantly download those entities)
-        if latestModificationDate == nil {
-            setLatestModificationDate(PresetModifiedDate)
-        }
+//        /// Set the preopulated `latestModificationDate` time if we have no version set (to ensure we don't redundantly download those entities)
+//        if latestModificationDate == nil {
+//            setLatestModificationDate(PresetModifiedDate)
+//        }
         
         shared.startUploadPoller()
     }
