@@ -7,28 +7,39 @@ import SwiftSugar
 private let UploadPollInterval: TimeInterval = 3
 
 extension PublicStore {
-    public static func startUploadPoller() {
-        shared.startUploadPoller()
+    
+    public static func uploadPendingEntities() {
+        shared.uploadPendingEntities()
     }
     
-    func startUploadPoller() {
+    func uploadPendingEntities() {
         
         /// Set this so that any interruption is mitigated by resuming on launch
-        setDefault(.hasPendingUpdates, true)
+//        Defaults.set(.hasPendingUpdates, true)
 
         uploadTask?.cancel()
         uploadTask = Task.detached(priority: .medium) {
             while true {
-                await self.uploadChanges()
+                let didComplete = await self.uploadPendingEntities()
+                
+                /// Only continue polling if we still have updated (if it failed from the network being lost etc)
+                guard !didComplete else { break }
+                
                 try await sleepTask(UploadPollInterval, tolerance: 1)
                 try Task.checkCancellation()
+                
+                /// Only continue polling if we still have updated (if it failed from the network being lost etc)
+//                guard Defaults.bool(.hasPendingUpdates) else { break }
+//                
+//                try await sleepTask(UploadPollInterval, tolerance: 1)
+//                try Task.checkCancellation()
             }
         }
     }
 }
 
 extension PublicStore {
-    func uploadChanges() async {
+    func uploadPendingEntities() async -> Bool {
         let context = PublicStore.newBackgroundContext()
         do {
             /// For each sync entity, in the order provided
@@ -43,8 +54,14 @@ extension PublicStore {
                 try Task.checkCancellation()
             }
             
+            /// Only once all pending entities have been uploaded without errors, reset the default to `false`
+//            Defaults.set(.hasPendingUpdates, false)
+            
+            return true
+            
         } catch {
             logger.error("Error during upload: \(error.localizedDescription)")
+            return false
         }
     }
 }
