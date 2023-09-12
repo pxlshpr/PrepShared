@@ -19,12 +19,12 @@ extension PublicStore.Container {
                     NSSortDescriptor(keyPath: \DatasetFoodEntity.name, ascending: true)
                 ]
                 
-                let results = DatasetFoodEntity.objects(
+                let results = DatasetFoodEntity.entities(
                     predicate: predicate,
                     sortDescriptors: sortDescriptors,
                     fetchLimit: FoodsPageSize,
                     fetchOffset: (page - 1) * FoodsPageSize,
-                    context: bgContext
+                    in: bgContext
                 )
                 
                 completion(results)
@@ -46,10 +46,10 @@ extension PublicStore.Container {
                     NSSortDescriptor(keyPath: \DatasetFoodEntity.name, ascending: true)
                 ]
                 
-                let results = DatasetFoodEntity.objects(
+                let results = DatasetFoodEntity.entities(
                     predicate: predicate,
                     sortDescriptors: sortDescriptors,
-                    context: bgContext
+                    in: bgContext
                 )
                 
                 completion(results)

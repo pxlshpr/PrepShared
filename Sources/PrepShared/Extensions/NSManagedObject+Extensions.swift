@@ -6,7 +6,7 @@ import OSLog
 
 let coreDataLogger = Logger(subsystem: "CoreData", category: "Background")
 
-public extension NSManagedObjectContext {
+extension NSManagedObjectContext {
     func performAndMergeWith(
         _ mainContext: NSManagedObjectContext,
         _ block: @escaping () -> ()
@@ -19,7 +19,7 @@ public extension NSManagedObjectContext {
     }
 }
 
-public func performInBackgroundContext(
+func performInBackgroundContext(
     _ context: NSManagedObjectContext,
     mainContext: NSManagedObjectContext,
     performBlock: @escaping () throws -> ()
@@ -39,7 +39,7 @@ public func performInBackgroundContext(
     }
 }
 
-public func performInBackgroundContext(
+func performInBackgroundContext(
     _ context: NSManagedObjectContext,
     mainContext: NSManagedObjectContext,
     performBlock: @escaping () throws -> (),
@@ -66,72 +66,72 @@ public func performInBackgroundContext(
 }
 
 //MARK: _ Legacy
-public extension NSManagedObjectContext {
-    func performInBackgroundAndMergeWithMainContext(
-        mainContext: NSManagedObjectContext,
-        posting notificationName: Notification.Name? = nil,
-        performBlock: @escaping () -> ()
-    ) async {
-        await performInBackgroundContextAndMergeWithMainContext(
-            bgContext: self,
-            mainContext: mainContext,
-            posting: notificationName,
-            performBlock: performBlock
-        )
-    }
-}
-
-public func performInBackgroundContextAndMergeWithMainContext(
-    bgContext: NSManagedObjectContext,
-    mainContext: NSManagedObjectContext,
-    posting notificationName: Notification.Name? = nil,
-    performBlock: @escaping () -> ()
-) async {
-    await performInBackgroundContextAndMergeWithMainContext(
-        bgContext: bgContext,
-        mainContext: mainContext,
-        performBlock: performBlock,
-        didSaveHandler: {
-            if let notificationName {
-                post(notificationName)
-            }
-        }
-    )
-}
-
-public func performInBackgroundContextAndMergeWithMainContext(
-    bgContext: NSManagedObjectContext,
-    mainContext: NSManagedObjectContext,
-    performBlock: @escaping () throws -> (),
-    didSaveHandler: @escaping () -> (),
-    errorHandler: ((Error) -> ())? = nil
-) async {
-    await bgContext.perform {
-        
-        do {
-            try performBlock()
-        } catch {
-            errorHandler?(error)
-        }
-        
-        do {
-            let observer = NotificationCenter.default.addObserver(
-                forName: .NSManagedObjectContextDidSave,
-                object: bgContext,
-                queue: .main
-            ) { (notification) in
-                mainContext.mergeChanges(fromContextDidSave: notification)
-                didSaveHandler()
-            }
-            
-            try bgContext.performAndWait {
-                try bgContext.save()
-            }
-            NotificationCenter.default.removeObserver(observer)
-
-        } catch {
-            //TODO: Handle CoreData error here
-            errorHandler?(error)
-        }
-    }
-}
+//public extension NSManagedObjectContext {
+//    func performInBackgroundAndMergeWithMainContext(
+//        mainContext: NSManagedObjectContext,
+//        posting notificationName: Notification.Name? = nil,
+//        performBlock: @escaping () -> ()
+//    ) async {
+//        await performInBackgroundContextAndMergeWithMainContext(
+//            bgContext: self,
+//            mainContext: mainContext,
+//            posting: notificationName,
+//            performBlock: performBlock
+//        )
+//    }
+//}
+//
+//public func performInBackgroundContextAndMergeWithMainContext(
+//    bgContext: NSManagedObjectContext,
+//    mainContext: NSManagedObjectContext,
+//    posting notificationName: Notification.Name? = nil,
+//    performBlock: @escaping () -> ()
+//) async {
+//    await performInBackgroundContextAndMergeWithMainContext(
+//        bgContext: bgContext,
+//        mainContext: mainContext,
+//        performBlock: performBlock,
+//        didSaveHandler: {
+//            if let notificationName {
+//                post(notificationName)
+//            }
+//        }
+//    )
+//}
+//
+//public func performInBackgroundContextAndMergeWithMainContext(
+//    bgContext: NSManagedObjectContext,
+//    mainContext: NSManagedObjectContext,
+//    performBlock: @escaping () throws -> (),
+//    didSaveHandler: @escaping () -> (),
+//    errorHandler: ((Error) -> ())? = nil
+//) async {
+//    await bgContext.perform {
+//        
+//        do {
+//            try performBlock()
+//        } catch {
+//            errorHandler?(error)
+//        }
+//        
+//        do {
+//            let observer = NotificationCenter.default.addObserver(
+//                forName: .NSManagedObjectContextDidSave,
+//                object: bgContext,
+//                queue: .main
+//            ) { (notification) in
+//                mainContext.mergeChanges(fromContextDidSave: notification)
+//                didSaveHandler()
+//            }
+//            
+//            try bgContext.performAndWait {
+//                try bgContext.save()
+//            }
+//            NotificationCenter.default.removeObserver(observer)
+//
+//        } catch {
+//            //TODO: Handle CoreData error here
+//            errorHandler?(error)
+//        }
+//    }
+//}

@@ -52,7 +52,7 @@ extension PublicStore {
     }
     
     static func findWords(matching text: String) async -> FindWordResult {
-        let words = SearchWordEntity.findWords(matching: text, context: newBackgroundContext())
+        let words = SearchWordEntity.findWords(matching: text, in: newBackgroundContext())
             .map { $0.asSearchWord }
         if words.isEmpty {
             return FindWordResult(words: nil, string: text)

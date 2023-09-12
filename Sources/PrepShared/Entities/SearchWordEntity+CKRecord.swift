@@ -7,8 +7,8 @@ public extension SearchWordEntity {
     static var recordType: RecordType { .searchWord }
     static var notificationName: Notification.Name { .didUpdateWord }
     
-    static func entity(matching record: CKRecord, context: NSManagedObjectContext) -> SearchWordEntity? {
-        existingWord(matching: record, context: context)
+    static func entity(matching record: CKRecord, in context: NSManagedObjectContext) -> SearchWordEntity? {
+        existingWord(matching: record, in: context)
     }
     
     static func record(matching entity: SearchWordEntity) async throws -> CKRecord? {
@@ -24,7 +24,7 @@ public extension SearchWordEntity {
         self.isTrashed = record.isTrashed ?? false
     }
     
-    func merge(with record: CKRecord, context: NSManagedObjectContext) {
+    func merge(with record: CKRecord, in context: NSManagedObjectContext) {
         
         let previousID = self.id!
         self.id = record.id /// Use the record's ID regardless of how recent our version is
@@ -45,11 +45,11 @@ public extension SearchWordEntity {
 
         /// Replace the `id` in any entities that may have used the old one (if it's different to what we have)
         if previousID != id {
-            Self.replaceWordID(previousID, with: record.id!, context: context)
+            Self.replaceWordID(previousID, with: record.id!, in: context)
         }
     }
     
-    func update(record: CKRecord, context: NSManagedObjectContext) async {
+    func update(record: CKRecord, in context: NSManagedObjectContext) async throws {
         
         /// **Important** `id` of the `CKRecord` never changes
         record[.singular] = self.singular! as CKRecordValue
@@ -62,11 +62,9 @@ public extension SearchWordEntity {
         record[.updatedAt] = updatedAt! as CKRecordValue
 
         if id != record.id {
-            await context.performInBackgroundAndMergeWithMainContext(
-                mainContext: PublicStore.mainContext
-            ) {
+            try await PublicStore.perform(in: context) {
                 /// Replace the `id` anywhere the old one is used
-                Self.replaceWordID(self.id!, with: record.id!, context: context)
+                Self.replaceWordID(self.id!, with: record.id!, in: context)
 
                 /// Set the `CKRecord.id` here if different, as it's the source of truth
                 self.id = record.id
@@ -74,8 +72,8 @@ public extension SearchWordEntity {
         }
     }
     
-    static func replaceWordID(_ old: UUID, with new: UUID, context: NSManagedObjectContext) {
-        DatasetFoodEntity.replaceWordID(old, with: new, context: context)
-        VerifiedFoodEntity.replaceWordID(old, with: new, context: context)
+    static func replaceWordID(_ old: UUID, with new: UUID, in context: NSManagedObjectContext) {
+        DatasetFoodEntity.replaceWordID(old, with: new, in: context)
+        VerifiedFoodEntity.replaceWordID(old, with: new, in: context)
     }
 }

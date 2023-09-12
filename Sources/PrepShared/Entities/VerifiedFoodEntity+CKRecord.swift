@@ -7,8 +7,8 @@ public extension VerifiedFoodEntity {
     static var recordType: RecordType { .verifiedFood }
     static var notificationName: Notification.Name { .didUpdateFood }
 
-    static func entity(matching record: CKRecord, context: NSManagedObjectContext) -> VerifiedFoodEntity? {
-        object(with: record.id!, in: context)
+    static func entity(matching record: CKRecord, in context: NSManagedObjectContext) -> VerifiedFoodEntity? {
+        entity(with: record.id!, in: context)
     }
     
     func fill(with record: CKRecord) {
@@ -70,7 +70,7 @@ public extension VerifiedFoodEntity {
         }
     }
     
-    func update(record: CKRecord, context: NSManagedObjectContext) async {
+    func update(record: CKRecord, in context: NSManagedObjectContext) async throws {
         record[.isTrashed] = isTrashed as CKRecordValue
         record[.publishStatusValue] = publishStatusValue as CKRecordValue
         record[.rejectionReasonsData] = rejectionReasonsData as? CKRecordValue

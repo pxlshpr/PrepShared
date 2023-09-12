@@ -63,10 +63,10 @@ public extension DatasetFoodEntity {
 }
 
 public extension DatasetFoodEntity {
-    static func replaceWordID(_ old: UUID, with new: UUID, context: NSManagedObjectContext) {
-        DatasetFoodEntity.objects(
+    static func replaceWordID(_ old: UUID, with new: UUID, in context: NSManagedObjectContext) {
+        DatasetFoodEntity.entities(
             predicate: NSPredicate(format: "searchTokensString CONTAINS %@", old.uuidString),
-            context: context
+            in: context
         ).forEach { entity in
             entity.replaceWordID(old, with: new)
         }

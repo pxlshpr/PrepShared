@@ -81,7 +81,7 @@ public extension SearchWordEntity {
 
 public extension SearchWordEntity {
 
-    static func existingWord(matching record: CKRecord, context: NSManagedObjectContext) -> SearchWordEntity? {
+    static func existingWord(matching record: CKRecord, in context: NSManagedObjectContext) -> SearchWordEntity? {
         guard let id = record.id?.uuidString, let singular = record.singular else {
             return nil
         }
@@ -91,7 +91,7 @@ public extension SearchWordEntity {
         ]
         let predicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
 
-        return objects(predicate: predicate, context: context).first
+        return entities(predicate: predicate, in: context).first
     }
     
     static func fetch(
@@ -101,12 +101,12 @@ public extension SearchWordEntity {
         
         let sortDescriptors = [NSSortDescriptor(keyPath: \SearchWordEntity.singular, ascending: true)]
         
-        return SearchWordEntity.objects(
+        return SearchWordEntity.entities(
             predicate: fetchPredicate(matching: text),
             sortDescriptors: sortDescriptors,
             fetchLimit: FoodsPageSize,
             fetchOffset: (page - 1) * FoodsPageSize,
-            context: context
+            in: context
         )
     }
     
@@ -138,10 +138,10 @@ public extension SearchWordEntity {
 
 public extension SearchWordEntity {
 
-    static func findWords(matching text: String, context: NSManagedObjectContext) -> [SearchWordEntity] {
-        SearchWordEntity.objects(
+    static func findWords(matching text: String, in context: NSManagedObjectContext) -> [SearchWordEntity] {
+        SearchWordEntity.entities(
             predicate: findPredicate(for: text),
-            context: context
+            in: context
         ).filter {
             $0.singular == text || $0.spellings.contains(text)
         }

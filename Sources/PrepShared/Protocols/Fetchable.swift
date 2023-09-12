@@ -6,13 +6,13 @@ public protocol Fetchable {
     static var entityName : String { get }
     
     static func countAll(in context: NSManagedObjectContext) -> Int
-    static func object(with id: UUID, in context: NSManagedObjectContext) -> FetchableType?
+    static func entity(with id: UUID, in context: NSManagedObjectContext) -> FetchableType?
     
-    static func objects(
+    static func entities(
         predicate: NSPredicate?,
         sortDescriptors: [NSSortDescriptor]?,
         fetchLimit: Int?,
         fetchOffset: Int?,
-        context: NSManagedObjectContext
+        in: NSManagedObjectContext
     ) -> [FetchableType]
 }

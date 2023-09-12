@@ -16,28 +16,28 @@ public extension Entity {
         }
     }
 
-    static func objects(
+    static func entities(
         predicateFormat: String,
         sortDescriptors: [NSSortDescriptor]? = nil,
         fetchLimit: Int? = nil,
         fetchOffset: Int? = nil,
-        context: NSManagedObjectContext
+        in context: NSManagedObjectContext
     ) -> [FetchableType] {
-        objects(
+        entities(
             predicate: NSPredicate(format: predicateFormat),
             sortDescriptors: sortDescriptors,
             fetchLimit: fetchLimit,
             fetchOffset: fetchOffset,
-            context: context
+            in: context
         )
     }
     
-    static func objects(
+    static func entities(
         predicate: NSPredicate? = nil,
         sortDescriptors: [NSSortDescriptor]? = nil,
         fetchLimit: Int? = nil,
         fetchOffset: Int? = nil,
-        context: NSManagedObjectContext
+        in context: NSManagedObjectContext
     ) -> [FetchableType] {
         do {
             let request = NSFetchRequest<FetchableType>(entityName: entityName)
@@ -57,7 +57,7 @@ public extension Entity {
         }
     }
     
-    static func object(with id: UUID, in context: NSManagedObjectContext) -> FetchableType? {
+    static func entity(with id: UUID, in context: NSManagedObjectContext) -> FetchableType? {
         do {
             let request = NSFetchRequest<FetchableType>(entityName: entityName)
 //            request.predicate = NSPredicate(format: "id == %@", id.uuidString)

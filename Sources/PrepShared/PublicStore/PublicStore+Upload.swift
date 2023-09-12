@@ -12,6 +12,10 @@ extension PublicStore {
     }
     
     func startUploadPoller() {
+        
+        /// Set this so that any interruption is mitigated by resuming on launch
+        setDefault(.hasPendingUpdates, true)
+
         uploadTask?.cancel()
         uploadTask = Task.detached(priority: .medium) {
             while true {
@@ -27,10 +31,18 @@ extension PublicStore {
     func uploadChanges() async {
         let context = PublicStore.newBackgroundContext()
         do {
+            /// For each sync entity, in the order provided
             for syncEntity in syncEntities {
+                
+                /// Ensure the SyncEntity is set to be uploaded
                 guard syncEntity.direction.shouldUpload else { continue }
+                
+                /// Upload any pending entities
                 try await syncEntity.type.uploadPendingEntities(context)
+
+                try Task.checkCancellation()
             }
+            
         } catch {
             logger.error("Error during upload: \(error.localizedDescription)")
         }

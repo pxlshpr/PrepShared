@@ -12,18 +12,18 @@ public protocol PublicEntity: Entity {
     static var recordType: RecordType { get }
     static var notificationName: Notification.Name { get }
 
-    static func entity(matching record: CKRecord, context: NSManagedObjectContext) -> Self?
+    static func entity(matching record: CKRecord, in context: NSManagedObjectContext) -> Self?
     static func record(matching entity: Self) async throws -> CKRecord?
     func fill(with record: CKRecord)
     
-    func merge(with record: CKRecord, context: NSManagedObjectContext)
+    func merge(with record: CKRecord, in context: NSManagedObjectContext)
     
-    func update(record: CKRecord, context: NSManagedObjectContext) async
+    func update(record: CKRecord, in context: NSManagedObjectContext) async throws
 }
 
 //MARK: Default Implementations
 public extension PublicEntity {
-    func merge(with record: CKRecord, context: NSManagedObjectContext) {
+    func merge(with record: CKRecord, in context: NSManagedObjectContext) {
         /// Make sure the record is more recent than this version
         guard isLessRecent(than: record) else {
             /// If our version is more recent then we retain any changes we may have made, which will be
@@ -62,10 +62,10 @@ public extension PublicEntity {
         
         func persist(record: CKRecord) async throws {
             
-            try await context.performAndMergeWith(PublicStore.mainContext) {
-                if let existing = Self.entity(matching: record, context: context) {
+            try await PublicStore.perform(in: context) {
+                 if let existing = Self.entity(matching: record, in: context) {
                     PublicStore.logger.trace("\(record.recordType) already exists, merging...")
-                    existing.merge(with: record, context: context)
+                    existing.merge(with: record, in: context)
                 } else {
                     PublicStore.logger.trace("\(record.recordType) does not exist, creating...")
                     let entity = Self(context: context)
@@ -85,12 +85,12 @@ public extension PublicEntity {
     
     static func uploadPendingEntities(_ context: NSManagedObjectContext) async throws {
         
-        let entities = self.objects(
+        let entities = self.entities(
             predicateFormat: "isSynced == NO",
-            context: context
+            in: context
         ) as! [Self]
         
-        PublicStore.logger.debug("We have: \(entities.count) foods to upload")
+        PublicStore.logger.debug("We have: \(entities.count) \(Self.recordType.name) entities to upload")
 
         for entity in entities {
             guard let record = try await fetchOrCreateRecord(for: entity, in: context) else {
@@ -100,10 +100,8 @@ public extension PublicEntity {
             /// Now call the `CKDatabase.save()` function
             try await PublicDatabase.save(record)
             
-            await context.performInBackgroundAndMergeWithMainContext(
-                mainContext: PublicStore.mainContext
-            ) {
-                /// Once saved, set isSynced to `true`
+            /// Once saved, set isSynced to `true`
+            try await PublicStore.perform(in: context) {
                 entity.isSynced = true
             }
         }
@@ -118,22 +116,21 @@ public extension PublicEntity {
             guard entity.updatedAt! > existingRecord.updatedAt! else {
 
                 /// If not more recent, merge record and abandon local changes
-                try await context.performAndMergeWith(PublicStore.mainContext) {
-                    entity.merge(with: existingRecord, context: context)
+                try await PublicStore.perform(in: context) {
+                    entity.merge(with: existingRecord, in: context)
                     entity.isSynced = true
                 }
                 return nil
             }
             
             /// Update the fetched record with entity
-            await entity.update(record: existingRecord, context: context)
+            try await entity.update(record: existingRecord, in: context)
             
             return existingRecord
             
         } else {
             /// Otherwise, create a new record using `.asCKRecord`
-//                return entity.asCKRecord
-            fatalError()
+            return entity.asCKRecord
         }
     }
     

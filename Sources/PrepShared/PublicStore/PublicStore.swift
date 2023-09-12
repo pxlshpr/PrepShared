@@ -9,7 +9,7 @@ private let overviewLogger = Logger(subsystem: "PublicStore", category: "Overvie
 
 let PresetModifiedDate = Date(timeIntervalSince1970: 1690830000) /// 1 Aug 2023
 
-@Observable public class PublicStore {
+@Observable public final class PublicStore: Store {
     
     static let shared = PublicStore()
     
