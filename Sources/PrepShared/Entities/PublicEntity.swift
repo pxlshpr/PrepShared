@@ -68,6 +68,10 @@ public extension PublicEntity {
 //            }
         }
         
-        return try await fetchUpdatedRecords(recordType, desiredKeys, context, persist)
+        let date = try await fetchUpdatedRecords(recordType, desiredKeys, context, persist)
+        await MainActor.run {
+            post(notificationName)
+        }
+        return date
     }
 }

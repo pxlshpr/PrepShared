@@ -46,21 +46,23 @@ public func performInBackgroundContext(
     completion: @escaping () -> ()
 ) throws {
     
-    try performBlock()
-
-    let observer = NotificationCenter.default.addObserver(
-        forName: .NSManagedObjectContextDidSave,
-        object: context,
-        queue: .main
-    ) { (notification) in
-        mainContext.mergeChanges(fromContextDidSave: notification)
-        completion()
-    }
-    
     try context.performAndWait {
-        try context.save()
+        try performBlock()
+        
+        let observer = NotificationCenter.default.addObserver(
+            forName: .NSManagedObjectContextDidSave,
+            object: context,
+            queue: .main
+        ) { (notification) in
+            mainContext.mergeChanges(fromContextDidSave: notification)
+            completion()
+        }
+        
+        try context.performAndWait {
+            try context.save()
+        }
+        NotificationCenter.default.removeObserver(observer)
     }
-    NotificationCenter.default.removeObserver(observer)
 }
 
 //MARK: _ Legacy
