@@ -7,7 +7,7 @@ import UIKit
 private let logger = Logger(subsystem: "FoodEntity", category: "")
 
 @objc(VerifiedFoodEntity)
-public class VerifiedFoodEntity: NSManagedObject, Identifiable, PublicEntity {
+public final class VerifiedFoodEntity: NSManagedObject, Identifiable, PublicEntity {
 
 }
 
@@ -37,6 +37,7 @@ extension VerifiedFoodEntity {
     @NSManaged public var image3: Data?
     @NSManaged public var image4: Data?
     @NSManaged public var image5: Data?
+    @NSManaged public var imageIDsData: Data?
     @NSManaged public var isSynced: Bool
     @NSManaged public var isTrashed: Bool
     @NSManaged public var lastAmountData: Data?
@@ -284,6 +285,16 @@ public extension VerifiedFoodEntity {
             }
         }
     }
+    
+    var imageIDs: [UUID] {
+        get {
+            guard let imageIDsData else { return [] }
+            return try! JSONDecoder().decode([UUID].self, from: imageIDsData)
+        }
+        set {
+            self.imageIDsData = try! JSONEncoder().encode(newValue)
+        }
+    }
 }
 
 public extension VerifiedFoodEntity {
@@ -309,5 +320,23 @@ public extension CKRecord {
         self[.searchTokensString] = foodEntity.searchTokensString as? CKRecordValue
         self[.isTrashed] = foodEntity.isTrashed as CKRecordValue
         self[.updatedAt] = Date.now as CKRecordValue
+    }
+}
+
+public extension VerifiedFoodEntity {
+    static func replaceWordID(_ old: UUID, with new: UUID, context: NSManagedObjectContext) {
+        DatasetFoodEntity.objects(
+            predicate: NSPredicate(format: "searchTokensString CONTAINS %@", old.uuidString),
+            context: context
+        ).forEach { entity in
+            entity.replaceWordID(old, with: new)
+        }
+    }
+    
+    func replaceWordID(_ old: UUID, with new: UUID) {
+        guard let index = searchTokens.firstIndex(where: { $0.wordID == old }) else {
+            return
+        }
+        searchTokens[index].wordID = new
     }
 }

@@ -7,7 +7,7 @@ public extension VerifiedFoodEntity {
     static var recordType: RecordType { .verifiedFood }
     static var notificationName: Notification.Name { .didUpdateFood }
 
-    static func object(matching record: CKRecord, context: NSManagedObjectContext) -> NSManagedObject? {
+    static func entity(matching record: CKRecord, context: NSManagedObjectContext) -> VerifiedFoodEntity? {
         object(with: record.id!, in: context)
     }
     
@@ -69,4 +69,60 @@ public extension VerifiedFoodEntity {
             image5 = try! Data(contentsOf: url)
         }
     }
+    
+    func update(record: CKRecord, context: NSManagedObjectContext) async {
+        record[.isTrashed] = isTrashed as CKRecordValue
+        record[.publishStatusValue] = publishStatusValue as CKRecordValue
+        record[.rejectionReasonsData] = rejectionReasonsData as? CKRecordValue
+        record[.rejectionNotes] = rejectionNotes as? CKRecordValue
+        record[.reviewerID] = reviewerID as? CKRecordValue
+        record[.searchTokensString] = searchTokensString as? CKRecordValue
+        record[.updatedAt] = Date.now as CKRecordValue
+    }
+    
+    var asCKRecord: CKRecord {
+        
+        let record = CKRecord(recordType: Self.recordType.name)
+
+        if let id { record[.id] = id.uuidString as CKRecordValue }
+        if let name { record[.name] = name as CKRecordValue }
+        if let detail { record[.detail] = detail as CKRecordValue }
+        if let brand { record[.brand] = brand as CKRecordValue }
+        if let emoji { record[.emoji] = emoji as CKRecordValue }
+
+        record[.energy] = energy as CKRecordValue
+        record[.energyUnitValue] = energyUnitValue as CKRecordValue
+        record[.carb] = carb as CKRecordValue
+        record[.fat] = fat as CKRecordValue
+        record[.protein] = protein as CKRecordValue
+        if let microsData { record[.microsData] = microsData as CKRecordValue }
+        if let amountData { record[.amountData] = amountData as CKRecordValue }
+        if let servingData { record[.servingData] = servingData as CKRecordValue }
+        if let densityData { record[.densityData] = densityData as CKRecordValue }
+        if let previewAmountData { record[.previewAmountData] = previewAmountData as CKRecordValue }
+        if let sizesData { record[.sizesData] = sizesData as CKRecordValue }
+        
+        if let barcodesString { record[.barcodesString] = barcodesString as CKRecordValue }
+        if let searchTokensString { record[.searchTokensString] = searchTokensString as CKRecordValue }
+
+        if let createdAt { record[.createdAt] = createdAt as CKRecordValue }
+        if let updatedAt { record[.updatedAt] = updatedAt as CKRecordValue }
+        record[.isTrashed] = isTrashed as CKRecordValue
+
+        record[.typeValue] = typeValue as CKRecordValue
+        if let url { record[.url] = url as CKRecordValue }
+        if let ownerID { record[.ownerID] = ownerID as CKRecordValue }
+        record[.publishStatusValue] = publishStatusValue as CKRecordValue
+
+        /// Fetch each image and attach it to the record
+        for index in imageIDs.indices {
+            let imageID = imageIDs[index]
+            let imageURL = ImageManager.url(for: imageID)
+            let asset = CKAsset(fileURL: imageURL)
+            record["image\(index+1)"] = asset
+        }
+
+        return record
+    }
 }
+

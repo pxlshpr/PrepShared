@@ -6,7 +6,6 @@ import OSLog
 import Zip
 
 private let overviewLogger = Logger(subsystem: "PublicStore", category: "Overview")
-private let UploadPollInterval: TimeInterval = 3
 
 let PresetModifiedDate = Date(timeIntervalSince1970: 1690830000) /// 1 Aug 2023
 
@@ -21,6 +20,8 @@ let PresetModifiedDate = Date(timeIntervalSince1970: 1690830000) /// 1 Aug 2023
     
     var uploadTask: Task<Void, Error>? = nil
     var fetchTask: Task<Void, Error>? = nil
+    
+    var syncEntities: [SyncEntity] = []
 
     public convenience init() {
         self.init(container: Container())
@@ -29,7 +30,6 @@ let PresetModifiedDate = Date(timeIntervalSince1970: 1690830000) /// 1 Aug 2023
     
     init(container: Container) {
         self.container = container
-        
         setupSubscription()
     }
 
@@ -76,217 +76,4 @@ extension PublicStore {
             }
         }
     }
-}
-
-//MARK: Syncer
-import SwiftSugar
-
-extension PublicStore {
-    public static func startUploadPoller() {
-//        /// Set the preopulated `latestModificationDate` time if we have no version set (to ensure we don't redundantly download those entities)
-//        if latestModificationDate == nil {
-//            setLatestModificationDate(PresetModifiedDate)
-//        }
-        
-        shared.startUploadPoller()
-    }
-    
-    func startUploadPoller() {
-        uploadTask?.cancel()
-        uploadTask = Task.detached(priority: .medium) {
-            while true {
-                await self.uploadChanges()
-                try await sleepTask(UploadPollInterval, tolerance: 1)
-                try Task.checkCancellation()
-            }
-        }
-    }
-}
-
-extension PublicStore {
-    func uploadChanges() async {
-        let context = PublicStore.newBackgroundContext()
-        do {
-            try await uploadSearchWords(context)
-            try await uploadDatasetFoods(context)
-        } catch {
-            logger.error("Error during upload: \(error.localizedDescription)")
-        }
-    }
-}
-
-extension PublicStore {
-    
-    func uploadSearchWords(_ context: NSManagedObjectContext) async throws {
-        
-        func updatedOrCreatedRecord(for entity: SearchWordEntity) async throws -> CKRecord? {
-            /// First try and fetch the existing record for the id
-            if let existingRecord = try await PublicDatabase.record(matching: entity.asSearchWord) {
-                /// If it was fetched, first do a sanity check and ensure our `updatedAt` time is more recent (in case changes occurred and were synced between the download and upload calls during the sync)
-                guard entity.updatedAt! > existingRecord.updatedAt! else {
-                    /// Otherwise merging the CloudKit copy and abandoning our changes
-                    await context.performInBackgroundAndMergeWithMainContext(
-                        mainContext: PublicStore.mainContext
-                    ) {
-                        entity.merge(with: existingRecord, context: context)
-                        entity.isSynced = true
-                    }
-                    return nil
-                }
-                
-                let previousID = entity.id!
-
-                /// If our copy is in fact more recent, update the fetched record with it
-                existingRecord.update(withSearchWordEntity: entity)
-                
-                await context.performInBackgroundAndMergeWithMainContext(
-                    mainContext: PublicStore.mainContext
-                ) {
-                    /// Replace the ID in any entities that may have used the old ID if it's different to what we have
-                    if previousID != existingRecord.id {
-                        DatasetFoodEntity.replaceWordID(previousID, with: existingRecord.id!, context: context)
-                    }
-                }
-                
-                return existingRecord
-                
-            } else {
-                /// Otherwise, create a new record using `.asCKRecord`
-                return entity.asCKRecord
-            }
-        }
-        
-        let entities = SearchWordEntity.objects(
-            predicateFormat: "isSynced == NO",
-            context: context
-        )
-
-        logger.debug("We have: \(entities.count) words to upload")
-        
-        for entity in entities {
-            guard let record = try await updatedOrCreatedRecord(for: entity) else {
-                continue
-            }
-            
-            /// Now call the `CKDatabase.save()` function
-            try await PublicDatabase.save(record)
-            
-            await context.performInBackgroundAndMergeWithMainContext(
-                mainContext: PublicStore.mainContext
-            ) {
-                /// Once saved, set isSynced to `true`
-                entity.isSynced = true
-            }
-        }
-    }
-    
-    func uploadDatasetFoods(_ context: NSManagedObjectContext) async throws {
-        
-        func updatedOrCreatedRecord(for entity: DatasetFoodEntity) async throws -> CKRecord? {
-            /// First try and fetch the existing record for the id
-            if let existingRecord = try await PublicDatabase.record(id: entity.id!, recordType: .datasetFood) {
-                /// If it was fetched, first do a sanity check and ensure our `updatedAt` time is more recent (in case changes occurred and were synced between the download and upload calls during the sync)
-                guard entity.updatedAt! > existingRecord.updatedAt! else {
-                    /// Otherwise merging the CloudKit copy and abandoning our changes
-                    await context.performInBackgroundAndMergeWithMainContext(
-                        mainContext: PublicStore.mainContext
-                    ) {
-                        entity.merge(with: existingRecord, context: context)
-                        entity.isSynced = true
-                    }
-                    return nil
-                }
-                
-                /// If our copy is in fact more recent, update the fetched record with it
-                existingRecord.update(withDatasetFoodEntity: entity)
-                
-                return existingRecord
-                
-            } else {
-                /// Otherwise, create a new `CKRecord` (not supported yet)
-                fatalError()
-            }
-        }
-        
-        let entities = DatasetFoodEntity.objects(
-            predicateFormat: "isSynced == NO",
-            context: context
-        )
-        logger.debug("We have: \(entities.count) foods to upload")
-
-        for entity in entities {
-            guard let record = try await updatedOrCreatedRecord(for: entity) else {
-                continue
-            }
-            
-            /// Now call the `CKDatabase.save()` function
-            try await PublicDatabase.save(record)
-            
-            await context.performInBackgroundAndMergeWithMainContext(
-                mainContext: PublicStore.mainContext
-            ) {
-                /// Once saved, set isSynced to `true`
-                entity.isSynced = true
-            }
-        }
-    }
-}
-
-//MARK: - Download
-
-func fetchUpdatedRecords(
-    _ type: RecordType,
-    _ desiredKeys: [CKRecord.FieldKey]?,
-    _ context: NSManagedObjectContext,
-    _ persistRecordHandler: @escaping (CKRecord) async throws -> ()
-) async throws -> Date? {
-    
-    var latestModificationDate: Date? = nil
-    
-    func processRecords(for query: CKQuery? = nil, continuing cursor: CKQueryOperation.Cursor? = nil) async throws {
-        let logger = Logger(subsystem: "Fetch", category: "")
-        do {
-
-            logger.info("Fetching updated records for \(type.name)")
-
-            let (results, cursor) = if let query {
-                try await PublicDatabase.records(matching: query, desiredKeys: desiredKeys)
-            } else {
-                try await PublicDatabase.records(continuingMatchFrom: cursor!)
-            }
-            
-            logger.info("Fetched \(results.count) \(type.name) records")
-            
-            latestModificationDate = results.latestModificationDate(ifAfter: latestModificationDate)
-            
-            for result in results {
-                switch result.1 {
-                case .success(let record):
-                    try await persistRecordHandler(record)
-                case .failure(let error):
-                    throw error
-                }
-            }
-            
-            if let cursor {
-                logger.trace("Cursor received for \(type.name), running a new query with that")
-                try await processRecords(continuing: cursor)
-            } else {
-                logger.info("✅ Fetch is complete since no cursor received for \(type.name). Latest modification date was \(String(describing: latestModificationDate))")
-            }
-            
-        } catch let error as CKError {
-            if error.code == .unknownItem {
-                logger.warning("Fetch failed for \(type.name) with unknownItem error. This indicates that the Record does not exist on CloudKit yet. Continuing without throwing an error.")
-            } else {
-                throw error
-            }
-        } catch {
-            throw error
-        }
-    }
-    
-    let query = CKQuery.updatedRecords(of: type)
-    try await processRecords(for: query)
-    return latestModificationDate
 }

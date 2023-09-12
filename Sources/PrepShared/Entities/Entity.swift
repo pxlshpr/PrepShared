@@ -56,6 +56,7 @@ public extension Entity {
             fatalError()
         }
     }
+    
     static func object(with id: UUID, in context: NSManagedObjectContext) -> FetchableType? {
         do {
             let request = NSFetchRequest<FetchableType>(entityName: entityName)

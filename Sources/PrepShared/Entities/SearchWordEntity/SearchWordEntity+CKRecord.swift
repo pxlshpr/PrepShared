@@ -7,8 +7,12 @@ public extension SearchWordEntity {
     static var recordType: RecordType { .searchWord }
     static var notificationName: Notification.Name { .didUpdateWord }
     
-    static func object(matching record: CKRecord, context: NSManagedObjectContext) -> NSManagedObject? {
+    static func entity(matching record: CKRecord, context: NSManagedObjectContext) -> SearchWordEntity? {
         existingWord(matching: record, context: context)
+    }
+    
+    static func record(matching entity: SearchWordEntity) async throws -> CKRecord? {
+        try await PublicDatabase.record(matching: entity.asSearchWord)
     }
     
     func fill(with record: CKRecord) {
@@ -41,8 +45,37 @@ public extension SearchWordEntity {
 
         /// Replace the `id` in any entities that may have used the old one (if it's different to what we have)
         if previousID != id {
-            DatasetFoodEntity.replaceWordID(previousID, with: record.id!, context: context)
-            //TODO: Add VerifiedFoodEntity too
+            Self.replaceWordID(previousID, with: record.id!, context: context)
         }
+    }
+    
+    func update(record: CKRecord, context: NSManagedObjectContext) async {
+        
+        /// **Important** `id` of the `CKRecord` never changes
+        record[.singular] = self.singular! as CKRecordValue
+        if let spellingsString {
+            record[.spellingsString] = spellingsString as CKRecordValue
+        } else {
+            record[.spellingsString] = nil
+        }
+        record[.isTrashed] = isTrashed as CKRecordValue
+        record[.updatedAt] = updatedAt! as CKRecordValue
+
+        if id != record.id {
+            await context.performInBackgroundAndMergeWithMainContext(
+                mainContext: PublicStore.mainContext
+            ) {
+                /// Replace the `id` anywhere the old one is used
+                Self.replaceWordID(self.id!, with: record.id!, context: context)
+
+                /// Set the `CKRecord.id` here if different, as it's the source of truth
+                self.id = record.id
+            }
+        }
+    }
+    
+    static func replaceWordID(_ old: UUID, with new: UUID, context: NSManagedObjectContext) {
+        DatasetFoodEntity.replaceWordID(old, with: new, context: context)
+        VerifiedFoodEntity.replaceWordID(old, with: new, context: context)
     }
 }

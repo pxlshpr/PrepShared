@@ -7,7 +7,7 @@ public extension DatasetFoodEntity {
     static var recordType: RecordType { .datasetFood }
     static var notificationName: Notification.Name { .didUpdateFood }
 
-    static func object(matching record: CKRecord, context: NSManagedObjectContext) -> NSManagedObject? {
+    static func entity(matching record: CKRecord, context: NSManagedObjectContext) -> DatasetFoodEntity? {
         object(with: record.id!, in: context)
     }
     
@@ -45,29 +45,52 @@ public extension DatasetFoodEntity {
         createdAt = record.createdAt!
         isTrashed = record.isTrashed ?? false
     }
-}
-
-public extension CKRecord {
-    func update(withDatasetFoodEntity entity: DatasetFoodEntity) {
+    
+    func update(record: CKRecord, context: NSManagedObjectContext) async {
         /// Make sure the `id` of the `CKRecord` never changes
-        self[.name] = entity.name! as CKRecordValue
-        self[.emoji] = entity.emoji! as CKRecordValue
-        if let detail = entity.detail {
-            self[.detail] = detail as CKRecordValue
+        record[.name] = name! as CKRecordValue
+        record[.emoji] = emoji! as CKRecordValue
+        if let detail {
+            record[.detail] = detail as CKRecordValue
         } else {
-            self[.detail] = nil
+            record[.detail] = nil
         }
-        if let brand = entity.brand {
-            self[.brand] = brand as CKRecordValue
+        if let brand {
+            record[.brand] = brand as CKRecordValue
         } else {
-            self[.brand] = nil
+            record[.brand] = nil
         }
-        if let searchTokensString = entity.searchTokensString {
-            self[.searchTokensString] = searchTokensString as CKRecordValue
+        if let searchTokensString {
+            record[.searchTokensString] = searchTokensString as CKRecordValue
         } else {
-            self[.searchTokensString] = nil
+            record[.searchTokensString] = nil
         }
-        self[.isTrashed] = entity.isTrashed as CKRecordValue
-        self[.updatedAt] = entity.updatedAt! as CKRecordValue
+        record[.isTrashed] = isTrashed as CKRecordValue
+        record[.updatedAt] = updatedAt! as CKRecordValue
     }
 }
+
+//public extension CKRecord {
+//    func update(withDatasetFoodEntity entity: DatasetFoodEntity) {
+//        /// Make sure the `id` of the `CKRecord` never changes
+//        self[.name] = entity.name! as CKRecordValue
+//        self[.emoji] = entity.emoji! as CKRecordValue
+//        if let detail = entity.detail {
+//            self[.detail] = detail as CKRecordValue
+//        } else {
+//            self[.detail] = nil
+//        }
+//        if let brand = entity.brand {
+//            self[.brand] = brand as CKRecordValue
+//        } else {
+//            self[.brand] = nil
+//        }
+//        if let searchTokensString = entity.searchTokensString {
+//            self[.searchTokensString] = searchTokensString as CKRecordValue
+//        } else {
+//            self[.searchTokensString] = nil
+//        }
+//        self[.isTrashed] = entity.isTrashed as CKRecordValue
+//        self[.updatedAt] = entity.updatedAt! as CKRecordValue
+//    }
+//}

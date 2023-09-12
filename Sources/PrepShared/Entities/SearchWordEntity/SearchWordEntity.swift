@@ -6,7 +6,7 @@ let FoodsPageSize = 1000
 let SearchWordPageSize = 50
 
 @objc(SearchWordEntity)
-public class SearchWordEntity: NSManagedObject, Identifiable, PublicEntity { }
+public final class SearchWordEntity: NSManagedObject, Identifiable, PublicEntity { }
 
 extension SearchWordEntity {
 
@@ -170,16 +170,16 @@ public extension SearchWordEntity {
     }
 }
 
-public extension CKRecord {
-    func update(withSearchWordEntity entity: SearchWordEntity) {
-        /// Make sure the `id` of the `CKRecord` never changes
-        self[.singular] = entity.singular! as CKRecordValue
-        if let spellingsString = entity.spellingsString {
-            self[.spellingsString] = spellingsString as CKRecordValue
-        } else {
-            self[.spellingsString] = nil
-        }
-        self[.isTrashed] = entity.isTrashed as CKRecordValue
-        self[.updatedAt] = entity.updatedAt! as CKRecordValue
-    }
-}
+//public extension CKRecord {
+//    func update(withSearchWordEntity entity: SearchWordEntity) {
+//        /// Make sure the `id` of the `CKRecord` never changes
+//        self[.singular] = entity.singular! as CKRecordValue
+//        if let spellingsString = entity.spellingsString {
+//            self[.spellingsString] = spellingsString as CKRecordValue
+//        } else {
+//            self[.spellingsString] = nil
+//        }
+//        self[.isTrashed] = entity.isTrashed as CKRecordValue
+//        self[.updatedAt] = entity.updatedAt! as CKRecordValue
+//    }
+//}
