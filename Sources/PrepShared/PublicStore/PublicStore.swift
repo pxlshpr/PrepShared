@@ -11,7 +11,7 @@ let PresetModifiedDate = Date(timeIntervalSince1970: 1690830000) /// 1 Aug 2023
 
 @Observable public final class PublicStore: Store {
     
-    static let shared = PublicStore()
+    public static let shared = PublicStore()
     
     let container: Container
 

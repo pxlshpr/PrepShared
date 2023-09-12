@@ -1,6 +1,6 @@
 import CoreData
 
-protocol Store {
+public protocol Store {
     static var shared: Self { get }
     static var mainContext: NSManagedObjectContext { get }
 }
