@@ -10,6 +10,12 @@ public enum SearchRank: Int, Codable, CaseIterable {
 }
 
 public extension SearchRank {
+    
+    static var displayTitle: String {
+        /// Use this as its more user-friendly and understandable than "Search Rank"
+        "Association"
+    }
+    
     static var allPriorities: [SearchRank] {
         [.quinary, .quaternary, .tertiary, .secondary, .primary]
     }
