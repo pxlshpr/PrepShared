@@ -58,14 +58,23 @@ public extension PublicEntity {
     static func fetchAndPersistUpdatedRecords(
         _ context: NSManagedObjectContext,
         _ desiredKeys: [CKRecord.FieldKey]?
-    ) async throws -> Date? {
+    ) async throws -> FetchResult {
         
-        func persist(record: CKRecord) async throws {
+        func persist(record: CKRecord) async throws -> Bool {
+            
+            var didPersist = true
             
             try await PublicStore.perform(in: context) {
                  if let existing = Self.entity(matching: record, in: context) {
-                    PublicStore.logger.trace("\(record.recordType) already exists, merging...")
-                    existing.merge(with: record, in: context)
+                     
+                     guard existing.updatedAt != record.updatedAt else {
+                         PublicStore.logger.trace("\(record.recordType) exists and has the same updatedAt timestamp, skipping over...")
+                         didPersist = false
+                         return
+                     }
+                     PublicStore.logger.trace("\(record.recordType) exists, merging...")
+                     existing.merge(with: record, in: context)
+
                 } else {
                     PublicStore.logger.trace("\(record.recordType) does not exist, creating...")
                     let entity = Self(context: context)
@@ -74,13 +83,20 @@ public extension PublicEntity {
                     context.insert(entity)
                 }
             }
+            
+            return didPersist
         }
         
-        let date = try await fetchUpdatedRecords(recordType, desiredKeys, context, persist)
-        await MainActor.run {
-            post(notificationName)
+        let result = try await fetchUpdatedRecords(recordType, desiredKeys, context, persist)
+        if result.didPersistRecords {
+            PublicStore.logger.trace("FetchResult for \(recordType.name) has didPersistRecords set, so sending notification")
+            await MainActor.run {
+                post(notificationName)
+            }
+        } else {
+            PublicStore.logger.trace("FetchResult for \(recordType.name) does not have didPersistRecords set, so NOT sending notification")
         }
-        return date
+        return result
     }
     
     static func uploadPendingEntities(_ context: NSManagedObjectContext) async throws {
@@ -90,7 +106,7 @@ public extension PublicEntity {
             predicateFormat: "isSynced == NO"
         ) as! [Self]
         
-        PublicStore.logger.debug("We have: \(entities.count) \(Self.recordType.name) entities to upload")
+        PublicStore.logger.debug("Uploading \(entities.count) \(Self.recordType.name) entities")
 
         for entity in entities {
             guard let record = try await fetchOrCreateRecord(for: entity, in: context) else {
@@ -99,7 +115,8 @@ public extension PublicEntity {
             
             /// Now call the `CKDatabase.save()` function
             try await PublicDatabase.save(record)
-            
+            PublicStore.logger.info("✅ Record Saved")
+
             /// Once saved, set isSynced to `true`
             try await PublicStore.perform(in: context) {
                 entity.isSynced = true
@@ -115,6 +132,8 @@ public extension PublicEntity {
             /// Sanity check that `entity.updatedAt` time is more recent
             guard entity.updatedAt! > existingRecord.updatedAt! else {
 
+                PublicStore.logger.trace("Existing (more up-to-date) record found, merging and discarding local changes")
+
                 /// If not more recent, merge record and abandon local changes
                 try await PublicStore.perform(in: context) {
                     entity.merge(with: existingRecord, in: context)
@@ -122,7 +141,9 @@ public extension PublicEntity {
                 }
                 return nil
             }
-            
+
+            PublicStore.logger.trace("Existing (outdated) record found, updating with entity")
+
             /// Update the fetched record with entity
             try await entity.update(record: existingRecord, in: context)
             
@@ -130,6 +151,7 @@ public extension PublicEntity {
             
         } else {
             /// Otherwise, create a new record using `.asCKRecord`
+            PublicStore.logger.trace("No existing record found, creating a new one")
             return entity.asCKRecord
         }
     }

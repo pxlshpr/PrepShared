@@ -3,7 +3,13 @@ import CoreData
 import CloudKit
 import OSLog
 
+public struct FetchResult {
+    public var latestModificationDate: Date?
+    public var didPersistRecords: Bool
+}
+
 public extension PublicStore {
+    
     static func fetchChanges() {
         shared.fetchChanges()
     }
@@ -29,14 +35,15 @@ extension PublicStore {
                     syncEntity.recordType.setPresetModificationDateIfNeeded(presetDate)
                 }
                 
-                let latestDate = try await syncEntity.type.fetchAndPersistUpdatedRecords(
+                let result = try await syncEntity.type.fetchAndPersistUpdatedRecords(
                     context,
                     syncEntity.desiredKeys
                 )
                 
                 /// If we fetched results and got returned the latest modification date, set that in the defaults
-                if let latestDate {
-                    syncEntity.recordType.setLatestModificationDate(latestDate)
+                if let date = result.latestModificationDate {
+                    logger.trace ("FetchResult for \(syncEntity.recordType.name) contains a latestModificationDate, so setting that")
+                    syncEntity.recordType.setLatestModificationDate(date)
                 }
                 
                 try Task.checkCancellation()
@@ -52,10 +59,20 @@ func fetchUpdatedRecords(
     _ type: RecordType,
     _ desiredKeys: [CKRecord.FieldKey]?,
     _ context: NSManagedObjectContext,
-    _ persistRecordHandler: @escaping (CKRecord) async throws -> ()
-) async throws -> Date? {
+    _ persistRecordHandler: @escaping (CKRecord) async throws -> (Bool)
+) async throws -> FetchResult {
     
+    var didPersistRecords: Bool = false
     var latestModificationDate: Date? = nil
+    
+    func handleModificationDate(_ date: Date?) {
+        guard let date else { return }
+        guard let latest = latestModificationDate else {
+            latestModificationDate = date
+            return
+        }
+        latestModificationDate = max(latest, date)
+    }
     
     func processRecords(for query: CKQuery? = nil, continuing cursor: CKQueryOperation.Cursor? = nil) async throws {
         let logger = PublicStore.logger
@@ -71,12 +88,18 @@ func fetchUpdatedRecords(
             
             logger.info("Fetched \(results.count) \(type.name) records")
             
-            latestModificationDate = results.latestModificationDate(ifAfter: latestModificationDate)
+//            latestModificationDate = results.latestModificationDate(ifAfter: latestModificationDate)
             
             for result in results {
                 switch result.1 {
                 case .success(let record):
-                    try await persistRecordHandler(record)
+                    if try await persistRecordHandler(record) {
+                        /// Set this to true as soon as a single record is persisted
+                        didPersistRecords = true
+                    }
+                    /// Handle the modification date even if we didn't persist the record (to move up our stored value)
+                    handleModificationDate(record.modificationDate)
+                    
                 case .failure(let error):
                     throw error
                 }
@@ -102,6 +125,10 @@ func fetchUpdatedRecords(
     
     let query = CKQuery.updatedRecords(of: type)
     try await processRecords(for: query)
-    return latestModificationDate
+    
+    return FetchResult(
+        latestModificationDate: latestModificationDate,
+        didPersistRecords: didPersistRecords
+    )
 }
 

@@ -3,9 +3,20 @@ import CoreData
 public protocol Store {
     static var shared: Self { get }
     static var mainContext: NSManagedObjectContext { get }
+    static func newBackgroundContext() -> NSManagedObjectContext
 }
 
 extension Store {
+    
+    public static func performInBackground(
+        _ block: @escaping (NSManagedObjectContext) -> ()
+    ) async throws {
+        let context = newBackgroundContext()
+        try await shared.perform(in: context) {
+            block(context)
+        }
+    }
+
     public static func perform(
         in context: NSManagedObjectContext,
         _ block: @escaping () -> ()
