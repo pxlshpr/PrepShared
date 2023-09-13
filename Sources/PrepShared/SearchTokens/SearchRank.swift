@@ -2,37 +2,35 @@ import Foundation
 
 public enum SearchRank: Int, Codable, CaseIterable {
     case none       = 0
-    case low        = 1
-    case standard   = 2
-    case high       = 3
-    case higher     = 4
-    case highest    = 5
+    case quinary    = 1
+    case quaternary = 2
+    case tertiary   = 3
+    case secondary  = 4
+    case primary    = 5
 }
 
 public extension SearchRank {
     static var allPriorities: [SearchRank] {
-        [.low, .standard, .high, .higher, .highest]
+        [.quinary, .quaternary, .tertiary, .secondary, .primary]
     }
-
+    
     var menuDescription: String {
         switch self {
-        case .none:     "Remove"
-        case .low:      "Low"
-        case .standard: "Standard"
-        case .high:     "High"
-        case .higher:   "Higher"
-        case .highest:  "Highest"
+        case .none:         "Remove"
+        case .quinary:      "Quinary"
+        case .quaternary:   "Quaternary"
+        case .tertiary:     "Tertiary"
+        case .secondary:    "Secondary"
+        case .primary:      "Primary"
         }
     }
     
     var description: String {
         switch self {
-        case .none:     "Not Included"
-        case .low:      "Low Priority"
-        case .standard: "Standard Priority"
-        case .high:     "High Priority"
-        case .higher:   "Higher Priority"
-        case .highest:  "Highest Priority"
+        case .none:
+            "Not Included"
+        default:
+            "\(menuDescription) Association"
         }
     }
     
@@ -40,6 +38,28 @@ public extension SearchRank {
         switch self {
         case .none: "minus.circle"
         default:    "\(self.rawValue).square"
+        }
+    }
+}
+
+import SwiftUI
+
+public extension SearchRank {
+    
+    var exampleText: Text {
+        switch self {
+        case .quinary:
+            Text("e.g. \"Guavas, Strawberry, Raw\" for **strawberry**")
+        case .quaternary:
+            Text("e.g. \"Strawberry Sundae, McDonald's\" for **strawberry**")
+        case .tertiary:
+            Text("e.g. \"Toppings, Strawberry\" for **strawberry**")
+        case .secondary:
+            Text("e.g. \"Strawberries, Frozen\" for **strawberry**")
+        case .primary:
+            Text("e.g. \"Strawberries, Raw\" for **strawberry**")
+        default:
+            Text("")
         }
     }
 }
