@@ -5,14 +5,9 @@ public struct DefaultsKeys {
     public static func latestModificationDate(for recordType: RecordType) -> String {
         "latestModificationDate_\(recordType.name)"
     }
-    
-//    public static let didCreateDatasetFoodsSubscription = "didCreateDatasetFoodsSubscription"
-
-//    public static let hasPendingUpdates = "hasPendingUpdates"
 }
 
 public enum DefaultKey: String {
-//    case hasPendingUpdates
     case didCreateDatasetFoodsSubscription
 }
 
