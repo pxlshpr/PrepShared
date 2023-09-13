@@ -2,12 +2,15 @@ import Foundation
 import CoreData
 import CloudKit
 import OSLog
+import Network
 
 import Zip
 
 private let overviewLogger = Logger(subsystem: "PublicStore", category: "Overview")
 
 let PresetModifiedDate = Date(timeIntervalSince1970: 1690830000) /// 1 Aug 2023
+
+public var isOffline: Bool = false
 
 @Observable public final class PublicStore: Store {
     
@@ -22,7 +25,9 @@ let PresetModifiedDate = Date(timeIntervalSince1970: 1690830000) /// 1 Aug 2023
     var fetchTask: Task<Void, Error>? = nil
     
     var syncEntities: [SyncEntity] = []
-    
+
+    var networkMonitor = NWPathMonitor()
+
     public static var syncEntities: [SyncEntity] {
         get { shared.syncEntities }
         set { shared.syncEntities = newValue }
@@ -36,6 +41,7 @@ let PresetModifiedDate = Date(timeIntervalSince1970: 1690830000) /// 1 Aug 2023
     init(container: Container) {
         self.container = container
         setupSubscription()
+        startMonitoringNetwork()
     }
 
     public static var mainContext: NSManagedObjectContext {
@@ -48,6 +54,24 @@ let PresetModifiedDate = Date(timeIntervalSince1970: 1690830000) /// 1 Aug 2023
 }
 
 extension PublicStore {
+    func startMonitoringNetwork() {
+        networkMonitor.pathUpdateHandler = { path in
+            if path.status == .satisfied {
+                if isOffline {
+                    post(.networkDidBecomeOnline)
+                    self.uploadPendingEntities()
+                    self.fetchChanges()
+                }
+                isOffline = false
+            } else {
+                isOffline = true
+            }
+        }
+        
+        let queue = DispatchQueue(label: "Monitor")
+        networkMonitor.start(queue: queue)
+    }
+    
     public static func populateIfEmpty() {
         let start = CFAbsoluteTimeGetCurrent()
         var count = DatasetFoodEntity.countAll(in: shared.container.viewContext)

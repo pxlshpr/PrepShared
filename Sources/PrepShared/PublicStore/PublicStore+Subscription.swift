@@ -6,9 +6,8 @@ private let logger = Logger(subsystem: "PublicStore", category: "Subscription")
 extension PublicStore {
     func setupSubscription() {
         guard !Defaults.bool(.didCreateDatasetFoodsSubscription) else {
-            PublicDatabase.fetchAllSubscriptions { subscriptions, error in
-                print("We here")
-            }
+//            PublicDatabase.fetchAllSubscriptions { subscriptions, error in
+//            }
             return
         }
         
