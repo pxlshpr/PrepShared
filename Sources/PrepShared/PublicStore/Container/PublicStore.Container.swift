@@ -5,12 +5,12 @@ extension PublicStore {
     class Container: NSPersistentContainer {
         init() {
             guard
-                let url = Bundle.main.url(forResource: "DatasetFoods", withExtension: "momd"),
+                let url = Bundle.main.url(forResource: "Public", withExtension: "momd"),
                 let objectModel = NSManagedObjectModel(contentsOf: url)
             else {
                 fatalError("Failed to retrieve the object model")
             }
-            super.init(name: "DatasetFoods", managedObjectModel: objectModel)
+            super.init(name: "Public", managedObjectModel: objectModel)
             
             self.initialize()
         }
