@@ -35,8 +35,8 @@ public extension VerifiedFoodEntity {
         density = record.density
         type = record.type!
 
-        datasetID = record.datasetID
-        dataset = record.dataset
+//        datasetID = record.datasetID
+//        dataset = record.dataset
 
         barcodes = record.barcodes
         searchTokens = record.searchTokens

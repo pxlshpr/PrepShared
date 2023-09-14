@@ -22,8 +22,8 @@ extension VerifiedFoodEntity {
     @NSManaged public var brand: String?
     @NSManaged public var carb: Double
     @NSManaged public var createdAt: Date?
-    @NSManaged public var datasetID: String?
-    @NSManaged public var datasetValue: Int16
+//    @NSManaged public var datasetID: String?
+//    @NSManaged public var datasetValue: Int16
     @NSManaged public var densityData: Data?
     @NSManaged public var detail: String?
     @NSManaged public var emoji: String?
@@ -85,8 +85,8 @@ public extension Food {
             barcodes: entity.barcodes,
             type: entity.type,
             publishStatus: entity.publishStatus,
-            dataset: entity.dataset,
-            datasetID: entity.datasetID,
+//            dataset: entity.dataset,
+//            datasetID: entity.datasetID,
             lastAmount: entity.lastAmount,
             updatedAt: entity.updatedAt ?? entity.createdAt!,
             createdAt: entity.createdAt!,
@@ -246,18 +246,18 @@ public extension VerifiedFoodEntity {
         }
     }
 
-    var dataset: FoodDataset? {
-        get {
-            FoodDataset(rawValue: Int(datasetValue))
-        }
-        set {
-            if let newValue {
-                datasetValue = Int16(newValue.rawValue)
-            } else {
-                datasetValue = 0
-            }
-        }
-    }
+//    var dataset: FoodDataset? {
+//        get {
+//            FoodDataset(rawValue: Int(datasetValue))
+//        }
+//        set {
+//            if let newValue {
+//                datasetValue = Int16(newValue.rawValue)
+//            } else {
+//                datasetValue = 0
+//            }
+//        }
+//    }
 
     var publishStatus: PublishStatus? {
         get {
