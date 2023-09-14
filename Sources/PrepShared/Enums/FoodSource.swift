@@ -37,7 +37,7 @@ public extension FoodSource {
     var systemImage: String {
         switch self {
         case .dataset:  "building.columns.fill"
-        case .private:  "carrot.fill"
+        case .private:  "person.fill"
         case .public:   "checkmark.seal.fill"
         }
     }
@@ -45,7 +45,7 @@ public extension FoodSource {
     var color: Color {
         switch self {
         case .dataset:  .accentColor
-        case .private:  .orange
+        case .private:  .blue
         case .public:   .green
         }
     }
