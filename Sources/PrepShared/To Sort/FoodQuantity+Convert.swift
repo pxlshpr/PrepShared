@@ -598,7 +598,7 @@ public extension FoodQuantity.Size {
 public extension Food {
 
     var servingSizeQuantity: SizeQuantity? {
-        guard let serving else { return nil }
+        guard let serving = servingOrSizeNamedServing else { return nil }
         guard let id = serving.sizeID else { return nil }
         guard let size = quantitySize(for: id) else { return nil }
         return .init(serving.value, size, serving.sizeVolumeUnit)
@@ -610,8 +610,8 @@ public extension Food {
     }
     
     func quantityPerServing(of size: FoodQuantity.Size, with volumeUnit: VolumeUnit? = nil) -> Double? {
-        guard let serving else { return nil }
-        
+        guard let serving = servingOrSizeNamedServing else { return nil }
+
         switch serving.unitType {
         case .weight:
             guard let sizeUnitWeight = size.unitWeight(in: self) else { return nil }
@@ -701,7 +701,8 @@ public extension Food {
     /// Returns the quantity of the provided size that 1 serving equates to
     func servingSizeQuantity(of size: FoodQuantity.Size, volumeUnit: VolumeUnit? = nil) -> Double? {
         
-        guard let serving else { return nil }
+        guard let serving = servingOrSizeNamedServing else { return nil }
+
         switch serving.unitType {
         case .weight:
             guard let servingWeight, let sizeUnitWeight = size.unitWeight(in: self) else { return nil }
@@ -760,7 +761,7 @@ public extension Food {
     //TODO: Quarantined *** TO BE REMOVED ***
     /// We can't use this as converting it to a `FormUnit` loses the explicit volume units
     var servingUnit: FormUnit? {
-        guard let serving else { return nil }
+        guard let serving = servingOrSizeNamedServing else { return nil }
         return FormUnit(foodValue: serving, in: self)
     }
     
@@ -772,11 +773,20 @@ public extension Food {
         guard let size = size(for: id) else { return nil }
         return FoodQuantity.Size(foodSize: size, in: self)
     }
-
+    
+    var sizeNamedServing: FoodSize? {
+        sizes.first(where: { $0.name.lowercased() == "serving" })
+    }
+    
+    var servingOrSizeNamedServing: FoodValue? {
+        /// `sizeNamedServing` is used as a fallback for foods that don't have a serving but have a size named "serving"
+        serving ?? sizeNamedServing?.valueForUnitQuantity
+    }
+    
     var servingWeight: WeightQuantity? {
         
-        guard let serving else { return nil }
-        
+        guard let serving = servingOrSizeNamedServing else { return nil }
+
         switch serving.unitType {
         case .weight:
             guard let weightUnit = serving.weightUnit else { return nil }
@@ -814,8 +824,8 @@ public extension Food {
     
     var servingVolume: VolumeQuantity? {
         
-        guard let serving else { return nil }
-        
+        guard let serving = servingOrSizeNamedServing else { return nil }
+
         switch serving.unitType {
         case .weight:
             /// If the serving is expressed as a volume, *and* we have a density...

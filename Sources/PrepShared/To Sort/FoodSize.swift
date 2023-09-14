@@ -57,6 +57,15 @@ public extension FoodSize {
     }
 }
 
+public extension FoodSize {
+    var valueForUnitQuantity: FoodValue {
+        guard quantity > 0 else { return value }
+        var value = value
+        value.value /= quantity
+        return value
+    }
+}
+
 //public extension FoodSize {
 //    var asString: String {
 //        "\(name)"

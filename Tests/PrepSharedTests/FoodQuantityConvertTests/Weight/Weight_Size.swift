@@ -128,6 +128,24 @@ extension TestCases {
             ]
         ),
         
+        /// Edge cases for a size with `serving` unit, where there is no serving but there is a size named "serving"
+        FoodQuantityTestCase(
+            quantity: FoodQuantity(
+                100, .g,
+                Food(
+                    amount: .init(100, .g),
+                    sizes: [
+                        .init(1, "package", .init(4)),
+                        .init(1, "serving", .init(30, .g))
+                    ]
+                )
+            ),
+            equivalentSizes: [
+                (nil, "package", 0.83333333),
+                (nil, "serving", 3.33333333),
+            ]
+        ),
+        
         //TODO: Write tests for these later
         
         /// serving-based sizes with a weight-size-based serving

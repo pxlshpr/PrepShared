@@ -39,7 +39,7 @@ public extension Food {
     }
     
     var servingQuantity: FoodQuantity? {
-        guard let serving = serving,
+        guard let serving = servingOrSizeNamedServing,
               let unit = FoodQuantity.Unit(foodValue: serving, in: self)
         else { return nil }
         return FoodQuantity(value: amount.value * serving.value, unit: unit, food: self)

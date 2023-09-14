@@ -38,6 +38,22 @@ extension TestCases {
             ]
         ),
         
+        FoodQuantityTestCase(
+            quantity: FoodQuantity(
+                2, "bottle",
+                Food(
+                    amount: .init(100, .mL),
+                    sizes: [
+                        .init(1, "bottle", .init(4)),
+                        .init(4, "serving", .init(400, .mL))
+                    ]
+                )
+            )!,
+            equivalentVolumes: [
+                .mL : 800,
+            ]
+        ),
+        
         //TODO: Convert these
 //        /// volumeprefixedsize
 //        FoodQuantityTestCase(

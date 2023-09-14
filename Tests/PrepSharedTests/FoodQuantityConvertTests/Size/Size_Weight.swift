@@ -69,6 +69,47 @@ extension TestCases {
                 .g : 1339.99999998
             ]
         ),
+        
+        
+        /// Edge cases for a size with `serving` unit, where there is no serving but there is a size named "serving"
+        FoodQuantityTestCase(
+            quantity: FoodQuantity(
+                1, "package",
+                Food(
+                    amount: .init(100, .g),
+                    sizes: [
+                        .init(1, "package", .init(4)),
+                        .init(1, "serving", .init(30, .g))
+                    ]
+                )
+            )!,
+            equivalentWeights: [
+                .g : 120,
+                .oz : 4.23288
+            ]
+        ),
+        FoodQuantityTestCase(
+            quantity: FoodQuantity(
+                1, "package",
+                Food(
+                    amount: .init(100, .g),
+                    sizes: [
+                        .init(1, "package", .init(4)),
+                        .init(3, "serving", .init(300, .g))
+                    ]
+                )
+            )!,
+            equivalentWeights: [
+                .g : 400,
+                .oz : 14.1096
+            ]
+        ),
+  
+        
+        
+        
+        
+        
 //        FoodQuantityTestCase(
 //            quantity: FoodQuantity(
 //                amount: 100,
