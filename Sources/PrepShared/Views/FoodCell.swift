@@ -194,6 +194,7 @@ public struct FoodCell: View {
         .foregroundStyle(Color(.secondaryLabel))
         
         return view
+            .multilineTextAlignment(.leading)
             .alignmentGuide(.listRowSeparatorLeading) { dimensions in
                 dimensions[.leading]
             }
