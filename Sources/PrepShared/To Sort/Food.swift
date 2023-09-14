@@ -34,6 +34,7 @@ public struct Food: Identifiable, Codable, Hashable {
     public var datasetID: String?
     
     public var lastAmount: FoodValue?
+    public var lastUsedAt: Date?
 
     public var updatedAt: Date
     public var createdAt: Date
@@ -76,6 +77,7 @@ public struct Food: Identifiable, Codable, Hashable {
         dataset: FoodDataset? = nil,
         datasetID: String? = nil,
         lastAmount: FoodValue? = nil,
+        lastUsedAt: Date? = nil,
         updatedAt: Date = Date.now,
         createdAt: Date = Date.now,
         isTrashed: Bool = false,
@@ -112,6 +114,7 @@ public struct Food: Identifiable, Codable, Hashable {
         self.dataset = dataset
         self.datasetID = datasetID
         self.lastAmount = lastAmount
+        self.lastUsedAt = lastUsedAt
         self.updatedAt = updatedAt
         self.createdAt = createdAt
         self.isTrashed = isTrashed

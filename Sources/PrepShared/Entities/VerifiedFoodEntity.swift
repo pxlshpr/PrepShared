@@ -38,7 +38,8 @@ extension VerifiedFoodEntity {
     @NSManaged public var imageIDsData: Data?
     @NSManaged public var isSynced: Bool
     @NSManaged public var isTrashed: Bool
-    @NSManaged public var lastAmountData: Data?
+//    @NSManaged public var lastAmountData: Data?
+    @NSManaged public var lastUsedAt: Date?
     @NSManaged public var microsData: Data?
     @NSManaged public var name: String?
     @NSManaged public var ownerID: String?
@@ -85,7 +86,7 @@ public extension Food {
             publishStatus: entity.publishStatus,
 //            dataset: entity.dataset,
 //            datasetID: entity.datasetID,
-            lastAmount: entity.lastAmount,
+//            lastAmount: entity.lastAmount,
             updatedAt: entity.updatedAt ?? entity.createdAt!,
             createdAt: entity.createdAt!,
             isTrashed: entity.isTrashed,
@@ -119,7 +120,8 @@ public extension VerifiedFoodEntity {
         self.id = food.id
         self.imageIDs = food.imageIDs
         self.isTrashed = food.isTrashed
-        self.lastAmount = food.lastAmount
+//        self.lastAmount = food.lastAmount
+        self.lastUsedAt = food.lastUsedAt
         self.micros = food.micros
         self.name = food.name
         self.ownerID = food.ownerID
@@ -244,21 +246,21 @@ public extension VerifiedFoodEntity {
         }
     }
     
-    var lastAmount: FoodValue? {
-        get {
-            guard let lastAmountData else {
-                return nil
-            }
-            return try! JSONDecoder().decode(FoodValue.self, from: lastAmountData)
-        }
-        set {
-            if let newValue {
-                self.lastAmountData = try! JSONEncoder().encode(newValue)
-            } else {
-                self.lastAmountData = nil
-            }
-        }
-    }
+//    var lastAmount: FoodValue? {
+//        get {
+//            guard let lastAmountData else {
+//                return nil
+//            }
+//            return try! JSONDecoder().decode(FoodValue.self, from: lastAmountData)
+//        }
+//        set {
+//            if let newValue {
+//                self.lastAmountData = try! JSONEncoder().encode(newValue)
+//            } else {
+//                self.lastAmountData = nil
+//            }
+//        }
+//    }
     
     var density: FoodDensity? {
         get {

@@ -43,7 +43,7 @@ extension DatasetFoodEntity {
     @NSManaged public var isSynced: Bool
     @NSManaged public var isTrashed: Bool
 
-    @NSManaged public var lastAmountData: Data?
+//    @NSManaged public var lastAmountData: Data?
     @NSManaged public var lastUsedAt: Date?
 
     @NSManaged public var newVersion: DatasetFoodEntity?
@@ -216,21 +216,21 @@ public extension DatasetFoodEntity {
         }
     }
     
-    var lastAmount: FoodValue? {
-        get {
-            guard let lastAmountData else {
-                return nil
-            }
-            return try! JSONDecoder().decode(FoodValue.self, from: lastAmountData)
-        }
-        set {
-            if let newValue {
-                self.lastAmountData = try! JSONEncoder().encode(newValue)
-            } else {
-                self.lastAmountData = nil
-            }
-        }
-    }
+//    var lastAmount: FoodValue? {
+//        get {
+//            guard let lastAmountData else {
+//                return nil
+//            }
+//            return try! JSONDecoder().decode(FoodValue.self, from: lastAmountData)
+//        }
+//        set {
+//            if let newValue {
+//                self.lastAmountData = try! JSONEncoder().encode(newValue)
+//            } else {
+//                self.lastAmountData = nil
+//            }
+//        }
+//    }
 }
 
 public extension Food {
