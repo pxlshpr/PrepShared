@@ -15,10 +15,10 @@ private let logger = Logger(subsystem: "PagedArray", category: "")
     
     public var fetchPageHandler: (Int, String?) async throws -> [Type]
     public var didFetchPageHandler: (() -> ())?
-
+    
     public var searchTask: Task<Void, Error>? = nil
     public var displayedSearchText: String? = nil
-
+    
     public init(
         _ fetchPageHandler: @escaping (Int, String?) async throws -> [Type],
         _ didFetchPageHandler: (() -> ())? = nil
@@ -31,9 +31,12 @@ private let logger = Logger(subsystem: "PagedArray", category: "")
         self.fetchPageHandler = fetchPageHandler
         self.didFetchPageHandler = didFetchPageHandler
     }
+}
+
+public extension PagedArray {
     
     //MARK: Public Functions
-    public func performSearch(_ text: String, showingLoading: Bool = true) {
+    func performSearch(_ text: String, showingLoading: Bool = true) {
         searchTask?.cancel()
         
         let text = text.trimmingWhitespaces.lowercased()
@@ -42,7 +45,7 @@ private let logger = Logger(subsystem: "PagedArray", category: "")
             fetchFirstPage(showingLoading: showingLoading)
             return
         }
-
+        
         shouldShowEmptyState = false
         isLoadingPage = showingLoading
         
@@ -51,23 +54,23 @@ private let logger = Logger(subsystem: "PagedArray", category: "")
             /// Wait a bit to allow fast typing to proceed uninterrupted
             try await sleepTask(0.3, tolerance: 0.05)
             try Task.checkCancellation()
-
+            
             await MainActor.run {
                 displayedSearchText = text
             }
             try Task.checkCancellation()
-
+            
             try await fetchFirstPage(searchText: text, showingLoading: showingLoading)
         }
     }
-
-    public func fetchFirstPage(showingLoading: Bool = true) {
+    
+    func fetchFirstPage(showingLoading: Bool = true) {
         Task {
             try await fetchFirstPage(searchText: nil, showingLoading: showingLoading)
         }
     }
     
-    public func fetchFirstPage(searchText: String? = nil, showingLoading: Bool = true) async throws {
+    func fetchFirstPage(searchText: String? = nil, showingLoading: Bool = true) async throws {
         await MainActor.run {
             currentPage = 1
             shouldShowEmptyState = false
@@ -76,7 +79,7 @@ private let logger = Logger(subsystem: "PagedArray", category: "")
         try await fetchNextPage(searchText: searchText)
     }
     
-    public func fetchNextPageIfAvailable(for element: Type, searchText: String? = nil) {
+    func fetchNextPageIfAvailable(for element: Type, searchText: String? = nil) {
         if shouldLoadNextPage(for: element), !isLoadingPage, canLoadMorePages {
             isLoadingPage = true
             Task.detached(priority: .userInitiated) {
@@ -84,7 +87,18 @@ private let logger = Logger(subsystem: "PagedArray", category: "")
             }
         }
     }
+    
+    func clear() {
+        array = []
+        isLoadingPage = true
+        shouldShowEmptyState = true
+        currentPage = 1
+        canLoadMorePages = true
+    }
+}
 
+extension PagedArray {
+    
     func fetchNextPage(searchText: String? = nil) async throws {
         let results = try await fetchPageHandler(currentPage, searchText)
         try Task.checkCancellation()
@@ -94,16 +108,6 @@ private let logger = Logger(subsystem: "PagedArray", category: "")
             }
             didFetchPageHandler?()
         }
-    }
-    
-    //MARK: Helpers
-    
-    func clear() {
-        array = []
-        isLoadingPage = true
-        shouldShowEmptyState = true
-        currentPage = 1
-        canLoadMorePages = true
     }
     
     func append(_ results: [Type]) {
