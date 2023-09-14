@@ -44,7 +44,7 @@ public extension FoodSource {
     
     var color: Color {
         switch self {
-        case .dataset:  .accentColor
+        case .dataset:  .brown
         case .private:  .blue
         case .public:   .green
         }
