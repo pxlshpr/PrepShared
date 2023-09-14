@@ -21,6 +21,28 @@ public extension CKContainer {
     static var prepPublicDatabase: CKDatabase {
         prepContainer.publicCloudDatabase
     }
+    
+    static func getCloudKitID() async throws -> String {
+    #if targetEnvironment(simulator)
+        /// Hardcoded until we can figure out how to get it on the simulator
+        return "_105388eaefce030f4e15a7cea035084f"
+    #else
+        try await withCheckedThrowingContinuation { continuation in
+            
+            /// Explicitly setting the identifier here to *possibly* mitigate a potential issue mentioned [here](https://twitter.com/ryanashcraft/status/1566579908138061824)
+            /// ** Keep an eye on this**
+            prepContainer
+                .fetchUserRecordID(completionHandler: { (recordID, error) in
+                if let name = recordID?.recordName {
+                    continuation.resume(returning: name)
+                }
+                else if let error = error {
+                    continuation.resume(throwing: error)
+                }
+            })
+        }
+    #endif
+    }
 }
 
 public extension CKDatabase {
