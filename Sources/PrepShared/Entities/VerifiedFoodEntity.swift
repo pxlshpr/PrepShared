@@ -22,8 +22,6 @@ extension VerifiedFoodEntity {
     @NSManaged public var brand: String?
     @NSManaged public var carb: Double
     @NSManaged public var createdAt: Date?
-//    @NSManaged public var datasetID: String?
-//    @NSManaged public var datasetValue: Int16
     @NSManaged public var densityData: Data?
     @NSManaged public var detail: String?
     @NSManaged public var emoji: String?
@@ -99,6 +97,53 @@ public extension Food {
             reviewerID: entity.reviewerID,
             searchTokens: entity.searchTokens
         )
+    }
+}
+
+public extension VerifiedFoodEntity {
+    
+    convenience init(_ food: Food, in context: NSManagedObjectContext) {
+        self.init(context: context)
+        self.amount = food.amount
+        self.barcodes = food.barcodes
+        self.brand = food.brand
+        self.carb = food.carb
+        self.createdAt = food.createdAt
+        self.density = food.density
+        self.detail = food.detail
+        self.emoji = food.emoji
+        self.energy = food.energy
+        self.energyUnit = food.energyUnit
+        self.fat = food.fat
+        self.id = food.id
+        self.imageIDs = food.imageIDs
+        self.isTrashed = food.isTrashed
+        self.lastAmount = food.lastAmount
+        self.micros = food.micros
+        self.name = food.name
+        self.ownerID = food.ownerID
+        self.previewAmount = food.previewAmount
+        self.protein = food.protein
+        self.publishStatus = food.publishStatus
+        self.reviewerID = food.reviewerID
+        self.searchTokens = food.searchTokens
+        self.serving = food.serving
+        self.sizes = food.sizes
+        self.type = food.type
+        self.updatedAt = food.updatedAt
+        self.url = food.url
+        
+        self.isSynced = false
+        self.hasAwardedCredits = false
+        self.rejectionNotes = nil
+        self.rejectionReasons = nil
+        self.image1 = nil
+        self.image2 = nil
+        self.image3 = nil
+        self.image4 = nil
+        self.image5 = nil
+        self.newVersion = nil
+        self.oldVersion = nil
     }
 }
 
