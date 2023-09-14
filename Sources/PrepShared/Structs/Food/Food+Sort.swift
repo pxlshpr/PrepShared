@@ -28,6 +28,15 @@ public extension Food {
     }
 }
 
+public extension Food {
+    func contains(_ word: String) -> Bool {
+        if name.searchWords.contains(word) { return true }
+        if let detail, detail.searchWords.contains(word) { return true }
+        if let brand, brand.searchWords.contains(word) { return true }
+        return false
+    }
+}
+
 extension Food {
     
     var totalCount: Int {
@@ -81,13 +90,6 @@ extension Food {
 //        detail?.lowercased() == "raw" || detail?.lowercased().contains(", raw") == true
 //    }
 
-    func contains(_ word: String) -> Bool {
-        if name.searchWords.contains(word) { return true }
-        if let detail, detail.searchWords.contains(word) { return true }
-        if let brand, brand.searchWords.contains(word) { return true }
-        return false
-    }
-    
     func numberOfWordMatches(of text: String) -> Int {
         //TODO: Count how many tokens of text are matched (all lowercased).
         /// [ ] Check search tokens (each has individual words) and each word in name, detail and brand

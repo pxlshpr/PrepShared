@@ -1,6 +1,6 @@
 import Foundation
 
-extension String {
+public extension String {
     func index(of string: String) -> Int? {
         guard self.contains(string) else { return nil }
         for (index, _) in self.enumerated() {
