@@ -117,6 +117,7 @@ public extension VerifiedFoodEntity {
         /// Fetch each image and attach it to the record
         for index in imageIDs.indices {
             let imageID = imageIDs[index]
+            guard ImageManager.imageExists(imageID) else { continue }
             let imageURL = ImageManager.url(for: imageID)
             let asset = CKAsset(fileURL: imageURL)
             record["image\(index+1)"] = asset
