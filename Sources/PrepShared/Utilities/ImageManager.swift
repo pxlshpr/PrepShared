@@ -3,8 +3,10 @@ import OSLog
 
 private let logger = Logger(subsystem: "ImageManager", category: "")
 
-struct ImageManager {
+public struct ImageManager {
+}
 
+public extension ImageManager {
     static var imagesURL: URL {
         documentsURL.appendingPathComponent("Images")
     }
@@ -47,7 +49,7 @@ struct ImageManager {
     }
 }
 
-extension ImageManager {
+public extension ImageManager {
     
     static func load(_ url: URL) -> UIImage? {
         do {
