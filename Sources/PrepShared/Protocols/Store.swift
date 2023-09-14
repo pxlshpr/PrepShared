@@ -9,17 +9,17 @@ public protocol Store {
 extension Store {
     
     public static func performInBackground(
-        _ block: @escaping (NSManagedObjectContext) -> ()
+        _ block: @escaping (NSManagedObjectContext) throws -> ()
     ) async throws {
         let context = newBackgroundContext()
         try await shared.perform(in: context) {
-            block(context)
+            try block(context)
         }
     }
 
     public static func perform(
         in context: NSManagedObjectContext,
-        _ block: @escaping () -> ()
+        _ block: @escaping () throws -> ()
     ) async throws {
         try await shared.perform(in: context, block)
     }
@@ -27,7 +27,7 @@ extension Store {
     /// Performs the `block` of code in the provided `context` and then merges the changes with the `viewContext` on the main thread
     func perform(
         in context: NSManagedObjectContext,
-        _ block: @escaping () -> ()
+        _ block: @escaping () throws -> ()
     ) async throws {
         try await context.performAndMergeWith(Self.mainContext, block)
     }

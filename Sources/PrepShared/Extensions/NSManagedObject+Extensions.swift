@@ -9,7 +9,7 @@ let coreDataLogger = Logger(subsystem: "CoreData", category: "Background")
 extension NSManagedObjectContext {
     func performAndMergeWith(
         _ mainContext: NSManagedObjectContext,
-        _ block: @escaping () -> ()
+        _ block: @escaping () throws -> ()
     ) async throws {
         try await performInBackgroundContext(
             self,
