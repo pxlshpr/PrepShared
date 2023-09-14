@@ -137,11 +137,11 @@ public extension VerifiedFoodEntity {
         self.hasAwardedCredits = false
         self.rejectionNotes = nil
         self.rejectionReasons = nil
-        self.image1 = nil
-        self.image2 = nil
-        self.image3 = nil
-        self.image4 = nil
-        self.image5 = nil
+//        self.image1 = nil
+//        self.image2 = nil
+//        self.image3 = nil
+//        self.image4 = nil
+//        self.image5 = nil
         self.newVersion = nil
         self.oldVersion = nil
     }
