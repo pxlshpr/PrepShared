@@ -61,7 +61,7 @@ extension VerifiedFoodEntity {
 
 public extension Food {
     
-    init(_ entity: VerifiedFoodEntity) {
+    init(_ entity: VerifiedFoodEntity, cloudKitID: String?) {
         self.init(
             id: entity.id!,
             emoji: entity.emoji!,
@@ -92,6 +92,7 @@ public extension Food {
 //            childrenFoodItems: entity.ingredientItems,
             childrenFoodItems: [],
             ownerID: entity.ownerID,
+            isOwnedByMe: entity.ownerID == cloudKitID,
             rejectionReasons: entity.rejectionReasons,
             rejectionNotes: entity.rejectionNotes,
             reviewerID: entity.reviewerID,

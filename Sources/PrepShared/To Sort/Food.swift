@@ -42,6 +42,7 @@ public struct Food: Identifiable, Codable, Hashable {
     public var childrenFoodItems: [FoodItem]
     
     public var ownerID: String?
+    public var isOwnedByMe: Bool
     
     public var reviewerID: String?
     public var rejectionReasons: [RejectionReason]?
@@ -80,6 +81,7 @@ public struct Food: Identifiable, Codable, Hashable {
         isTrashed: Bool = false,
         childrenFoodItems: [FoodItem] = [],
         ownerID: String? = nil,
+        isOwnedByMe: Bool = false,
         rejectionReasons: [RejectionReason]? = nil,
         rejectionNotes: String? = nil,
         reviewerID: String? = nil,
@@ -115,6 +117,7 @@ public struct Food: Identifiable, Codable, Hashable {
         self.isTrashed = isTrashed
         self.childrenFoodItems = childrenFoodItems
         self.ownerID = ownerID
+        self.isOwnedByMe = isOwnedByMe
         self.rejectionReasons = rejectionReasons
         self.rejectionNotes = rejectionNotes
         self.reviewerID = reviewerID

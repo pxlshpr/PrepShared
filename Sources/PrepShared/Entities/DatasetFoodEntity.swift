@@ -261,6 +261,7 @@ public extension Food {
             isTrashed: entity.isTrashed,
             childrenFoodItems: [],
             ownerID: nil,
+            isOwnedByMe: false,
             searchTokens: entity.searchTokens
         )
     }
