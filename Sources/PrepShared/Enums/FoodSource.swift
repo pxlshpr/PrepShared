@@ -1,24 +1,6 @@
 import Foundation
 import SwiftUI
 
-//public enum FoodSortType {
-//    case dataset
-//    case `public`
-//    case `private`
-//    
-//    var heuristics: [FoodSortHeuristic] {
-//        switch self {
-//        case .dataset, .public:
-////            [.tokenRank, .numberOfMatchedWords, .distance, .length, .ratio]
-////            [.isRaw, .numberOfMatchedWords, .distance, .length, .ratio]
-////            [.isRaw, .numberOfMatchedWords]
-//            [.tokenRank]
-//        case .private:
-//            [.numberOfMatchedWords, .distance, .length, .ratio]
-//        }
-//    }
-//}
-
 public enum FoodSource: CaseIterable {
     case dataset
     case `private`

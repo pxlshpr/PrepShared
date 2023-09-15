@@ -1,7 +1,13 @@
 import Foundation
 
 public struct FindWordResult {
+    
+    /// Multiple `SearchWord`s that have matched the word. A match is when the main `singular`
+    /// spelling or any of the alternative spellings match the word.
     public let words: [SearchWord]?
+
+    /// When no `SearchWord` is found, the original word is placed here so that it can still be used for
+    /// lower priority searches.
     public let string: String?
     
     public init(words: [SearchWord]?, string: String?) {
@@ -15,6 +21,16 @@ public extension Array where Element == FindWordResult {
         self.compactMap { $0.string }
     }
     
+    var allWordArrays: [[SearchWord]] {
+        self.compactMap { $0.words }
+    }
+    
+    var allWords: [SearchWord] {
+        allWordArrays.reduce([]) { partialResult, array in
+            partialResult + array
+        }
+    }
+
     var allWordIDs: [UUID] {
         self.compactMap { $0.words }
             .reduce([]) { wordIDs, array in
