@@ -339,9 +339,9 @@ public extension DatasetFoodEntity {
     }
 }
 
-//MARK: DatasetFoodEntity + FoodEntityType
+//MARK: DatasetFoodEntity + SearchableFoodEntity
 
-extension DatasetFoodEntity: FoodEntityType {
+extension DatasetFoodEntity: SearchableFoodEntity {
     public var asFood: Food {
         Food(self)
     }

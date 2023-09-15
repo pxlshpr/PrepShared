@@ -1,7 +1,7 @@
 import Foundation
 import CoreData
 
-public protocol FoodEntityType: Entity {
+public protocol SearchableFoodEntity: Entity {
     static func entities(for wordResults: [FindWordResult], page: Int) -> [Self]
     static var sortDescriptors: [NSSortDescriptor] { get }
     static var store: any Store.Type { get }
@@ -16,7 +16,7 @@ public protocol FoodEntityType: Entity {
     var searchTokensString: String? { get }
 }
 
-extension FoodEntityType {
+extension SearchableFoodEntity {
     
     static func metadataPredicate(for text: String) -> NSPredicate {
         let name = NSPredicate(format: "name CONTAINS[cd] %@", text)
@@ -83,7 +83,7 @@ extension FoodEntityType {
     }
 }
 
-extension FoodEntityType {
+extension SearchableFoodEntity {
     public static var predicate: NSPredicate? { nil }
 
     public static var sortDescriptors: [NSSortDescriptor] {
