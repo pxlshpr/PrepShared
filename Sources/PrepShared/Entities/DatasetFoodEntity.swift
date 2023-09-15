@@ -348,7 +348,7 @@ public extension DatasetFoodEntity {
 //MARK: DatasetFoodEntity + SearchableFoodEntity
 
 extension DatasetFoodEntity: Searchable {
-    public static var source: FoodSource {
+    public static var searchSource: FoodSource {
         .dataset
     }
     

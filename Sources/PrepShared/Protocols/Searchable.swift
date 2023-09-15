@@ -5,7 +5,7 @@ public protocol Searchable: Entity {
     static func entities(for wordResults: [FindWordResult], page: Int) -> [Self]
     static var sortDescriptors: [NSSortDescriptor] { get }
     static var store: any Store.Type { get }
-    static var source: FoodSource { get }
+    static var searchSource: FoodSource { get }
     
     static var predicate: NSPredicate? { get }
     var asFood: Food { get }
@@ -114,7 +114,7 @@ public extension Searchable {
                 Food.areInIncreasingOrder($0, $1,
                                           for: text,
                                           wordResults: results,
-                                          source: source
+                                          source: searchSource
                 )
             })
     }
