@@ -8,11 +8,11 @@ public enum FoodSource: CaseIterable {
 }
 
 public extension FoodSource {
-    var description: String {
+    var name: String {
         switch self {
-        case .dataset:  "Official Foods"
-        case .private:  "My Foods"
-        case .public:   "Verified Foods"
+        case .dataset:  "Official"
+        case .private:  "My"
+        case .public:   "Verified"
         }
     }
     
