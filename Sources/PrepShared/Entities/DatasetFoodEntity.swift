@@ -342,11 +342,15 @@ public extension DatasetFoodEntity {
 //MARK: DatasetFoodEntity + SearchableFoodEntity
 
 extension DatasetFoodEntity: Searchable {
-    public var asFood: Food {
-        Food(self)
+    public static var source: FoodSource {
+        .dataset
     }
     
     public static var store: any Store.Type {
         PublicStore.self
+    }
+    
+    public var asFood: Food {
+        Food(self)
     }
 }

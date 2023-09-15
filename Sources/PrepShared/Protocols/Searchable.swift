@@ -5,6 +5,7 @@ public protocol Searchable: Entity {
     static func entities(for wordResults: [FindWordResult], page: Int) -> [Self]
     static var sortDescriptors: [NSSortDescriptor] { get }
     static var store: any Store.Type { get }
+    static var source: FoodSource { get }
     
     static var predicate: NSPredicate? { get }
     var asFood: Food { get }
@@ -40,11 +41,7 @@ extension Searchable {
 }
 
 public extension Searchable {
-    static func searchFoods(
-        source: FoodSource,
-        with text: String?,
-        page: Int
-    ) async throws -> [Food] {
+    static func searchFoods(with text: String?, page: Int) async throws -> [Food] {
         
         guard let text, !text.isEmpty else { return [] }
         
