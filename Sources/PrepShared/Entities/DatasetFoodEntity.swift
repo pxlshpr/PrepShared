@@ -262,6 +262,7 @@ public extension Food {
             type: entity.type,
             dataset: entity.dataset,
             datasetID: entity.datasetID,
+            lastUsedAt: entity.lastUsedAt,
             updatedAt: entity.updatedAt ?? entity.createdAt!,
             createdAt: entity.createdAt!,
             isTrashed: entity.isTrashed,
@@ -333,6 +334,7 @@ public extension DatasetFoodEntity {
         searchTokens = food.searchTokens
         dataset = food.dataset
         datasetID = food.datasetID
+        lastUsedAt = food.lastUsedAt
         createdAt = food.createdAt
         updatedAt = food.updatedAt
         isTrashed = food.isTrashed

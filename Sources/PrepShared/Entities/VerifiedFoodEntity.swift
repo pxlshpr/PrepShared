@@ -84,9 +84,7 @@ public extension Food {
             barcodes: entity.barcodes,
             type: entity.type,
             publishStatus: entity.publishStatus,
-//            dataset: entity.dataset,
-//            datasetID: entity.datasetID,
-//            lastAmount: entity.lastAmount,
+            lastUsedAt: entity.lastUsedAt,
             updatedAt: entity.updatedAt ?? entity.createdAt!,
             createdAt: entity.createdAt!,
             isTrashed: entity.isTrashed,
@@ -120,7 +118,6 @@ public extension VerifiedFoodEntity {
         self.id = food.id
         self.imageIDs = food.imageIDs
         self.isTrashed = food.isTrashed
-//        self.lastAmount = food.lastAmount
         self.lastUsedAt = food.lastUsedAt
         self.micros = food.micros
         self.name = food.name
