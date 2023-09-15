@@ -168,6 +168,27 @@ func areInIncreasingOrderUsingIsRaw(_ params: FoodSortParams) -> Bool? {
     return isRaw0
 }
 
+func areInIncreasingOrderUsingLastUsedAt(_ params: FoodSortParams) -> Bool? {
+    let date0 = params.food0.lastUsedAt
+    let date1 = params.food1.lastUsedAt
+    
+    switch (date0, date1) {
+    case (.some(let date0), .some(let date1)):
+        /// *Prioritise foods that have a more recent lastUsedAt date*
+        return date0 > date1
+
+    /// *Prioritise foods that have a lastUsedAt date when comparing with those that do not*
+    case (.some, .none):
+        return true
+    case (.none, .some):
+        return false
+
+    case (.none, .none):
+        /// *Discard this comparison when never food has a lastUsedAt date*
+        return nil
+    }
+}
+
 func areInIncreasingOrderUsingTokenRank(_ params: FoodSortParams) -> Bool? {
     let rank0 = params.food0.tokenRank(for: params.wordResults)
     let rank1 = params.food1.tokenRank(for: params.wordResults)
