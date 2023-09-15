@@ -48,7 +48,7 @@ extension FoodSource {
 }
 
 public extension Food {
-    var foodSource: FoodSource {
+    var source: FoodSource {
         if self.dataset != nil {
             return .dataset
         }

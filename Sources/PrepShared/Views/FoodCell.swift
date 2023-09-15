@@ -62,8 +62,8 @@ public struct FoodCell: View {
     }
     
     var sourceIcon: some View {
-        Image(systemName: food.foodSource.systemImage)
-            .foregroundStyle(food.foodSource.color)
+        Image(systemName: food.source.systemImage)
+            .foregroundStyle(food.source.color)
     }
     
     @ViewBuilder
