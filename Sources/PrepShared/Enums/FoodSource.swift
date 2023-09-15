@@ -57,4 +57,21 @@ public extension Food {
         }
         return .public
     }
+    
+    var sourceDescription: String {
+        switch source {
+        case .dataset:
+            guard let dataset else { return "" }
+            return "Source: \(dataset.abbreviation)"
+        case .private:
+            return ""
+        case .public:
+            return "Verified by Prep"
+        }
+    }
+    
+    var sourceURL: URL? {
+        guard let dataset else { return nil }
+        return dataset.url(datasetID)
+    }
 }
