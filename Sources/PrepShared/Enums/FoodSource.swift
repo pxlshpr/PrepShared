@@ -38,11 +38,11 @@ extension FoodSource {
         [
             .lastUsedAt, 
             .tokenRank,
-            .isRaw,
+//            .isRaw,
             .numberOfMatchedWords,
-            .distance,
-            .length,
-            .ratio
+//            .distance,
+//            .length,
+//            .ratio
         ]
     }
 }
