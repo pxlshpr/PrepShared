@@ -35,15 +35,13 @@ public extension FoodSource {
 
 extension FoodSource {
     var heuristics: [FoodSortHeuristic] {
-        switch self {
-        case .dataset, .public:
-//            [.tokenRank, .numberOfMatchedWords, .distance, .length, .ratio]
-//            [.isRaw, .numberOfMatchedWords, .distance, .length, .ratio]
-//            [.isRaw, .numberOfMatchedWords]
-            [.tokenRank]
-        case .private:
-            [.numberOfMatchedWords, .distance, .length, .ratio]
-        }
+        [.tokenRank, .numberOfMatchedWords, .distance, .length, .ratio]
+//        switch self {
+//        case .dataset, .public:
+//            [.tokenRank]
+//        case .private:
+//            [.numberOfMatchedWords, .distance, .length, .ratio]
+//        }
     }
 }
 

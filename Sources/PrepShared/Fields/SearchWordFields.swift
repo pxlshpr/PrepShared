@@ -25,4 +25,12 @@ public extension SearchWordFields {
         singular = word.singular
         spellings = word.spellings
     }
+    
+    var allWords: [String] {
+        [singular] + spellings
+    }
+    
+    var allWordsAsSentence: String {
+        allWords.joined(separator: " ")
+    }
 }
