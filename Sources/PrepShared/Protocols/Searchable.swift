@@ -11,11 +11,11 @@ public protocol Searchable: Entity {
     var asFood: Food { get }
     
     /// Fields used in the predicates
-    var name: String? { get }
-    var detail: String? { get }
-    var brand: String? { get }
-    var lastUsedAt: Date? { get }
-    var isTrashed: Bool { get }
+    var name: String? { get set }
+    var detail: String? { get set }
+    var brand: String? { get set }
+    var lastUsedAt: Date? { get set }
+    var isTrashed: Bool { get set }
     var searchTokensString: String? { get set }
 }
 
