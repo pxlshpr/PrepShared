@@ -35,7 +35,7 @@ public extension FoodSource {
 
 extension FoodSource {
     var heuristics: [FoodSortHeuristic] {
-        [.tokenRank, .numberOfMatchedWords, .distance, .length, .ratio]
+        [.tokenRank, .isRaw, .numberOfMatchedWords, .distance, .length, .ratio]
 //        switch self {
 //        case .dataset, .public:
 //            [.tokenRank]

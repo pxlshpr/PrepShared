@@ -86,15 +86,47 @@ extension Food {
         return max
     }
     
-//    var isRaw: Bool {
-//        detail?.lowercased() == "raw" || detail?.lowercased().contains(", raw") == true
-//    }
+    var isRaw: Bool {
+        detail?.lowercased() == "raw" || detail?.lowercased().contains(", raw") == true
+    }
 
-    func numberOfWordMatches(of text: String) -> Int {
-        //TODO: Count how many tokens of text are matched (all lowercased).
-        /// [ ] Check search tokens (each has individual words) and each word in name, detail and brand
-        /// [ ] So, "banana chips" should match 2 with food named "banana chips", and 1 with food named "banana"
-        return 0
+    func numberOfWordMatches(of params: FoodSortParams) -> Int {
+        
+        var count = 0
+        var unmatchedWords: [SearchWord] = []
+        
+        /// [ ] First go through all `params.wordResults`
+        /// [ ] Counting how many are present in `searchTokens`
+        /// [ ] While removing them from a separate array we keep
+        for wordArray in params.wordResults.allWordArrays {
+            if wordArray.contains(where: { word in
+                searchTokens.contains(where: { $0.wordID == word.id })
+            }) {
+                count += 1
+            } else {
+                unmatchedWords.append(contentsOf: wordArray)
+            }
+        }
+
+        /// [ ] Now with the remaning words, with all their spellings, and the unrecognized words in an array
+        var strings = unmatchedWords
+            .map { $0.allStrings }
+            .reduce([]) { $0 + $1 }
+        + params.wordResults.unrecognizedWords
+
+        /// [ ] Go through all the words in each of name, detail, brand
+        /// [ ] Count each one that has a match in the array we're keeping
+        /// [ ] At the end return this count
+        for text in [name, detail, brand].compactMap({$0}) {
+            for textWord in text.searchWords {
+                if strings.contains(textWord) {
+                    count += 1
+                    strings.removeAll(where: { $0 == textWord })
+                }
+            }
+        }
+        
+        return count
     }
     
     func distanceOfSearchText(_ text: String) -> Int {
@@ -127,14 +159,14 @@ extension Food {
 }
 
 
-//func areInIncreasingOrderUsingIsRaw(_ params: FoodSortParams) -> Bool? {
-//    let isRaw0 = params.food0.isRaw
-//    let isRaw1 = params.food1.isRaw
-//    guard isRaw0 != isRaw1 else { return nil }
-//
-//    /// *Prioritise foods that are raw*
-//    return isRaw0
-//}
+func areInIncreasingOrderUsingIsRaw(_ params: FoodSortParams) -> Bool? {
+    let isRaw0 = params.food0.isRaw
+    let isRaw1 = params.food1.isRaw
+    guard isRaw0 != isRaw1 else { return nil }
+
+    /// *Prioritise foods that are raw*
+    return isRaw0
+}
 
 func areInIncreasingOrderUsingTokenRank(_ params: FoodSortParams) -> Bool? {
     let rank0 = params.food0.tokenRank(for: params.wordResults)
@@ -146,8 +178,8 @@ func areInIncreasingOrderUsingTokenRank(_ params: FoodSortParams) -> Bool? {
 }
 
 func areInIncreasingOrderUsingNumberOfMatchedWords(_ params: FoodSortParams) -> Bool? {
-    let count0 = params.food0.numberOfWordMatches(of: params.text)
-    let count1 = params.food1.numberOfWordMatches(of: params.text)
+    let count0 = params.food0.numberOfWordMatches(of: params)
+    let count1 = params.food1.numberOfWordMatches(of: params)
     guard count0 != count1 else { return nil }
 
     /// *Prioritise foods that have more token matches*

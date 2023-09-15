@@ -17,10 +17,21 @@ public struct FoodCell: View {
     let protein: Double
 
     let showsPublishMetadata: Bool
+    let accessoryType: AccessoryType
+
+    public enum AccessoryType {
+        case nutrientPieChart
+        case sourceIcon
+    }
     
-    public init(food: Food, showsPublishMetadata: Bool = false) {
+    public init(
+        food: Food,
+        showsPublishMetadata: Bool = false,
+        accessoryType: AccessoryType = .nutrientPieChart
+    ) {
         self.food = food
         self.showsPublishMetadata = showsPublishMetadata
+        self.accessoryType = accessoryType
         
         self.emoji = food.emoji
         self.name = food.name
@@ -38,8 +49,21 @@ public struct FoodCell: View {
             nameTexts
             publishStatusBadge
             Spacer()
-            pieChart
+            accessory
         }
+    }
+    
+    @ViewBuilder
+    var accessory: some View {
+        switch accessoryType {
+        case .nutrientPieChart: pieChart
+        case .sourceIcon:       sourceIcon
+        }
+    }
+    
+    var sourceIcon: some View {
+        Image(systemName: food.foodSource.systemImage)
+            .foregroundStyle(food.foodSource.color)
     }
     
     @ViewBuilder

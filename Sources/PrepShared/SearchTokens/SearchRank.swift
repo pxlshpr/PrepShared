@@ -11,6 +11,10 @@ public enum SearchRank: Int, Codable, CaseIterable {
 
 public extension SearchRank {
     
+    static var wordFormListCases: [SearchRank] {
+        [.none] + allPriorities.reversed()
+    }
+    
     static var displayTitle: String {
         /// Use this as its more user-friendly and understandable than "Search Rank"
         "Association"
@@ -36,7 +40,7 @@ public extension SearchRank {
         case .none:
             "Not Included"
         default:
-            "\(menuDescription) Association"
+            "\(menuDescription)"
         }
     }
     

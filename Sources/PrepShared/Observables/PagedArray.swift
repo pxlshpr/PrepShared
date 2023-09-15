@@ -94,6 +94,7 @@ public extension PagedArray {
         shouldShowEmptyState = true
         currentPage = 1
         canLoadMorePages = true
+        searchTask?.cancel()
     }
 }
 

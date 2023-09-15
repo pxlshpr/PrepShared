@@ -41,3 +41,9 @@ public extension SearchWord {
         )
     }
 }
+
+extension SearchWord {
+    var allStrings: [String] {
+        [singular] + spellings
+    }
+}

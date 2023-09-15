@@ -95,20 +95,28 @@ public extension Searchable {
         
         guard let text, !text.isEmpty else { return [] }
         
-        let matchedWords = await PublicStore.findWords(in: text)
+        let results = await PublicStore.findWords(in: text)
         try Task.checkCancellation()
         
-        let entities = entities(for: matchedWords, page: page)
-        let foods = entities.map { $0.asFood }
-        let sorted = foods.sorted(by: {
-            Food.areInIncreasingOrder($0, $1,
-                                      for: text,
-                                      wordResults: matchedWords,
-                                      source: source
-            )
-        })
-
-        return sorted
+        let entities = entities(for: results, page: page)
+        return entities
+            .map { $0.asFood }
+//            .filter {
+//                /// Remove any that doesnt have the unrecognized words
+//                for word in results.unrecognizedWords {
+//                    if !$0.contains(word) {
+//                        return false
+//                    }
+//                }
+//                return true
+//            }
+            .sorted(by: {
+                Food.areInIncreasingOrder($0, $1,
+                                          for: text,
+                                          wordResults: results,
+                                          source: source
+                )
+            })
     }
 
     
@@ -140,7 +148,7 @@ extension Searchable {
             predicates.append(wordPredicate(for: word))
         }
         guard !predicates.isEmpty else { return nil }
-        return NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
     }
 
     static func unrecognizedWordsPredicate(for wordResults: [FindWordResult]) -> NSPredicate? {
@@ -154,7 +162,7 @@ extension Searchable {
     }
     
     static func matchPredicate(for results: [FindWordResult]) -> NSPredicate {
-        NSCompoundPredicate(orPredicateWithSubpredicates: [
+        NSCompoundPredicate(andPredicateWithSubpredicates: [
             unrecognizedWordsPredicate(for: results),
             wordsPredicate(for: results)
         ].compactMap({$0}))

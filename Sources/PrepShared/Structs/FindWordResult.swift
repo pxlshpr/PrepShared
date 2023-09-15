@@ -30,6 +30,13 @@ public extension Array where Element == FindWordResult {
             partialResult + array
         }
     }
+    
+    var allStrings: [String] {
+        allWords
+            .map { [$0.singular] + $0.spellings }
+            .reduce([]) { $0 + $1 }
+        + unrecognizedWords
+    }
 
     var allWordIDs: [UUID] {
         self.compactMap { $0.words }
