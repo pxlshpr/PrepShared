@@ -104,12 +104,3 @@ extension FoodEntityType {
     }
 }
 
-extension DatasetFoodEntity: FoodEntityType {
-    public var asFood: Food {
-        Food(self)
-    }
-    
-    public static var store: any Store.Type {
-        PublicStore.self
-    }
-}
