@@ -9,11 +9,62 @@ public protocol Searchable: Entity {
     static var predicate: NSPredicate? { get }
     var asFood: Food { get }
     
+    /// Fields used in the predicates
     var name: String? { get }
     var detail: String? { get }
     var brand: String? { get }
+    var lastUsedAt: Date? { get }
     var isTrashed: Bool { get }
     var searchTokensString: String? { get }
+}
+
+extension Searchable {
+    public static var predicate: NSPredicate? { nil }
+
+    public static var sortDescriptors: [NSSortDescriptor] {
+        [
+            NSSortDescriptor(key: "lastUsedAt", ascending: false),
+            NSSortDescriptor(key: "name", ascending: true)
+        ]
+    }
+    
+    public static func entities(for wordResults: [FindWordResult], page: Int) -> [Self] {
+        Self.entities(
+            in: store.newBackgroundContext(),
+            predicate: predicate(for: wordResults),
+            sortDescriptors: sortDescriptors,
+            fetchLimit: FoodsPageSize,
+            fetchOffset: (page - 1) * FoodsPageSize
+        ) as! [Self]
+    }
+}
+
+public extension Searchable {
+    static func searchFoods(
+        source: FoodSource,
+        with text: String?,
+        page: Int
+    ) async throws -> [Food] {
+        
+        guard let text, !text.isEmpty else { return [] }
+        
+        let matchedWords = await PublicStore.findWords(in: text)
+        try Task.checkCancellation()
+        
+        let entities = entities(for: matchedWords, page: page)
+        let foods = entities.map { $0.asFood }
+        let sorted = foods.sorted(by: {
+            Food.areInIncreasingOrder($0, $1,
+                                      for: text,
+                                      wordResults: matchedWords,
+                                      source: source
+            )
+        })
+
+        return sorted
+    }
+
+    
 }
 
 extension Searchable {
@@ -82,25 +133,3 @@ extension Searchable {
         }
     }
 }
-
-extension Searchable {
-    public static var predicate: NSPredicate? { nil }
-
-    public static var sortDescriptors: [NSSortDescriptor] {
-        [
-//            NSSortDescriptor(key: "lastUsedAt", ascending: false),
-            NSSortDescriptor(key: "name", ascending: true)
-        ]
-    }
-    
-    public static func entities(for wordResults: [FindWordResult], page: Int) -> [Self] {
-        Self.entities(
-            in: store.newBackgroundContext(),
-            predicate: predicate(for: wordResults),
-            sortDescriptors: sortDescriptors,
-            fetchLimit: FoodsPageSize,
-            fetchOffset: (page - 1) * FoodsPageSize
-        ) as! [Self]
-    }
-}
-
