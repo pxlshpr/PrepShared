@@ -39,7 +39,7 @@ extension FoodSource {
             .lastUsedAt, 
             .tokenRank,
 //            .isRaw,
-            .numberOfMatchedWords,
+//            .numberOfMatchedWords,
 //            .distance,
 //            .length,
 //            .ratio
