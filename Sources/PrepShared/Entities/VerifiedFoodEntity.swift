@@ -373,7 +373,7 @@ public extension CKRecord {
 
 public extension VerifiedFoodEntity {
     static func replaceWordID(_ old: UUID, with new: UUID, in context: NSManagedObjectContext) {
-        DatasetFoodEntity.entities(
+        VerifiedFoodEntity.entities(
             in: context,
             predicate: NSPredicate(format: "searchTokensString CONTAINS %@", old.uuidString)
         ).forEach { entity in

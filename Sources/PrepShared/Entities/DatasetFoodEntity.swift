@@ -51,49 +51,55 @@ extension DatasetFoodEntity {
 
 }
 
-public extension DatasetFoodEntity {
-    func contains(wordID: UUID) -> Bool {
-        searchTokens.contains(where: { $0.wordID == wordID })
-    }
-    func removeSearchToken(wordID: UUID) {
-        searchTokens.removeAll(where: { $0.wordID == wordID })
-    }
-    
-    func setSearchToken(wordID: UUID, rank: SearchRank) {
-        removeSearchToken(wordID: wordID)
-        searchTokens.append(.init(wordID: wordID, rank: rank))
-    }
-}
+//public extension DatasetFoodEntity {
+//    func contains(wordID: UUID) -> Bool {
+//        searchTokens.contains(where: { $0.wordID == wordID })
+//    }
+//    
+//    func contains(wordID: UUID, withRank rank: SearchRank) -> Bool {
+//        searchTokens.contains(where: {
+//            $0.wordID == wordID
+//            && $0.rank == rank
+//        })
+//    }
+//
+//    func removeSearchToken(wordID: UUID) {
+//        searchTokens.removeAll(where: { $0.wordID == wordID })
+//    }
+//    
+//    func setSearchToken(wordID: UUID, rank: SearchRank) {
+//        removeSearchToken(wordID: wordID)
+//        searchTokens.append(.init(wordID: wordID, rank: rank))
+//    }
+//    
+//    static func replaceWordID(_ old: UUID, with new: UUID, in context: NSManagedObjectContext) {
+//        DatasetFoodEntity.entities(
+//            in: context,
+//            predicate: NSPredicate(format: "searchTokensString CONTAINS %@", old.uuidString)
+//        ).forEach { entity in
+//            entity.replaceWordID(old, with: new)
+//        }
+//    }
+//    
+//    func replaceWordID(_ old: UUID, with new: UUID) {
+//        guard let index = searchTokens.firstIndex(where: { $0.wordID == old }) else {
+//            return
+//        }
+//        searchTokens[index].wordID = new
+//    }
+//    
+//    var searchTokens: [FlattenedSearchToken] {
+//        get {
+//            guard let searchTokensString else { return [] }
+//            return searchTokensString.searchTokens
+//        }
+//        set {
+//            self.searchTokensString = newValue.asString
+//        }
+//    }
+//}
 
 public extension DatasetFoodEntity {
-    static func replaceWordID(_ old: UUID, with new: UUID, in context: NSManagedObjectContext) {
-        DatasetFoodEntity.entities(
-            in: context,
-            predicate: NSPredicate(format: "searchTokensString CONTAINS %@", old.uuidString)
-        ).forEach { entity in
-            entity.replaceWordID(old, with: new)
-        }
-    }
-    
-    func replaceWordID(_ old: UUID, with new: UUID) {
-        guard let index = searchTokens.firstIndex(where: { $0.wordID == old }) else {
-            return
-        }
-        searchTokens[index].wordID = new
-    }
-}
-
-public extension DatasetFoodEntity {
-    
-    var searchTokens: [FlattenedSearchToken] {
-        get {
-            guard let searchTokensString else { return [] }
-            return searchTokensString.searchTokens
-        }
-        set {
-            self.searchTokensString = newValue.asString
-        }
-    }
     
     var barcodes: [String] {
         get {
