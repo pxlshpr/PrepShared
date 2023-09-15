@@ -341,7 +341,7 @@ public extension DatasetFoodEntity {
 
 //MARK: DatasetFoodEntity + SearchableFoodEntity
 
-extension DatasetFoodEntity: SearchableFoodEntity {
+extension DatasetFoodEntity: Searchable {
     public var asFood: Food {
         Food(self)
     }

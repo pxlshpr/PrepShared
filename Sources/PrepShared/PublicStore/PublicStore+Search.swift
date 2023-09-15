@@ -3,7 +3,7 @@ import Foundation
 extension PublicStore {
     public static func searchFoods(
         source: FoodSource,
-        entityType: any SearchableFoodEntity.Type,
+        entityType: any Searchable.Type,
         with text: String?,
         page: Int
     ) async throws -> [Food] {
