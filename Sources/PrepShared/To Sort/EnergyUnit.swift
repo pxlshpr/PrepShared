@@ -14,7 +14,16 @@ public extension EnergyUnit {
             return "Kilojule"
         }
     }
-    
+
+    var commonName: String {
+        switch self {
+        case .kcal:
+            return "Calories"
+        case .kJ:
+            return "Kilojules"
+        }
+    }
+
     var abbreviation: String {
         switch self {
         case .kcal:
