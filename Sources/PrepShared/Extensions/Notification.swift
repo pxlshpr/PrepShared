@@ -15,9 +15,6 @@ public extension Notification.Name {
     /// Backend Changes
     static var didPopulate: Notification.Name { return .init("didPopulate") }
     static var didUpdateDay: Notification.Name { return .init("didUpdateDay") }
-//    static var didUpdateFood: Notification.Name { return .init("didUpdateFood") }
-    static var didUpdateSettings: Notification.Name { return .init("didUpdateSettings") }
-
 }
 
 //public extension Notification {
