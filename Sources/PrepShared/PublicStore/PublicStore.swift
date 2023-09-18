@@ -74,6 +74,7 @@ extension PublicStore {
     
     public static func populateIfEmpty() {
         let start = CFAbsoluteTimeGetCurrent()
+        
         var count = DatasetFoodEntity.countAll(in: shared.container.viewContext)
         guard count == 0 else {
             logger.debug("Not populating DatasetFoods")
@@ -110,11 +111,14 @@ extension PublicStore {
 import UIKit
 
 public extension PublicStore {
-    static func imagesForVerifiedFood(with id: UUID) async -> [UIImage] {
-        let bgContext = newBackgroundContext()
-        guard let foodEntity = VerifiedFoodEntity.entity(in: bgContext, with: id) else {
-            fatalError()
+    static func imagesForVerifiedFood(with id: UUID) async throws -> [UIImage] {
+        var images: [UIImage] = []
+        try await performInBackground { context in
+            guard let foodEntity = VerifiedFoodEntity.entity(in: context, with: id) else {
+                fatalError()
+            }
+            images = foodEntity.images
         }
-        return foodEntity.images
+        return images
     }
 }
