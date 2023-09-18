@@ -1,6 +1,6 @@
 import Foundation
 
-public enum VolumeUnit: Int, Codable {
+public enum VolumeUnit: Int, Codable, CaseIterable {
     
     case mL = 1
 
