@@ -138,14 +138,14 @@ public extension SearchWordEntity {
 
 public extension SearchWordEntity {
 
-    static func findWords(matching text: String, in context: NSManagedObjectContext) -> [SearchWordEntity] {
-        SearchWordEntity.entities(
-            in: context,
-            predicate: findPredicate(for: text)
-        ).filter {
-            $0.singular == text || $0.spellings.contains(text)
-        }
-    }
+//    static func findWords(matching text: String, in context: NSManagedObjectContext) -> [SearchWordEntity] {
+//        SearchWordEntity.entities(
+//            in: context,
+//            predicate: findPredicate(for: text)
+//        ).filter {
+//            $0.singular == text || $0.spellings.contains(text)
+//        }
+//    }
     
     static func findPredicate(for text: String) -> NSPredicate {
         let text = text.lowercased()

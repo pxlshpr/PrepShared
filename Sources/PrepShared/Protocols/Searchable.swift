@@ -2,7 +2,7 @@ import Foundation
 import CoreData
 
 public protocol Searchable: Entity {
-    static func entities(for wordResults: [FindWordResult], page: Int) -> [Self]
+    static func entities(for wordResults: [FindWordResult], page: Int, in context: NSManagedObjectContext) -> [Self]
     static var sortDescriptors: [NSSortDescriptor] { get }
     static var store: any Store.Type { get }
     static var searchSource: FoodSource { get }
@@ -79,9 +79,13 @@ extension Searchable {
         ]
     }
     
-    public static func entities(for wordResults: [FindWordResult], page: Int) -> [Self] {
+    public static func entities(
+        for wordResults: [FindWordResult],
+        page: Int,
+        in context: NSManagedObjectContext
+    ) -> [Self] {
         Self.entities(
-            in: store.newBackgroundContext(),
+            in: context,
             predicate: predicate(for: wordResults),
             sortDescriptors: sortDescriptors,
             fetchLimit: FoodsPageSize,
@@ -95,21 +99,15 @@ public extension Searchable {
         
         guard let text, !text.isEmpty else { return [] }
         
-        let results = await PublicStore.findWords(in: text)
+        let results = try await PublicStore.findWords(in: text)
         try Task.checkCancellation()
         
-        let entities = entities(for: results, page: page)
-        return entities
-            .map { $0.asFood }
-//            .filter {
-//                /// Remove any that doesnt have the unrecognized words
-//                for word in results.unrecognizedWords {
-//                    if !$0.contains(word) {
-//                        return false
-//                    }
-//                }
-//                return true
-//            }
+        var foods: [Food] = []
+        try await PublicStore.performInBackground { context in
+            let entities = entities(for: results, page: page, in: context)
+            foods = entities.map { $0.asFood }
+        }
+        return foods
             .sorted(by: {
                 Food.areInIncreasingOrder($0, $1,
                                           for: text,

@@ -31,29 +31,41 @@ extension PublicStore {
 
 extension PublicStore {
     
-    public static func findWords(in text: String) async -> [FindWordResult] {
+    public static func findWords(in text: String) async throws -> [FindWordResult] {
         
         let wordStrings = text
             .lowercased()
             .searchWords
 
-        return await withTaskGroup(
+        return try await withThrowingTaskGroup(
             of: FindWordResult.self,
             returning: [FindWordResult].self
         ) { taskGroup in
             for string in wordStrings {
-                taskGroup.addTask { await findWords(matching: string) }
+                taskGroup.addTask { try await findWords(matching: string) }
             }
 
-            return await taskGroup.reduce(into: [FindWordResult]()) { partialResult, results in
+            return try await taskGroup.reduce(into: [FindWordResult]()) { partialResult, results in
                 partialResult.append(results)
             }
         }
     }
     
-    static func findWords(matching text: String) async -> FindWordResult {
-        let words = SearchWordEntity.findWords(matching: text, in: newBackgroundContext())
+    static func findWords(matching text: String) async throws -> FindWordResult {
+        
+        var words: [SearchWord] = []
+        try await performInBackground { context in
+            words = SearchWordEntity.entities(
+                in: context,
+                predicate: SearchWordEntity.findPredicate(for: text)
+            ).filter {
+                $0.singular == text || $0.spellings.contains(text)
+            }
             .map { $0.asSearchWord }
+        }
+
+//        let words = SearchWordEntity.findWords(matching: text, in: newBackgroundContext())
+//            .map { $0.asSearchWord }
         if words.isEmpty {
             return FindWordResult(words: nil, string: text)
         } else {
