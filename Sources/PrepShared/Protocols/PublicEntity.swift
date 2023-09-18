@@ -101,10 +101,13 @@ public extension PublicEntity {
     
     static func uploadPendingEntities(_ context: NSManagedObjectContext) async throws {
         
-        let entities = self.entities(
-            in: context,
-            predicateFormat: "isSynced == NO"
-        ) as! [Self]
+        var entities: [Self] = []
+        try await PublicStore.perform(in: context) {
+            entities = self.entities(
+                in: context,
+                predicateFormat: "isSynced == NO"
+            ) as! [Self]
+        }
         
         PublicStore.logger.debug("Uploading \(entities.count) \(Self.recordType.name) entities")
 
