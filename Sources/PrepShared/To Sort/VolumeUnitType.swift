@@ -12,6 +12,12 @@ public enum VolumeUnitType: Int, CaseIterable, Codable {
     case liter
 }
 
+public extension VolumeUnitType {
+    static var settingsOptions: [VolumeUnitType] {
+        [.cup, .teaspoon, .tablespoon, .fluidOunce, .pint, .quart, .gallon]
+    }
+}
+
 extension VolumeUnitType: Unit {
     
     public var name: String {
