@@ -16,6 +16,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/pxlshpr/SwiftSugar", from: "0.0.97"),
+        .package(url: "https://github.com/pxlshpr/SwiftHaptics", from: "0.1.4"),
         .package(url: "https://github.com/pxlshpr/VisionSugar", from: "0.0.80"),
         .package(url: "https://github.com/pxlshpr/ColorSugar", from: "0.0.8"),
         .package(url: "https://github.com/marmelroy/Zip", from: "2.1.2"),
@@ -27,6 +28,7 @@ let package = Package(
             name: "PrepShared",
             dependencies: [
                 .product(name: "SwiftSugar", package: "SwiftSugar"),
+                .product(name: "SwiftHaptics", package: "SwiftHaptics"),
                 .product(name: "VisionSugar", package: "VisionSugar"),
                 .product(name: "ColorSugar", package: "ColorSugar"),
                 .product(name: "Zip", package: "Zip"),
