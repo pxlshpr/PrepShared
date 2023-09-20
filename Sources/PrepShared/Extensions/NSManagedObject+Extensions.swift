@@ -26,18 +26,12 @@ func performInBackgroundContext(
 ) async throws {
     try await withCheckedThrowingContinuation { continuation in
         do {
-            var didResume = false
             try performInBackgroundContext(
                 context,
                 mainContext: mainContext,
                 performBlock: performBlock
             ) {
-                if !didResume {
-                    continuation.resume()
-                    didResume = true
-                } else {
-                    print("Captured and handled multiple resumes")
-                }
+                continuation.resume()
             }
         } catch {
             continuation.resume(throwing: error)
@@ -51,7 +45,10 @@ func performInBackgroundContext(
     performBlock: @escaping () throws -> (),
     completion: @escaping () -> ()
 ) throws {
-    
+
+    let address = String(describing: Unmanaged.passUnretained(context).toOpaque())
+    let logger = Logger(subsystem: "BackgroundContext", category: "")
+
     try context.performAndWait {
         try performBlock()
         
@@ -61,12 +58,15 @@ func performInBackgroundContext(
             queue: .main
         ) { (notification) in
             mainContext.mergeChanges(fromContextDidSave: notification)
+            logger.debug("\(address): didSave observed, calling completion()")
             completion()
         }
         
         try context.performAndWait {
+            logger.debug("\(address): context.save()")
             try context.save()
         }
+        logger.debug("\(address): removing observer")
         NotificationCenter.default.removeObserver(observer)
     }
 }
