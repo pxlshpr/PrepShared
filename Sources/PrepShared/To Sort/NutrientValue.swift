@@ -116,9 +116,3 @@ public extension Array where Element == NutrientValue {
         return true
     }
 }
-
-public extension Double {
-    func matches(_ other: Double) -> Bool {
-        self.rounded(toPlaces: 1) == other.rounded(toPlaces: 1)
-    }
-}
