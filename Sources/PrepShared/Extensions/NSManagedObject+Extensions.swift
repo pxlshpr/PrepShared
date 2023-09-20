@@ -26,12 +26,18 @@ func performInBackgroundContext(
 ) async throws {
     try await withCheckedThrowingContinuation { continuation in
         do {
+            var didResume = false
             try performInBackgroundContext(
                 context,
                 mainContext: mainContext,
                 performBlock: performBlock
             ) {
-                continuation.resume()
+                if !didResume {
+                    continuation.resume()
+                    didResume = true
+                } else {
+                    print("Captured and handled multiple resumes")
+                }
             }
         } catch {
             continuation.resume(throwing: error)
@@ -49,19 +55,13 @@ func performInBackgroundContext(
     try context.performAndWait {
         try performBlock()
         
-        var completionCalled = false
-        
         let observer = NotificationCenter.default.addObserver(
             forName: .NSManagedObjectContextDidSave,
             object: context,
             queue: .main
         ) { (notification) in
-            /// Ensure we don't call completion once (to account for instances where another save occurs before the observer is removed)
-            if !completionCalled {
-                mainContext.mergeChanges(fromContextDidSave: notification)
-                completion()
-                completionCalled = true
-            }
+            mainContext.mergeChanges(fromContextDidSave: notification)
+            completion()
         }
         
         try context.performAndWait {
