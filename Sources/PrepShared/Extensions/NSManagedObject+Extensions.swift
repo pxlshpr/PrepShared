@@ -25,119 +25,101 @@ func performInBackgroundContext(
     performBlock: @escaping () throws -> ()
 ) async throws {
     try await withCheckedThrowingContinuation { continuation in
+        let id = UUID()
         do {
-            try performInBackgroundContext(
-                context,
-                mainContext: mainContext,
-                performBlock: performBlock
-            ) {
+            
+            try ContextPerformer(mainContext: mainContext) {
                 continuation.resume()
             }
+            .performInBackgroundContext(
+                context,
+                performBlock: performBlock
+            )
+            
+//            try performInBackgroundContext(
+//                context,
+//                mainContext: mainContext,
+//                performBlock: performBlock
+//            ) {
+//                continuation.resume()
+//            }
         } catch {
             continuation.resume(throwing: error)
         }
     }
 }
 
-func performInBackgroundContext(
-    _ context: NSManagedObjectContext,
-    mainContext: NSManagedObjectContext,
-    performBlock: @escaping () throws -> (),
-    completion: @escaping () -> ()
-) throws {
+class ContextPerformer {
+    
+    let id = UUID()
+    let mainContext: NSManagedObjectContext
+    let completion: () -> ()
+    
+    init(
+        mainContext: NSManagedObjectContext,
+        completion: @escaping () -> ()
+    ) {
+        self.mainContext = mainContext
+        self.completion = completion
+    }
+    
+    func performInBackgroundContext(
+        _ context: NSManagedObjectContext,
+        performBlock: @escaping () throws -> ()
+    ) throws {
 
-    let address = String(describing: Unmanaged.passUnretained(context).toOpaque())
-    let logger = Logger(subsystem: "BackgroundContext", category: "")
-
-    try context.performAndWait {
-        try performBlock()
-        
-        let observer = NotificationCenter.default.addObserver(
-            forName: .NSManagedObjectContextDidSave,
-            object: context,
-            queue: .main
-        ) { (notification) in
-            mainContext.mergeChanges(fromContextDidSave: notification)
-            logger.debug("\(address): didSave observed, calling completion()")
-            completion()
-        }
-        
         try context.performAndWait {
-            logger.debug("\(address): context.save()")
-            try context.save()
+            try performBlock()
+            
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(didSave),
+                name: .NSManagedObjectContextDidSave,
+                object: context
+            )
+            
+            try context.performAndWait {
+                try context.save()
+            }
         }
-        logger.debug("\(address): removing observer")
-        NotificationCenter.default.removeObserver(observer)
+    }
+    
+    @objc func didSave(notification: Notification) {
+        DispatchQueue.main.async {
+            NotificationCenter.default.removeObserver(self)
+            self.mainContext.mergeChanges(fromContextDidSave: notification)
+            self.completion()
+        }
     }
 }
 
-//MARK: _ Legacy
-//public extension NSManagedObjectContext {
-//    func performInBackgroundAndMergeWithMainContext(
-//        mainContext: NSManagedObjectContext,
-//        posting notificationName: Notification.Name? = nil,
-//        performBlock: @escaping () -> ()
-//    ) async {
-//        await performInBackgroundContextAndMergeWithMainContext(
-//            bgContext: self,
-//            mainContext: mainContext,
-//            posting: notificationName,
-//            performBlock: performBlock
-//        )
-//    }
-//}
-//
-//public func performInBackgroundContextAndMergeWithMainContext(
-//    bgContext: NSManagedObjectContext,
-//    mainContext: NSManagedObjectContext,
-//    posting notificationName: Notification.Name? = nil,
-//    performBlock: @escaping () -> ()
-//) async {
-//    await performInBackgroundContextAndMergeWithMainContext(
-//        bgContext: bgContext,
-//        mainContext: mainContext,
-//        performBlock: performBlock,
-//        didSaveHandler: {
-//            if let notificationName {
-//                post(notificationName)
-//            }
-//        }
-//    )
-//}
-//
-//public func performInBackgroundContextAndMergeWithMainContext(
-//    bgContext: NSManagedObjectContext,
+/// This was our legacy function that is now deprecated since there is an edge case where:
+/// - `newBackgroundContext` might sometimes return an existing context (with the same pointer address), especially when invoked in quick succession
+/// - this would result in the observer block sometimes being called more than once between the `.save()` and `.removeObserver(:)` calls (once for the actual call, the second time being for the call on the re-used context—since the notification is tied to the context itself).
+/// - this isn't an issue on itself, but when using continuations above to invoke this asynchronously—we get an error where `completion()` being called multiple times causes the continuation also resume multiple times, which is an error in Swift.
+/// - So we re-wrote this with the `ContextPerformer` class above, which uses a selector based notification scheme so that we're able to remove the observer before actually calling completion.
+//func performInBackgroundContext(
+//    _ context: NSManagedObjectContext,
 //    mainContext: NSManagedObjectContext,
 //    performBlock: @escaping () throws -> (),
-//    didSaveHandler: @escaping () -> (),
-//    errorHandler: ((Error) -> ())? = nil
-//) async {
-//    await bgContext.perform {
-//        
-//        do {
-//            try performBlock()
-//        } catch {
-//            errorHandler?(error)
-//        }
-//        
-//        do {
-//            let observer = NotificationCenter.default.addObserver(
-//                forName: .NSManagedObjectContextDidSave,
-//                object: bgContext,
-//                queue: .main
-//            ) { (notification) in
-//                mainContext.mergeChanges(fromContextDidSave: notification)
-//                didSaveHandler()
-//            }
-//            
-//            try bgContext.performAndWait {
-//                try bgContext.save()
-//            }
-//            NotificationCenter.default.removeObserver(observer)
+//    completion: @escaping () -> ()
+//) throws {
 //
-//        } catch {
-//            //TODO: Handle CoreData error here
-//            errorHandler?(error)
+//    try context.performAndWait {
+//        try performBlock()
+//                
+//        let observer = NotificationCenter.default.addObserver(
+//            forName: .NSManagedObjectContextDidSave,
+//            object: context,
+//            queue: .main
+//        ) { (notification) in
+//            mainContext.mergeChanges(fromContextDidSave: notification)
+//            completion()
 //        }
+//        
+//        try context.performAndWait {
+//            try context.save()
+//        }
+//        NotificationCenter.default.removeObserver(observer)
 //    }
 //}
