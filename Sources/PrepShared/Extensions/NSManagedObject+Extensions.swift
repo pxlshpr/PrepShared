@@ -49,13 +49,19 @@ func performInBackgroundContext(
     try context.performAndWait {
         try performBlock()
         
+        var completionCalled = false
+        
         let observer = NotificationCenter.default.addObserver(
             forName: .NSManagedObjectContextDidSave,
             object: context,
             queue: .main
         ) { (notification) in
-            mainContext.mergeChanges(fromContextDidSave: notification)
-            completion()
+            /// Ensure we don't call completion once (to account for instances where another save occurs before the observer is removed)
+            if !completionCalled {
+                mainContext.mergeChanges(fromContextDidSave: notification)
+                completion()
+                completionCalled = true
+            }
         }
         
         try context.performAndWait {
