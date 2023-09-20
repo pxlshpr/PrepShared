@@ -1,0 +1,38 @@
+import Foundation
+
+public enum BodyMassType: Int16, Hashable, Codable, CaseIterable, Identifiable {
+    case weight = 1
+    case leanMass
+    
+    public var id: Int16 { rawValue }
+}
+
+public extension BodyMassType {
+    
+    var name: String {
+        switch self {
+        case .weight:   "Weight"
+        case .leanMass: "Lean Body Mass"
+        }
+    }
+
+    var abbreviation: String {
+        switch self {
+        case .weight:   "Weight"
+        case .leanMass: "LBM"
+        }
+    }
+
+    var pickerPrefix: String {
+        "of "
+    }
+}
+
+public extension BodyMassType {
+    var biometricType: BiometricType {
+        switch self {
+        case .weight:   .weight
+        case .leanMass: .leanBodyMass
+        }
+    }
+}
