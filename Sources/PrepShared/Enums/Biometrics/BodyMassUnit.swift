@@ -1,6 +1,6 @@
 import Foundation
 
-let PoundsPerStone: Double = 14
+public let PoundsPerStone: Double = 14
 
 public enum BodyMassUnit: Int16, CaseIterable, Codable, Identifiable {
     case kg = 1
