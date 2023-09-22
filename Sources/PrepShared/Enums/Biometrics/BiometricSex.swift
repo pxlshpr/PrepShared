@@ -37,11 +37,12 @@ public extension BiometricSex {
 }
 
 public extension HKBiologicalSex {
-    var biometricSex: BiometricSex {
+    var biometricSex: BiometricSex? {
         switch self {
         case .female:   .female
         case .male:     .male
-        default:        .notSpecified
+        case .other:    .notSpecified
+        default:        nil
         }
     }
 }

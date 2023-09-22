@@ -24,7 +24,7 @@ public extension BiometricType {
         switch self {
         case .restingEnergy:    "resting energy"
         case .activeEnergy:     "active energy"
-        case .sex:              "sex"
+        case .sex:              "biological sex"
         case .age:              "age"
         case .weight:           "weight"
         case .leanBodyMass:     "lean body mass"

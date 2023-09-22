@@ -1,6 +1,6 @@
 import Foundation
 
-public enum BiometricUnit {
+public enum LegacyBiometricUnit {
     case energy(EnergyUnit)
     case bodyMass(BodyMassUnit)
     case height(HeightUnit)
@@ -8,7 +8,7 @@ public enum BiometricUnit {
     case percentage
 }
 
-public extension BiometricUnit {
+public extension LegacyBiometricUnit {
     var description: String {
         switch self {
         case .energy(let energyUnit):

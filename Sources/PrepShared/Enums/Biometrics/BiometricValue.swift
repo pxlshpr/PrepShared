@@ -99,7 +99,7 @@ public extension BiometricValue {
         }
     }
     
-    var unit: BiometricUnit? {
+    var unit: LegacyBiometricUnit? {
         switch self {
         case .activeEnergy(_, let energyUnit):
             return .energy(energyUnit)

@@ -26,8 +26,8 @@ public struct MenuPicker<T: Pickable>: View {
     public var body: some View {
         Menu {
             Picker(selection: binding, label: EmptyView()) {
-                noneSection
-                optionsSection
+                noneContent
+                optionsContent
             }
         } label: {
             label
@@ -48,27 +48,24 @@ public struct MenuPicker<T: Pickable>: View {
     }
     
     @ViewBuilder
-    var noneSection: some View {
+    var noneContent: some View {
         if let none = T.noneOption {
-            Section {
-                Text(none.menuTitle)
-                    .tag(none)
-            }
+            Text(none.menuTitle)
+                .tag(none)
+            Divider()
         }
     }
     
-    var optionsSection: some View {
-        Section {
-            ForEach(optionsWithoutNone, id: \.self) { option in
-                Group {
-                    if option.menuImage.isEmpty {
-                        Text(option.menuTitle)
-                    } else {
-                        Label(option.menuTitle, systemImage: option.menuImage)
-                    }
+    var optionsContent: some View {
+        ForEach(optionsWithoutNone, id: \.self) { option in
+            Group {
+                if option.menuImage.isEmpty {
+                    Text(option.menuTitle)
+                } else {
+                    Label(option.menuTitle, systemImage: option.menuImage)
                 }
-                .tag(option)
             }
+            .tag(option)
         }
     }
     
