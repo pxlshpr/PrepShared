@@ -5,10 +5,14 @@ public protocol Pickable: Hashable, CaseIterable {
     var menuTitle: String { get }
     var menuImage: String { get }
     static var `default`: Self { get }
+    
+    /// An optional option that is identified as "None", which would be placed in its own section
+    static var noneOption: Self? { get }
 }
 
 public extension Pickable {
     var menuImage: String { "" }
+    static var noneOption: Self? { nil }
 }
 
 //MARK: - Extensions

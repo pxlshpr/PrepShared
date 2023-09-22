@@ -3,16 +3,16 @@ import Foundation
 public enum BiometricSex: Int16, Codable, CaseIterable {
     case female = 1
     case male
-    case other
+    case notSpecified
 }
 
 public extension BiometricSex {
     
     var name: String {
         switch self {
-        case .female:   "female"
-        case .male:     "male"
-        case .other:    "other"
+        case .female:   "Female"
+        case .male:     "Male"
+        case .notSpecified: "Not specified"
         }
     }
 }
@@ -22,15 +22,16 @@ import HealthKit
 extension BiometricSex: Pickable {
     public var pickedTitle: String { self.name }
     public var menuTitle: String { self.name }
-    public static var `default`: BiometricSex { .female }
+    public static var `default`: BiometricSex { .notSpecified }
+    public static var noneOption: BiometricSex? { .notSpecified }
 }
 
 public extension BiometricSex {
     var hkBiologicalSex: HKBiologicalSex {
         switch self {
-        case .female:   .female
-        case .male:     .male
-        case .other:    .other
+        case .female:       .female
+        case .male:         .male
+        default:            .other
         }
     }
 }
@@ -40,7 +41,7 @@ public extension HKBiologicalSex {
         switch self {
         case .female:   .female
         case .male:     .male
-        default:        .other
+        default:        .notSpecified
         }
     }
 }
