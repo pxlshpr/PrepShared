@@ -1,6 +1,6 @@
 import Foundation
 
-let InchesPerFoot: Double = 12
+public let InchesPerFoot: Double = 12
 
 public enum HeightUnit: Int, CaseIterable, Codable {
     case cm = 1
