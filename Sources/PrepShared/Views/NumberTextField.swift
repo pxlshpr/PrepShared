@@ -41,19 +41,24 @@ public struct NumberTextField: View {
             .simultaneousGesture(textSelectionTapGesture)
     }
     
+    @ViewBuilder
     var textField: some View {
         if let doubleBinding {
             TextField(
                 placeholder,
                 value: doubleBinding,
-                formatter: roundUp ? NumberFormatter.energyValue : NumberFormatter.foodValue
+                formatter: NumberFormatter.input(roundUp ? 0 : 2)
             )
-        } else {
+            .contentTransition(.numericText(value: doubleBinding.wrappedValue))
+            .animation(.default, value: doubleBinding.wrappedValue)
+        } else if let intBinding {
             TextField(
                 placeholder,
-                value: intBinding!,
-                formatter: NumberFormatter.energyValue
+                value: intBinding,
+                formatter: NumberFormatter.input(0)
             )
+            .contentTransition(.numericText(value: Double(intBinding.wrappedValue)))
+            .animation(.default, value: intBinding.wrappedValue)
         }
     }
 }

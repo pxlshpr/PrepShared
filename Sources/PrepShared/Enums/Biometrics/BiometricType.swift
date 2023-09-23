@@ -1,6 +1,7 @@
 import Foundation
 
-public enum BiometricType: CaseIterable {
+public enum BiometricType {
+    case maintenanceEnergy
     case restingEnergy
     case activeEnergy
     case sex
@@ -22,27 +23,29 @@ public extension BiometricType {
     
     var abbreviation: String {
         switch self {
-        case .restingEnergy:    "resting energy"
-        case .activeEnergy:     "active energy"
-        case .sex:              "biological sex"
-        case .age:              "age"
-        case .weight:           "weight"
-        case .leanBodyMass:     "lean body mass"
-        case .fatPercentage:    "fat %"
-        case .height:           "height"
+        case .maintenanceEnergy:    "maintenance energy"
+        case .restingEnergy:        "resting energy"
+        case .activeEnergy:         "active energy"
+        case .sex:                  "biological sex"
+        case .age:                  "age"
+        case .weight:               "weight"
+        case .leanBodyMass:         "lean body mass"
+        case .fatPercentage:        "fat %"
+        case .height:               "height"
         }
     }
     
     var name: String {
         switch self {
-        case .restingEnergy:    "Resting Energy"
-        case .activeEnergy:     "Active Energy"
-        case .sex:              "Biological Sex"
-        case .age:              "Age"
-        case .weight:           "Weight"
-        case .leanBodyMass:     "Lean Body Mass"
-        case .fatPercentage:    "Fat Percentage"
-        case .height:           "Height"
+        case .maintenanceEnergy:    "Maintenance Energy"
+        case .restingEnergy:        "Resting Energy"
+        case .activeEnergy:         "Active Energy"
+        case .sex:                  "Biological Sex"
+        case .age:                  "Age"
+        case .weight:               "Weight"
+        case .leanBodyMass:         "Lean Body Mass"
+        case .fatPercentage:        "Fat Percentage"
+        case .height:               "Height"
         }
     }
 

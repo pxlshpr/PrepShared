@@ -17,3 +17,14 @@ public extension NumberFormatter {
         return formatter
     }
 }
+
+public extension NumberFormatter {
+    static func input(_ fractionDigits: Int = 2) -> NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.usesGroupingSeparator = false
+        formatter.maximumFractionDigits = fractionDigits
+        formatter.roundingMode = .halfUp
+        return formatter
+    }
+}
