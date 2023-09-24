@@ -12,7 +12,7 @@ public extension BodyMassType {
     var name: String {
         switch self {
         case .weight:   "Weight"
-        case .leanMass: "Lean Body Mass"
+        case .leanMass: "Lean body mass"
         }
     }
 

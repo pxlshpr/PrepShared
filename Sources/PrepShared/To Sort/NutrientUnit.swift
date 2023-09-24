@@ -31,7 +31,7 @@ public extension NutrientUnit {
         case .mcgDFE:   "mcgDFE"
         case .mcgRAE:   "mcgRAE"
         case .IU:       "IU"
-        case .p:        "p"
+        case .p:        "%"
         case .kcal:     "kcal"
         case .kJ:       "kJ"
         case .pH:       "pH"

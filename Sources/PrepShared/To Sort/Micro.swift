@@ -298,8 +298,14 @@ public extension Micro {
     }
 
     var supportedFoodLabelUnits: [FoodLabelUnit] {
-        supportedNutrientUnits.map { $0.foodLabelUnit ?? .g}
+        supportedNutrientUnits
+            .map { $0.foodLabelUnit ?? .g}
             .removingDuplicates()
+    }
+    
+    var goalUnits: [NutrientUnit] {
+        units
+            .filter { $0 != .p }
     }
 }
 
