@@ -11,7 +11,7 @@ public extension EnergyGoalDelta {
         switch self {
         case .deficit:      "Deficit"
         case .surplus:      "Surplus"
-        case .deviation:    "Range"
+        case .deviation:    "Deficit and surplus"
         }
     }
 
