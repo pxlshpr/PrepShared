@@ -7,6 +7,20 @@ public enum Nutrient: Codable, Hashable {
 }
 
 public extension Nutrient {
+    static var allNutrients: [Nutrient] {
+        [.energy] + allMacros + allMicros
+    }
+    
+    static var allMacros: [Nutrient] {
+        Macro.allCases.map { .macro($0) }
+    }
+    
+    static var allMicros: [Nutrient] {
+        Micro.allCases.map { .micro($0) }
+    }
+}
+
+public extension Nutrient {
     var description: String {
         switch self {
         case .energy:
