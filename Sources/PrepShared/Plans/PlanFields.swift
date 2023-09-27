@@ -248,6 +248,7 @@ public extension PlanFields {
     var hasAutoEnergyGoal: Bool { goals.hasAutoEnergyGoal }
     var supportsAutoMacroGoal: Bool { goals.supportsAutoMacroGoal }
     var macroForAutoGoal: Macro? { goals.macroForAutoGoal }
+    var supportsOrHasAutoMacroGoal: Bool { goals.supportsOrHasAutoMacroGoal }
 }
 
 import SwiftUI
