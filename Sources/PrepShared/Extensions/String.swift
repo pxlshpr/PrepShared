@@ -64,3 +64,9 @@ public extension String {
             .compactMap { $0.isEmpty ? nil : $0 }
     }
 }
+
+extension String {
+    static var randomPlanEmoji: String {
+        String("⤵️⤴️🍽️⚖️🏝🏋🏽🚴🏽🍩🍪🥛".randomElement()!)
+    }
+}
