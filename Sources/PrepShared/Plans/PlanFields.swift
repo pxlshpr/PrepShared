@@ -94,7 +94,11 @@ public extension PlanFields {
     var haveClosedMacroGoal: Bool {
         manualMacroGoals.contains(where: { $0.calculatedBound.type == .closed })
     }
-    
+
+    var haveLowerMacroGoal: Bool {
+        manualMacroGoals.contains(where: { $0.calculatedBound.type == .lower })
+    }
+
     func generatedAutoMacroGoal() -> Goal? {
         /// Gather 2 macro goals and energy goal
         guard
@@ -144,9 +148,9 @@ public extension PlanFields {
         /// Gather all macro goals
         guard manualMacroGoals.count == 3 else { return nil }
 
-        /// If any of them have a closed bound, we're creating a closed bound goal
+        /// If none of them have a open ended upper goal (by being a lower goal), and at least one is closed, we're creating a closed bound goal
         let bound: GoalBound
-        if haveClosedMacroGoal {
+        if haveClosedMacroGoal && !haveLowerMacroGoal {
             
             guard
                 let lowerInKcal = manualMacroGoals.lowerEnergyInKcal,

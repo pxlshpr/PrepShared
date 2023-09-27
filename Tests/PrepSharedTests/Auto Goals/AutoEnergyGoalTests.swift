@@ -18,19 +18,29 @@ final class AutoEnergyGoalTests: XCTestCase {
     }
 }
 
-let AutoEnergyTestCases: [AutoGoalTestCase] = [
-//    AutoGoalTestCase.expectedEnergy(
-//        (1125.26, 2433.14),
-//        carb: (20, 100),
-//        fat: (60, 150),
-//        protein: (130, 180)
-//    ),
+//let AutoEnergyTestCases = [CurrentAutoEnergyTestCase]
+let AutoEnergyTestCases = [CurrentAutoEnergyTestCase] + PassingAutoEnergyTestCases
+
+let CurrentAutoEnergyTestCase: AutoGoalTestCase = AutoGoalTestCase.expectedEnergy(
+    (600.0, nil),
+    carb: (20, nil),
+    fat: (nil, 150),
+    protein: (130, 180)
+)
+
+let PassingAutoEnergyTestCases: [AutoGoalTestCase] = [
+    AutoGoalTestCase.expectedEnergy(
+        (1125.26, 2433.14),
+        carb: (20, 100),
+        fat: (60, 150),
+        protein: (130, 180)
+    ),
     AutoGoalTestCase.expectedEnergy(
         (600.0, 2433.14),
         carb: (20, 100),
         fat: (nil, 150),
         protein: (130, 180)
-    )
+    ),
 ]
 
 
