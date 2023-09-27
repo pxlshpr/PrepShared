@@ -8,11 +8,7 @@ final class AutoEnergyGoalTests: XCTestCase {
     func testAutoEnergyGoal() throws {
         for testCase in AutoEnergyTestCases {
             let planFields = PlanFields(testCase.plan)
-            guard let energyGoal = planFields.generatedAutoEnergyGoal(using: energyUnit) else {
-                XCTFail()
-                return
-            }
-            
+            let energyGoal = planFields.generatedAutoEnergyGoal(using: energyUnit)
             assertEqual(energyGoal, testCase.expectedGoal)
         }
     }
@@ -21,9 +17,10 @@ final class AutoEnergyGoalTests: XCTestCase {
 //let AutoEnergyTestCases = [CurrentAutoEnergyTestCase]
 let AutoEnergyTestCases = [CurrentAutoEnergyTestCase] + PassingAutoEnergyTestCases
 
-let CurrentAutoEnergyTestCase: AutoGoalTestCase = AutoGoalTestCase.expectedEnergy(
-    (600.0, nil),
-    carb: (20, nil),
+let CurrentAutoEnergyTestCase: AutoGoalTestCase = 
+AutoGoalTestCase.expectedEnergy(
+    (nil, 2433.14),
+    carb: (20, 100),
     fat: (nil, 150),
     protein: (130, 180)
 )
@@ -36,11 +33,11 @@ let PassingAutoEnergyTestCases: [AutoGoalTestCase] = [
         protein: (130, 180)
     ),
     AutoGoalTestCase.expectedEnergy(
-        (600.0, 2433.14),
-        carb: (20, 100),
+        nil,
+        carb: (20, nil),
         fat: (nil, 150),
         protein: (130, 180)
-    ),
+    )
 ]
 
 
@@ -48,10 +45,10 @@ let PassingAutoEnergyTestCases: [AutoGoalTestCase] = [
 
 struct AutoGoalTestCase {
     let plan: Plan
-    let expectedGoal: Goal
+    let expectedGoal: Goal?
     
     static func expectedEnergy(
-        _ energy: (Double?, Double?),
+        _ energy: (Double?, Double?)?,
         carb: (Double?, Double?),
         fat: (Double?, Double?),
         protein: (Double?, Double?)
@@ -62,7 +59,7 @@ struct AutoGoalTestCase {
                 Goal.fixedMacro(.fat, fat),
                 Goal.fixedMacro(.protein, protein)
             ]),
-            expectedGoal: Goal.fixedEnergy(energy)
+            expectedGoal: energy != nil ? Goal.fixedEnergy(energy!) : nil
         )
     }
 }
@@ -101,6 +98,14 @@ extension Goal {
 
 //MARK: - Assertions
 
+func assertEqual(_ goal: Goal?, _ other: Goal?) {
+    switch (goal, other) {
+    case (.some(let goal), .some(let other)):   assertEqual(goal, other)
+    case (.none, .some), (.some, .none):        XCTFail()
+    case (.none, .none):                        break
+    }
+}
+
 func assertEqual(_ goal: Goal, _ other: Goal) {
     XCTAssertEqual(goal.type, other.type)
     assertEqual(goal.bound, other.bound)
@@ -114,12 +119,8 @@ func assertEqual(_ bound: GoalBound, _ other: GoalBound) {
 
 func assertEqual(_ double: Double?, _ other: Double?) {
     switch (double, other) {
-    case (.some(let double), .some(let other)):
-        assertEqual(toPlaces: 0, double, other)
-    case (.none, .some), (.some, .none):
-        XCTFail()
-    case (.none, .none):
-        /// true
-        break
+    case (.some(let double), .some(let other)): assertEqual(toPlaces: 0, double, other)
+    case (.none, .some), (.some, .none):        XCTFail()
+    case (.none, .none):                        break
     }
 }

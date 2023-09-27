@@ -95,6 +95,18 @@ public extension PlanFields {
         manualMacroGoals.contains(where: { $0.calculatedBound.type == .closed })
     }
 
+    var allMacroGoalsAreClosed: Bool {
+        manualMacroGoals.allSatisfy { $0.calculatedBound.type == .closed }
+    }
+
+    var allMacroGoalsHaveUpper: Bool {
+        manualMacroGoals.allSatisfy { $0.calculatedBound.upper != nil }
+    }
+
+    var allMacroGoalsHaveLower: Bool {
+        manualMacroGoals.allSatisfy { $0.calculatedBound.lower != nil }
+    }
+
     var haveLowerMacroGoal: Bool {
         manualMacroGoals.contains(where: { $0.calculatedBound.type == .lower })
     }
@@ -148,9 +160,8 @@ public extension PlanFields {
         /// Gather all macro goals
         guard manualMacroGoals.count == 3 else { return nil }
 
-        /// If none of them have a open ended upper goal (by being a lower goal), and at least one is closed, we're creating a closed bound goal
         let bound: GoalBound
-        if haveClosedMacroGoal && !haveLowerMacroGoal {
+        if allMacroGoalsAreClosed {
             
             guard
                 let lowerInKcal = manualMacroGoals.lowerEnergyInKcal,
@@ -161,24 +172,33 @@ public extension PlanFields {
             
             let lower = EnergyUnit.kcal.convert(lowerInKcal, to: unit)
             let upper = EnergyUnit.kcal.convert(upperInKcal, to: unit)
-
+            
             guard let energyBound = GoalBound(.closed, lower, upper) else {
                 return nil
             }
             bound = energyBound
+        } else if allMacroGoalsHaveUpper {
+            bound = GoalBound(upper: manualMacroGoals.upperEnergyInKcal)
+        } else if allMacroGoalsHaveLower {
+            bound = GoalBound(lower: manualMacroGoals.lowerEnergyInKcal)
         } else {
-            let upperCount = manualMacroGoals.filter {
-                $0.calculatedBound.upper != nil
-            }.count
-            let lowerCount = manualMacroGoals.filter {
-                $0.calculatedBound.lower != nil
-            }.count
-            
-            /// Set a maximum for energy only if all macros are also maximum. Otherwise, set a minimum with a total of any minimum bounds.
-            switch (upperCount, lowerCount) {
-            case (3, 0):    bound = GoalBound(upper: manualMacroGoals.upperEnergyInKcal)
-            default:        bound = GoalBound(lower: manualMacroGoals.lowerEnergyInKcal)
-            }
+            return nil
+//        } else {
+//            
+//            
+//            
+//            let upperCount = manualMacroGoals.filter {
+//                $0.calculatedBound.upper != nil
+//            }.count
+//            let lowerCount = manualMacroGoals.filter {
+//                $0.calculatedBound.lower != nil
+//            }.count
+//            
+//            /// Set a maximum for energy only if all macros are also maximum. Otherwise, set a minimum with a total of any minimum bounds.
+//            switch (upperCount, lowerCount) {
+//            case (3, 0):    bound = GoalBound(upper: manualMacroGoals.upperEnergyInKcal)
+//            default:        bound = GoalBound(lower: manualMacroGoals.lowerEnergyInKcal)
+//            }
         }
 
         return Goal(
@@ -208,11 +228,11 @@ public extension PlanFields {
     }
     
     var showGoalsHeaderOnMacros: Bool {
-        !hasEnergy && !supportsAutoEnergyGoal && haveMacros
+        !hasEnergy && !supportsOrHasAutoEnergyGoal && haveMacros
     }
     
     var showGoalsHeaderOnEnergy: Bool {
-        hasEnergy || supportsAutoEnergyGoal
+        hasEnergy || supportsOrHasAutoEnergyGoal
     }
     
     var showGoalsHeaderOnAdd: Bool {
@@ -249,11 +269,15 @@ public extension PlanFields {
     var hasManualEnergyGoal: Bool {
         manualEnergyGoal != nil
     }
+
+    var supportsOrHasAutoEnergyGoal: Bool {
+        supportsAutoEnergyGoal || hasAutoEnergyGoal
+    }
     
     var supportsAutoEnergyGoal: Bool {
-        (!hasManualEnergyGoal && macrosWithGoals.count == 3)
-        ||
-        hasAutoEnergyGoal
+        !hasManualEnergyGoal
+        && manualMacroGoals.count == 3
+        && (allMacroGoalsAreClosed || allMacroGoalsHaveLower || allMacroGoalsHaveUpper)
     }
     
     var hasAutoEnergyGoal: Bool {
