@@ -23,6 +23,18 @@ public struct Goal: Identifiable, Hashable, Codable {
     }
 }
 
+extension Goal: Comparable {
+    var sortPosition: Int {
+        switch type {
+        case .energy:                   1
+        case .macro(_, let macro):      macro.sortPosition
+        case .micro(_, let micro, _):   micro.rawValue
+        }
+    }
+    public static func <(lhs: Goal, rhs: Goal) -> Bool {
+        return lhs.sortPosition < rhs.sortPosition
+    }
+}
 public extension Goal {
     var id: String {
         type.identifyingHashValue
