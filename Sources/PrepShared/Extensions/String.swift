@@ -65,7 +65,7 @@ public extension String {
     }
 }
 
-extension String {
+public extension String {
     static var randomPlanEmoji: String {
         String("⤵️⤴️🍽️⚖️🏝🏋🏽🚴🏽🍩🍪🥛".randomElement()!)
     }

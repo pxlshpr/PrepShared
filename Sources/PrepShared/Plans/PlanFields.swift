@@ -1,9 +1,19 @@
 import Foundation
 
 public struct PlanFields: Hashable, Equatable {
-    public var name: String = ""
-    public var emoji: String = String.randomPlanEmoji
-    public var goals: [Goal] = []
+    public var name: String
+    public var emoji: String
+    public var goals: [Goal]
+    
+    public init(
+        name: String = "",
+        emoji: String = String.randomPlanEmoji,
+        goals: [Goal] = []
+    ) {
+        self.name = name
+        self.emoji = emoji
+        self.goals = goals
+    }
 }
 
 public extension PlanFields {
