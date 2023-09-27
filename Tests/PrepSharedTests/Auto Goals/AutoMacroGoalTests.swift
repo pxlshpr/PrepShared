@@ -12,15 +12,16 @@ final class AutoEnergyMacroTests: XCTestCase {
 }
 
 //let AutoMacroTestCases = [CurrentAutoMacroTestCase]
-let AutoMacroTestCases = [CurrentAutoMacroTestCase] + PassingAutoMacroTestCases
+//let AutoMacroTestCases = [CurrentAutoMacroTestCase] + PassingAutoMacroTestCases
+let AutoMacroTestCases = PassingAutoMacroTestCases
 
-let CurrentAutoMacroTestCase: AutoGoalTestCase =
-AutoGoalTestCase.expectedCarb(
-    (nil, 363.69),
-    energy: (nil, 2500),
-    fat: (60, nil),
-    protein: (130, 180)
-)
+//let CurrentAutoMacroTestCase: AutoGoalTestCase =
+//AutoGoalTestCase.expectedFat(
+//    (130.22, 226.17),
+//    energy: (1500, 1800),
+//    carb: (nil, 40),
+//    protein: (130, 180)
+//)
 
 let PassingAutoMacroTestCases = PassingAutoFatTestCases + PassingAutoCarbTestCases + PassingAutoProteinTestCases
 
