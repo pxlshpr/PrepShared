@@ -6,6 +6,20 @@ public enum Macro: String, CaseIterable, Codable {
     case protein = "Protein"
 }
 
+extension Macro: Comparable {
+    var sortPosition: Int {
+        switch self {
+        case .carb:     1
+        case .fat:      2
+        case .protein:  3
+        }
+    }
+    
+    public static func <(lhs: Macro, rhs: Macro) -> Bool {
+        return lhs.sortPosition < rhs.sortPosition
+    }
+}
+
 public extension Macro {
     var name: String {
         self.rawValue
