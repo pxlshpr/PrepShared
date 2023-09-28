@@ -40,22 +40,22 @@ public extension PlanFields {
         goals.firstIndex(where: { $0.type.nutrient == goal.type.nutrient })
     }
     
-    mutating func save(_ goal: Goal) {
-        if let index = indexOfGoal(matching: goal) {
-            goals[index] = goal
-        } else {
-            goals.append(goal)
-        }
-        resetAutoGoal()
-    }
-    
-    mutating func delete(_ goal: Goal) {
-        if goal.type.isEnergy {
-            goals.removeAll(where: { $0.type.usesEnergyGoal })
-        }
-        goals.removeAll(where: { $0.type.nutrient == goal.type.nutrient })
-        resetAutoGoal()
-    }
+//    mutating func save(_ goal: Goal) {
+//        if let index = indexOfGoal(matching: goal) {
+//            goals[index] = goal
+//        } else {
+//            goals.append(goal)
+//        }
+//        resetAutoGoal()
+//    }
+//    
+//    mutating func delete(_ goal: Goal) {
+//        if goal.type.isEnergy {
+//            goals.removeAll(where: { $0.type.usesEnergyGoal })
+//        }
+//        goals.removeAll(where: { $0.type.nutrient == goal.type.nutrient })
+//        resetAutoGoal()
+//    }
 }
 
 public extension PlanFields {
