@@ -27,6 +27,21 @@ public struct GoalBound: Hashable, Codable {
 }
 
 public extension GoalBound {
+    var isValid: Bool {
+        switch (lower, upper) {
+        case (.some(let lower), .some(let upper)):
+            lower >= 0 && upper >= 0 && upper > lower
+        case (.some(let lower), nil):
+            lower >= 0
+        case (nil, .some(let upper)):
+            upper >= 0
+        case (.none, .none):
+            false
+        }
+    }
+}
+
+public extension GoalBound {
     var type: GoalBoundType {
         switch (lower, upper) {
         case (.some, .some):    .closed
