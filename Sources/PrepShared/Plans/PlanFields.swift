@@ -59,15 +59,15 @@ public extension PlanFields {
 }
 
 public extension PlanFields {
-    var haveMicros: Bool {
+    var hasAnyMicroGoal: Bool {
         goals.contains(where: { $0.type.isMicro })
     }
     
-    var haveMacros: Bool {
+    var hasAnyMacroGoal: Bool {
         goals.contains(where: { $0.type.isMacro })
     }
     
-    var hasEnergy: Bool {
+    var hasEnergyGoal: Bool {
         goals.contains(where: { $0.type.isEnergy })
     }
 }
@@ -159,15 +159,15 @@ public extension PlanFields {
     }
     
     var showGoalsHeaderOnMicros: Bool {
-        !hasEnergy && !haveMacros && haveMicros
+        !hasEnergyGoal && !hasAnyMacroGoal && hasAnyMicroGoal
     }
     
     var showGoalsHeaderOnMacros: Bool {
-        !hasEnergy && !supportsOrHasAutoEnergyGoal && haveMacros
+        !hasEnergyGoal && !supportsOrHasAutoEnergyGoal && hasAnyMacroGoal
     }
     
     var showGoalsHeaderOnEnergy: Bool {
-        hasEnergy || supportsOrHasAutoEnergyGoal
+        hasEnergyGoal || supportsOrHasAutoEnergyGoal
     }
     
     var showGoalsHeaderOnAdd: Bool {
