@@ -5,7 +5,6 @@ extension Plan {
     static func plan(_ goals: [Goal]) -> Plan {
         .init(
             name: "",
-            emoji: "",
             goals: goals
         )
     }

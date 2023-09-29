@@ -30,7 +30,6 @@ public extension PlanFields {
     
     mutating func fill(with plan: Plan) {
         name = plan.name
-        emoji = plan.emoji
         goals = plan.goals
     }
 }
@@ -75,7 +74,11 @@ public extension PlanFields {
 public extension Plan {
     func matches(_ fields: PlanFields) -> Bool {
         if fields.name != name { return false }
-        if fields.emoji != emoji { return false }
+        for goal in goals {
+            if !fields.goals.contains(where: { $0 == goal }) {
+                return false
+            }
+        }
         return true
     }
 }
