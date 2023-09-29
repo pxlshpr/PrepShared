@@ -2,16 +2,13 @@ import Foundation
 
 public struct PlanFields: Hashable, Equatable {
     public var name: String
-    public var emoji: String
     public var goals: [Goal]
     
     public init(
         name: String = "",
-        emoji: String = String.randomPlanEmoji,
         goals: [Goal] = []
     ) {
         self.name = name
-        self.emoji = emoji
         self.goals = goals
     }
     
@@ -24,7 +21,6 @@ public struct PlanFields: Hashable, Equatable {
 public extension PlanFields {
     var canBeSaved: Bool {
         !name.isEmpty
-        && !emoji.isEmpty
         && !goals.isEmpty
     }
     
