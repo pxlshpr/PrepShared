@@ -2,7 +2,7 @@ import Foundation
 
 public struct Plan: Identifiable, Hashable, Codable {
     
-    public let id: UUID
+    public var id: UUID
     public var name: String
     public var goals: [Goal] = []
     
