@@ -33,6 +33,9 @@ public extension Notification {
         case foodItem = "foodItem"
         case safeArea = "safeArea"
         case foodIDToRemove = "foodIDToRemove"
+
+        case isCurrentBiometrics = "isCurrentBiometrics"
+        case biometrics = "biometrics"
     }
 }
 
