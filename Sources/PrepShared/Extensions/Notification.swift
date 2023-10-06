@@ -58,6 +58,10 @@ public extension Notification {
     var food: Food? {
         value(for: .food) as? Food
     }
+    
+    var isCurrentBiometrics: Bool? {
+        value(for: .isCurrentBiometrics) as? Bool
+    }    
 }
 
 //public func post(_ name: Notification.Name, _ userInfo: [Notification.Keys : Any]? = nil) {
