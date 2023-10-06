@@ -2,13 +2,16 @@ import Foundation
 
 public struct PlanFields: Hashable, Equatable {
     
+    public var id: UUID
     public var name: String
     public var goals: [Goal]
     
     public init(
+        id: UUID = UUID(),
         name: String = "",
         goals: [Goal] = []
     ) {
+        self.id = id
         self.name = name
         self.goals = goals
     }
@@ -26,6 +29,7 @@ public extension PlanFields {
     }
     
     mutating func fill(with plan: Plan) {
+        id = plan.id
         name = plan.name
         goals = plan.goals
     }
