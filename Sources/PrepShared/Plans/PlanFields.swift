@@ -1,6 +1,7 @@
 import Foundation
 
 public struct PlanFields: Hashable, Equatable {
+    
     public var name: String
     public var goals: [Goal]
     
