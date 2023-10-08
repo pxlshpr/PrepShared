@@ -16,14 +16,14 @@ extension Store {
             try block(context)
         }
     }
-
+    
     public static func perform(
         in context: NSManagedObjectContext,
         _ block: @escaping () throws -> ()
     ) async throws {
         try await shared.perform(in: context, block)
     }
-
+    
     /// Performs the `block` of code in the provided `context` and then merges the changes with the `viewContext` on the main thread
     func perform(
         in context: NSManagedObjectContext,
@@ -31,7 +31,26 @@ extension Store {
     ) async throws {
         try await context.performAndMergeWith(Self.mainContext, block)
     }
+}
+
+extension Store {
     
+    public static func fetchInBackground(
+        _ block: @escaping (NSManagedObjectContext) throws -> ()
+    ) async throws {
+        let context = newBackgroundContext()
+        try await shared.fetch(in: context) {
+            try block(context)
+        }
+    }
+
+    public static func fetch(
+        in context: NSManagedObjectContext,
+        _ block: @escaping () throws -> ()
+    ) async throws {
+        try await shared.fetch(in: context, block)
+    }
+
     func fetch(
         in context: NSManagedObjectContext,
         _ block: @escaping () throws -> ()
