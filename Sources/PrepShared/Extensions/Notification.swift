@@ -36,6 +36,7 @@ public extension Notification {
 
         case isCurrentBiometrics = "isCurrentBiometrics"
         case biometrics = "biometrics"
+        case plan = "plan"
     }
 }
 
