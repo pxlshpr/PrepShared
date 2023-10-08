@@ -25,7 +25,6 @@ func performInBackgroundContext(
     performBlock: @escaping () throws -> ()
 ) async throws {
     try await withCheckedThrowingContinuation { continuation in
-//        let id = UUID()
         do {
             
             try ContextPerformer(mainContext: mainContext) {
@@ -35,14 +34,27 @@ func performInBackgroundContext(
                 context,
                 performBlock: performBlock
             )
+        } catch {
+            continuation.resume(throwing: error)
+        }
+    }
+}
+
+func fetchInBackgroundContext(
+    _ context: NSManagedObjectContext,
+    mainContext: NSManagedObjectContext,
+    performBlock: @escaping () throws -> ()
+) async throws {
+    try await withCheckedThrowingContinuation { continuation in
+        do {
             
-//            try performInBackgroundContext(
-//                context,
-//                mainContext: mainContext,
-//                performBlock: performBlock
-//            ) {
-//                continuation.resume()
-//            }
+            try ContextPerformer(mainContext: mainContext) {
+                continuation.resume()
+            }
+            .fetchInBackgroundContext(
+                context,
+                performBlock: performBlock
+            )
         } catch {
             continuation.resume(throwing: error)
         }
@@ -61,6 +73,21 @@ class ContextPerformer {
     ) {
         self.mainContext = mainContext
         self.completion = completion
+    }
+    
+    /// Use this if no changes will be made and we're only fetching data
+    func fetchInBackgroundContext(
+        _ context: NSManagedObjectContext,
+        performBlock: @escaping () throws -> ()
+    ) throws {
+
+        try context.performAndWait {
+            try performBlock()
+            
+            DispatchQueue.main.async {
+                self.completion()
+            }
+        }
     }
     
     func performInBackgroundContext(

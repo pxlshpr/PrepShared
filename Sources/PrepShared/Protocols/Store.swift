@@ -31,4 +31,16 @@ extension Store {
     ) async throws {
         try await context.performAndMergeWith(Self.mainContext, block)
     }
+    
+    func fetch(
+        in context: NSManagedObjectContext,
+        _ block: @escaping () throws -> ()
+    ) async throws {
+        try await fetchInBackgroundContext(
+            context,
+            mainContext: Self.mainContext,
+            performBlock: block
+        )
+    }
+
 }
