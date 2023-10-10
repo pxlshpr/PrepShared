@@ -19,7 +19,8 @@ public struct FoodItem: Identifiable, Codable, Hashable {
     public var micros: [FoodNutrient]
 
     public var largestEnergyInKcal: Double
-    
+    public var energyRatio: Double
+
     public var sortPosition: Int
     
     public var eatenAt: Date?
@@ -39,6 +40,7 @@ public struct FoodItem: Identifiable, Codable, Hashable {
         protein: Double,
         micros: [FoodNutrient],
         largestEnergyInKcal: Double,
+        energyRatio: Double,
         sortPosition: Int = 0,
         eatenAt: Date? = nil,
         updatedAt: Date = Date.now,
@@ -56,6 +58,7 @@ public struct FoodItem: Identifiable, Codable, Hashable {
         self.protein = protein
         self.micros = micros
         self.largestEnergyInKcal = largestEnergyInKcal
+        self.energyRatio = energyRatio
         self.sortPosition = sortPosition
         self.eatenAt = eatenAt
         self.updatedAt = updatedAt
@@ -83,7 +86,8 @@ public struct FoodItem: Identifiable, Codable, Hashable {
             fat: fat,
             protein: protein,
             micros: micros,
-            largestEnergyInKcal: energy
+            largestEnergyInKcal: energy,
+            energyRatio: 1
         )
     }
     
@@ -182,6 +186,8 @@ public extension FoodItem {
         && protein.matches(other.protein)
         && largestEnergyInKcal.matches(other.largestEnergyInKcal)
         
+        && energyRatio.matches(other.energyRatio)
+        
         && eatenAt == other.eatenAt
 //        && updatedAt == other.updatedAt
 //        && createdAt == other.createdAt
@@ -232,6 +238,7 @@ public extension Array where Element == FoodItem {
         let largest = largestEnergyInKcal
         for i in indices {
             self[i].largestEnergyInKcal = largest
+            self[i].energyRatio = self[i].energy / largest
         }
     }
 }
