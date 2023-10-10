@@ -238,7 +238,7 @@ public extension Array where Element == FoodItem {
         let largest = largestEnergyInKcal
         for i in indices {
             self[i].largestEnergyInKcal = largest
-            self[i].energyRatio = self[i].energy / largest
+            self[i].energyRatio = self[i].energyInKcal / largest
         }
     }
 }
