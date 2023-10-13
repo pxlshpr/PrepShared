@@ -51,6 +51,8 @@ public struct MenuPicker<T: Pickable>: View {
     var noneContent: some View {
         if let none = T.noneOption {
             Text(none.menuTitle)
+                .font(.body)
+                .textCase(.none)
                 .tag(none)
             Divider()
         }
@@ -65,6 +67,8 @@ public struct MenuPicker<T: Pickable>: View {
                     Label(option.menuTitle, systemImage: option.menuImage)
                 }
             }
+            .font(.body)
+            .textCase(.none)
             .tag(option)
         }
     }
@@ -72,9 +76,11 @@ public struct MenuPicker<T: Pickable>: View {
     var label: some View {
         HStack(spacing: 4) {
             Text(binding.wrappedValue.pickedTitle)
+                .textCase(.none)
             Image(systemName: "chevron.up.chevron.down")
                 .imageScale(.small)
         }
+        .font(.body)
         .foregroundStyle(foregroundColor)
     }
     
