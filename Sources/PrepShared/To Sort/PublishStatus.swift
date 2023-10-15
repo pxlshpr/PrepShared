@@ -11,3 +11,20 @@ public enum PublishStatus: Int, Codable {
     
     case rejected = 200
 }
+
+extension PublishStatus {
+    var title: String {
+        switch self {
+        case .hidden:           "Private"
+        case .pendingReview:    "Submitted"
+        case .inReview:         "In Review"
+        case .revoked:          "Revoked"
+        case .verified:         "Verified"
+        case .rejected:         "Rejected"
+        }
+    }
+    
+    static var myFoodsCases: [PublishStatus] {
+        [.pendingReview, .verified, .rejected]
+    }
+}
