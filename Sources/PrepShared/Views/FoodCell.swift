@@ -43,8 +43,7 @@ public struct FoodCell: View {
     }
 
     public var body: some View {
-        let _ = Self._printChanges()
-        return HStack {
+        HStack {
 //            notificationBadge
             emojiText
             nameTexts
