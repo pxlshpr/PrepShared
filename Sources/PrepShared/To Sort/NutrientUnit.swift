@@ -78,6 +78,11 @@ public extension NutrientUnit {
 public extension NutrientUnit {
     
     //TODO: Write tests for these
+
+    func convert(_ amount: Double, to unit: NutrientUnit) -> Double {
+        guard let foodLabelUnit = unit.foodLabelUnit else { return 0 }
+        return convert(amount, to: foodLabelUnit)
+    }
     
     func convert(_ amount: Double, to unit: FoodLabelUnit) -> Double {
         var scale: Double {
