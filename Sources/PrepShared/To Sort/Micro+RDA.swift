@@ -295,8 +295,8 @@ public extension Micro {
             /// https://www.hsph.harvard.edu/nutritionsource/folic-acid/
             return (1000, .mcg)
         case .vitaminK2_menaquinone:
-            /// https://futureyouhealth.com/knowledge-centre/vitamin-k2-benefits
-            return (300, .mcg)
+            /// *Vitamin K has a very low potential for toxicity. This is why there is no established Tolerable Upper Intake Level (UL) set for vitamin K. There is no known toxicity for vitamin K1 or K2 from food or supplements.* Source: https://www.healthline.com/nutrition/vitamin-k2#functions
+            return nil
         case .taurine:
             return nil
         case .polyols:
