@@ -264,9 +264,9 @@ public extension Micro {
 
     var units: [NutrientUnit] {
         switch self {
-        case .cholesterol, .calcium, .chloride, .copper, .iron, .magnesium, .manganese, .phosphorus, .potassium, .sodium, .zinc, .vitaminC_ascorbicAcid, .vitaminB6_pyridoxine, .choline, .vitaminB5_pantothenicAcid, .vitaminB2_riboflavin, .vitaminB1_thiamine, .caffeine, .taurine:
+        case .cholesterol, .calcium, .chloride, .copper, .iron, .magnesium, .manganese, .phosphorus, .potassium, .sodium, .zinc, .vitaminC_ascorbicAcid, .vitaminB6_pyridoxine, .choline, .vitaminB5_pantothenicAcid, .vitaminB2_riboflavin, .vitaminB1_thiamine, .caffeine, .taurine, .vitaminK2_menaquinone:
             return [.mg]
-        case .chromium, .iodine, .molybdenum, .selenium, .vitaminB12_cobalamin, .vitaminK1_phylloquinone, .vitaminK2_menaquinone, .vitaminB7_biotin, .vitaminB9_folicAcid:
+        case .chromium, .iodine, .molybdenum, .selenium, .vitaminB12_cobalamin, .vitaminK1_phylloquinone, /*.vitaminK2_menaquinone,*/ .vitaminB7_biotin, .vitaminB9_folicAcid:
             return [.mcg]
         case .vitaminA:
             return [.mcgRAE, .IU]

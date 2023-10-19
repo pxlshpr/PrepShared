@@ -336,10 +336,12 @@ public extension Food {
     func calculateMicro(_ micro: Micro, for amount: FoodValue, in unit: NutrientUnit?) -> Double {
         guard let value = value(for: .micro(micro)) else { return 0 }
         
-        //TODO: Handle unit conversions
-//        let unit = unit ?? micro.defaultUnit
+        /// Scale the value for the amount we've specified
+        let scaled = value.value * nutrientScaleFactor(for: amount)
         
-        return value.value * nutrientScaleFactor(for: amount)
+        /// Convert the value for the unit we've specified (or the default unit if not specified)
+        let unit = unit ?? micro.defaultUnit
+        return value.unit.convert(scaled, to: unit)
     }
 
     private func nutrientScaleFactor(for amount: FoodValue) -> Double {
