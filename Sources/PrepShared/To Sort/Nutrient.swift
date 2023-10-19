@@ -21,6 +21,16 @@ public extension Nutrient {
 }
 
 public extension Nutrient {
+    var rdaGoal: Goal? {
+        switch self {
+        case .energy:           nil
+        case .macro:            nil
+        case .micro(let micro): micro.rdaGoal
+        }
+    }
+}
+
+public extension Nutrient {
     var description: String {
         switch self {
         case .energy:
