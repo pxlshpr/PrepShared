@@ -65,6 +65,16 @@ public extension DatasetFoodEntity {
         } else {
             record[.searchTokensString] = nil
         }
+        
+        /// Fields to be added here as required
+        
+        /// This was added in to allow fixing units for micros (namely Vitamin K2)
+        if let microsData {
+            record[.microsData] = microsData as CKRecordValue
+        } else {
+            record[.microsData] = nil
+        }
+        
         record[.isTrashed] = isTrashed as CKRecordValue
         record[.updatedAt] = updatedAt! as CKRecordValue
     }
