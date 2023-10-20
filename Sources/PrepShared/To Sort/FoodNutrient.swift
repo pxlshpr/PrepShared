@@ -122,3 +122,9 @@ public extension Array where Element == FoodNutrient {
         first(where: { $0.micro == micro })
     }
 }
+
+extension FoodNutrient: CustomStringConvertible {
+    public var description: String {
+        "\(value.clean) \(unit.abbreviation)"
+    }
+}
