@@ -264,22 +264,24 @@ public extension Micro {
 
     var units: [NutrientUnit] {
         switch self {
-        case .cholesterol, .calcium, .chloride, .copper, .iron, .magnesium, .manganese, .phosphorus, .potassium, .sodium, .zinc, .vitaminC_ascorbicAcid, .vitaminB6_pyridoxine, .choline, .vitaminB5_pantothenicAcid, .vitaminB2_riboflavin, .vitaminB1_thiamine, .caffeine, .taurine, .vitaminK2_menaquinone:
-            return [.mg]
-        case .chromium, .iodine, .molybdenum, .selenium, .vitaminB12_cobalamin, .vitaminK1_phylloquinone, /*.vitaminK2_menaquinone,*/ .vitaminB7_biotin, .vitaminB9_folicAcid:
-            return [.mcg]
+        case .cholesterol, .calcium, .iron, .magnesium, .manganese, .phosphorus, .potassium, .sodium, .zinc, .vitaminC_ascorbicAcid, .vitaminB6_pyridoxine, .choline, .vitaminB5_pantothenicAcid, .vitaminB2_riboflavin, .vitaminB1_thiamine, .caffeine, .taurine:
+            [.mg]
+        case .chromium, .copper, .iodine, .molybdenum, .selenium, .vitaminB12_cobalamin, .vitaminK1_phylloquinone, .vitaminK2_menaquinone, .vitaminB7_biotin, .vitaminB9_folicAcid:
+            [.mcg]
         case .vitaminA:
-            return [.mcgRAE, .IU]
+            [.mcgRAE, .IU]
         case .vitaminD_calciferol:
-            return [.mcg, .IU]
+            [.mcg, .IU]
         case .vitaminE:
-            return [.mgAT, .IU]
+            [.mgAT, .IU]
         case .vitaminB9_folate:
-            return [.mcgDFE, .mcg]
+            [.mcgDFE, .mcg]
         case .vitaminB3_niacin:
-            return [.mgNE, .mg]
+            [.mgNE, .mg]
+        case .chloride:
+            [.g]
         default:
-            return [.g]
+            [.g]
         }
     }
     var supportedNutrientUnits: [NutrientUnit] {
