@@ -99,11 +99,15 @@ public extension Searchable {
         
         guard let text, !text.isEmpty else { return [] }
         
+        /// Words are always located in the `PublicStore`
         let results = try await PublicStore.findWords(in: text)
         try Task.checkCancellation()
         
         var foods: [Food] = []
-        try await PublicStore.performInBackground { context in
+        
+        /// Find the entities from the store associated with this `Searchable` entity
+        try await store.performInBackground { context in
+//        try await PublicStore.performInBackground { context in
             let entities = entities(for: results, page: page, in: context)
             foods = entities.map { $0.asFood }
         }
