@@ -38,7 +38,7 @@ public extension FoodNutrient {
     }
 }
 
-extension FoodNutrient {
+public extension FoodNutrient {
     var valueInGrams: Double {
         switch unit {
         case .g:
@@ -50,5 +50,75 @@ extension FoodNutrient {
         default:
             return 0
         }
+    }
+}
+
+public extension Array where Element == DatasetFoodEntity {
+    
+    var withNoneZeroVitaminK2: [DatasetFoodEntity] {
+        foodsWithNonZeroMicro(.vitaminK2_menaquinone)
+    }
+
+    var withSubstantialVitaminK2: [DatasetFoodEntity] {
+        foodsWithSubstantialMicro(.vitaminK2_menaquinone)
+    }
+
+    var withSubstantialVitaminK1: [DatasetFoodEntity] {
+        foodsWithSubstantialMicro(.vitaminK1_phylloquinone)
+    }
+
+    var withSubstantialChloride: [DatasetFoodEntity] {
+        foodsWithSubstantialMicro(.chloride)
+    }
+
+    var withSubstantialCopper: [DatasetFoodEntity] {
+        foodsWithSubstantialMicro(.copper)
+    }
+
+    func foodsWithSubstantialMicro(_ micro: Micro) -> [DatasetFoodEntity] {
+        foodsWithMicro(micro, minimum: 1)
+    }
+
+    func foodsWithNonZeroMicro(_ micro: Micro) -> [DatasetFoodEntity] {
+        foodsWithMicro(micro, minimum: 0)
+    }
+    
+    func foodsWithMicro(_ micro: Micro, minimum: Double) -> [DatasetFoodEntity] {
+        filter {
+            guard let micro = $0.micros.micro(micro) else { return false }
+            return micro.value > minimum
+        }
+    }
+}
+
+public extension DatasetFoodEntity {
+    var vitaminK2: FoodNutrient? {
+        micros.vitaminK2
+    }
+
+    var vitaminK1: FoodNutrient? {
+        micros.micro(.vitaminK1_phylloquinone)
+    }
+
+    var copper: FoodNutrient? {
+        micros.micro(.copper)
+    }
+    var chloride: FoodNutrient? {
+        micros.micro(.chloride)
+    }
+
+}
+
+public extension Array where Element == FoodNutrient {
+    func contains(_ micro: Micro) -> Bool {
+        contains(where: { $0.micro == micro })
+    }
+    
+    var vitaminK2: FoodNutrient? {
+        micro(.vitaminK2_menaquinone)
+    }
+    
+    func micro(_ micro: Micro) -> FoodNutrient? {
+        first(where: { $0.micro == micro })
     }
 }
