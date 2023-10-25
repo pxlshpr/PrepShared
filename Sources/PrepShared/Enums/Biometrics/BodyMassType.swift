@@ -27,12 +27,3 @@ public extension BodyMassType {
         "of "
     }
 }
-
-public extension BodyMassType {
-    var biometricType: BiometricType {
-        switch self {
-        case .weight:   .weight
-        case .leanMass: .leanBodyMass
-        }
-    }
-}
