@@ -1,6 +1,6 @@
 import Foundation
 
-extension DateComponents {
+public extension DateComponents {
     var age: Int? {
         let calendar = Calendar.current
         let now = calendar.dateComponents([.year, .month, .day], from: Date())
