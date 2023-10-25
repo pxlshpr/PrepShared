@@ -1,6 +1,5 @@
 import Foundation
 
-
 public enum LegacyBiometricUnit {
     case energy(EnergyUnit)
     case bodyMass(BodyMassUnit)
