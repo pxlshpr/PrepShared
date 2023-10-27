@@ -2,7 +2,7 @@ import Foundation
 import CoreData
 
 @objc(PlanEntity)
-public class PlanEntity: NSManagedObject, Identifiable { }
+public class PlanEntity: NSManagedObject, Identifiable, Entity { }
 
 extension PlanEntity {
 

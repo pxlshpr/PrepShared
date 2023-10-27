@@ -2,7 +2,7 @@ import Foundation
 import CoreData
 
 @objc(MealEntity)
-public class MealEntity: NSManagedObject, Identifiable { }
+public class MealEntity: NSManagedObject, Identifiable, Entity { }
 
 extension MealEntity {
 

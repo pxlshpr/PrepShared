@@ -2,7 +2,7 @@ import Foundation
 import CoreData
 
 @objc(DayEntity)
-public class DayEntity: NSManagedObject, Identifiable { }
+public class DayEntity: NSManagedObject, Identifiable, Entity { }
 
 extension DayEntity {
 
