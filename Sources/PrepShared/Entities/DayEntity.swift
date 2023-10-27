@@ -24,3 +24,20 @@ extension DayEntity {
     @NSManaged public var mealEntities: NSSet?
 
 }
+
+
+extension DayEntity {
+
+    @objc(addMealEntitiesObject:)
+    @NSManaged public func addToMealEntities(_ value: MealEntity)
+
+    @objc(removeMealEntitiesObject:)
+    @NSManaged public func removeFromMealEntities(_ value: MealEntity)
+
+    @objc(addMealEntities:)
+    @NSManaged public func addToMealEntities(_ values: NSSet)
+
+    @objc(removeMealEntities:)
+    @NSManaged public func removeFromMealEntities(_ values: NSSet)
+
+}
