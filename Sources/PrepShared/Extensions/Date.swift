@@ -48,9 +48,9 @@ public extension Date {
         return dateFormatter.string(from: self).lowercased()
     }
 
-    var year: Int {
-        Calendar.current.dateComponents([.year], from: self).year ?? 0
-    }
+//    var year: Int {
+//        Calendar.current.dateComponents([.year], from: self).year ?? 0
+//    }
     
     func longDateString(longDayNames: Bool = true) -> String {
         let formatter = DateFormatter()
@@ -82,27 +82,27 @@ public extension Date {
         logDateString()
     }
 
-    var startOfDay: Date {
-        Calendar.current.startOfDay(for: self)
-    }
+//    var startOfDay: Date {
+//        Calendar.current.startOfDay(for: self)
+//    }
 
-    var isToday: Bool {
-        startOfDay == Date().startOfDay
-    }
-    
-    var isYesterday: Bool {
-        startOfDay == Date().startOfDay.addingTimeInterval(-24 * 3600)
-    }
-    
-    var isTomorrow: Bool {
-        startOfDay == Date().startOfDay.addingTimeInterval(24 * 3600)
-    }
+//    var isToday: Bool {
+//        startOfDay == Date().startOfDay
+//    }
+//    
+//    var isYesterday: Bool {
+//        startOfDay == Date().startOfDay.addingTimeInterval(-24 * 3600)
+//    }
+//    
+//    var isTomorrow: Bool {
+//        startOfDay == Date().startOfDay.addingTimeInterval(24 * 3600)
+//    }
 
-    func moveDayBy(_ dateIncrement: Int) -> Date {
-        var components = DateComponents()
-        components.day = dateIncrement
-        return Calendar.current.date(byAdding: components, to: self)!
-    }
+//    func moveDayBy(_ dateIncrement: Int) -> Date {
+//        var components = DateComponents()
+//        components.day = dateIncrement
+//        return Calendar.current.date(byAdding: components, to: self)!
+//    }
 
     func moveYearBy(_ yearIncrement: Int) -> Date {
         var components = DateComponents()
