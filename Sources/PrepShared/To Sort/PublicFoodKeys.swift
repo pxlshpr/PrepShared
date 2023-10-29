@@ -16,6 +16,18 @@ public enum PublicSearchWordKeys: String {
     case spellingsString
 }
 
+public enum PublicRDIKeys: String {
+    case rdiMicroValue
+    case rdiUnitValue
+    case rdiTypeData
+    case rdiValuesData
+    case rdiSourceID
+}
+
+public enum PublicRDISourceKeys: String {
+    case abbreviation
+}
+
 public enum PublicFoodKeys: String {
     case name
     case emoji

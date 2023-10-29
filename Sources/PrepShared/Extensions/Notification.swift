@@ -3,6 +3,8 @@ import Foundation
 public extension Notification.Name {
     static var didUpdateFood: Notification.Name { return .init("didUpdateFood") }
     static var didUpdateWord: Notification.Name { return .init("didUpdateWord") }
+    static var didUpdateRDISource: Notification.Name { return .init("didUpdateRDISource") }
+    static var didUpdateRDI: Notification.Name { return .init("didUpdateRDI") }
     static var networkDidBecomeOnline: Notification.Name { return .init("networkDidBecomeOnline") }
     
     /// UI Changes

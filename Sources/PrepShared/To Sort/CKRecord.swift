@@ -21,6 +21,16 @@ public extension CKRecord {
         get { self[key.rawValue] }
         set { self[key.rawValue] = newValue }
     }
+    
+    subscript(key: PublicRDIKeys) -> CKRecordValue? {
+        get { self[key.rawValue] }
+        set { self[key.rawValue] = newValue }
+    }
+    
+    subscript(key: PublicRDISourceKeys) -> CKRecordValue? {
+        get { self[key.rawValue] }
+        set { self[key.rawValue] = newValue }
+    }
 }
 
 public extension CKRecord {
@@ -115,4 +125,35 @@ public extension CKRecord {
         guard let string = self[.spellingsString] as? String else { return [] }
         return string.components(separatedBy: SpellingsSeparator)
     }
+}
+
+/// `RDI` specific
+public extension CKRecord {
+
+    var rdiMicro: Micro? {
+        guard let rawValue = self[.rdiMicroValue] as? Int else { return nil }
+        return Micro(rawValue: rawValue)
+    }
+
+    var rdiUnit: NutrientUnit? {
+        guard let rawValue = self[.rdiUnitValue] as? Int else { return nil }
+        return NutrientUnit(rawValue: rawValue)
+    }
+
+    var rdiType: RDIType? {
+        guard let data = self[.rdiTypeData] as? Data else { return nil }
+        return try? JSONDecoder().decode(RDIType.self, from: data)
+    }
+
+    var rdiValues: [RDIValue]? {
+        guard let data = self[.rdiValuesData] as? Data else { return nil }
+        return try? JSONDecoder().decode([RDIValue].self, from: data)
+    }
+
+    var rdiSourceID: String? { self[.rdiSourceID] as? String }
+}
+
+/// `RDISource` specific
+public extension CKRecord {
+    var abbreviation: String? { self[.abbreviation] as? String }
 }

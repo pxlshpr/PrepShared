@@ -5,6 +5,8 @@ public enum RecordType {
     case verifiedFood
     case datasetFood
     case searchWord
+    case rdi
+    case rdiSource
 }
 
 public extension RecordType {
@@ -14,6 +16,8 @@ public extension RecordType {
         case .verifiedFood:         "VerifiedFood"
         case .datasetFood:          "DatasetFood"
         case .searchWord:           "SearchWord"
+        case .rdi:                  "RDI"
+        case .rdiSource:            "RDISource"
         }
     }
     
@@ -23,6 +27,8 @@ public extension RecordType {
         case .verifiedFood:         VerifiedFoodEntity.self
         case .datasetFood:          DatasetFoodEntity.self
         case .searchWord:           SearchWordEntity.self
+        case .rdi:                  RDIEntity.self
+        case .rdiSource:            RDISourceEntity.self
         }
     }
 }
