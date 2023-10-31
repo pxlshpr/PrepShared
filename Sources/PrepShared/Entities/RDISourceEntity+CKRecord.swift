@@ -16,8 +16,8 @@ public extension RDISourceEntity {
     func fill(fields: RDISourceFields) {
         self.abbreviation = fields.abbreviation
         self.name = fields.name
-        self.detail = fields.detail
-        self.url = fields.url
+        self.detail = fields.detail.isEmpty ? nil : fields.detail
+        self.url = fields.url.isEmpty ? nil : fields.url
     }
 }
 
@@ -30,8 +30,8 @@ public extension RDISourceEntity {
         
         self.abbreviation = record.abbreviation
         self.name = record.name
-        self.detail = record.detail
-        self.url = record.url
+        self.detail = record.detail?.isEmpty == true ? nil : record.detail
+        self.url = record.url?.isEmpty == true ? nil : record.url
     }
     
     func update(record: CKRecord, in context: NSManagedObjectContext) async throws {
