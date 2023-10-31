@@ -22,12 +22,11 @@ public struct RDISourceFields: Hashable, Equatable {
 public extension RDISourceFields {
     
     var canBeSaved: Bool {
-        !abbreviation.isEmpty
-        && !name.isEmpty
+        !name.isEmpty
     }
     
     mutating func fill(with rdiSource: RDISource) {
-        abbreviation = rdiSource.abbreviation
+        abbreviation = rdiSource.abbreviation ?? ""
         name = rdiSource.name
         detail = rdiSource.detail ?? ""
         url = rdiSource.url ?? ""

@@ -60,7 +60,7 @@ public extension RDISourceEntity {
             createdAt: createdAt!,
             updatedAt: updatedAt!,
             isTrashed: isTrashed,
-            abbreviation: abbreviation!,
+            abbreviation: abbreviation,
             name: name!,
             detail: detail,
             url: url

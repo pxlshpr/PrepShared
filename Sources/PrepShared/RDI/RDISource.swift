@@ -6,7 +6,7 @@ public struct RDISource: Identifiable, Codable, Hashable, Equatable {
     public var updatedAt: Date
     public var isTrashed: Bool
     
-    public var abbreviation: String
+    public var abbreviation: String?
     public var name: String
     public var detail: String?
     public var url: String?
@@ -16,7 +16,7 @@ public struct RDISource: Identifiable, Codable, Hashable, Equatable {
         createdAt: Date = Date(),
         updatedAt: Date = Date(),
         isTrashed: Bool = false,
-        abbreviation: String,
+        abbreviation: String? = nil,
         name: String,
         detail: String? = nil,
         url: String? = nil
@@ -37,7 +37,7 @@ public struct RDISource: Identifiable, Codable, Hashable, Equatable {
             createdAt: entity.createdAt!,
             updatedAt: entity.updatedAt!,
             isTrashed: entity.isTrashed,
-            abbreviation: entity.abbreviation!,
+            abbreviation: entity.abbreviation,
             name: entity.name!,
             detail: entity.detail,
             url: entity.url
@@ -54,7 +54,7 @@ public extension RDISource {
             createdAt: record.createdAt!,
             updatedAt: record.updatedAt!,
             isTrashed: record.isTrashed!,
-            abbreviation: record.abbreviation!,
+            abbreviation: record.abbreviation,
             name: record.name!,
             detail: record.detail,
             url: record.url
