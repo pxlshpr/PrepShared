@@ -6,7 +6,7 @@ public struct RDISourceFields: Hashable, Equatable {
     public var detail: String
     public var url: String
     
-    init(
+    public init(
         abbreviation: String = "",
         name: String = "",
         detail: String = "",
