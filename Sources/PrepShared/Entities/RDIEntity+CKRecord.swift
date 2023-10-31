@@ -25,7 +25,7 @@ public extension RDIEntity {
 }
 
 public extension RDIEntity {
-    func fill(with record: CKRecord) {
+    func fill(with record: CKRecord, in context: NSManagedObjectContext){
         self.id = record.id
         self.createdAt = record.createdAt
         self.updatedAt = record.updatedAt
@@ -37,8 +37,10 @@ public extension RDIEntity {
         self.url = record.url!
         self.values = record.rdiValues!
         
-        //TODO: Handle source
-//        self.source = record.rdiSourceID
+        /// Every RDI requires a source, so this will fail if it doesn't exist
+        let sourceID = UUID(uuidString: record.rdiSourceID!)!
+        let rdiSourceEntity = RDISourceEntity.entity(in: context, with: sourceID)!
+        self.rdiSourceEntity = rdiSourceEntity
     }
     
     func update(record: CKRecord, in context: NSManagedObjectContext) async throws {

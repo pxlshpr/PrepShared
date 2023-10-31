@@ -14,7 +14,7 @@ public protocol PublicEntity: Entity {
 
     static func entity(matching record: CKRecord, in context: NSManagedObjectContext) -> Self?
     static func record(matching entity: Self) async throws -> CKRecord?
-    func fill(with record: CKRecord)
+    func fill(with record: CKRecord, in context: NSManagedObjectContext)
     
     func merge(with record: CKRecord, in context: NSManagedObjectContext)
     
@@ -31,7 +31,7 @@ public extension PublicEntity {
             return
         }
         /// Use all its values (that could have possibly changed), discarding our changes and resetting `isSynced` to `false`
-        fill(with: record)
+        fill(with: record, in: context)
         isSynced = true
     }
     
@@ -78,7 +78,7 @@ public extension PublicEntity {
                 } else {
                     PublicStore.logger.trace("\(record.recordType) does not exist, creating...")
                     let entity = Self(context: context)
-                    entity.fill(with: record)
+                    entity.fill(with: record, in: context)
                     entity.isSynced = true
                     context.insert(entity)
                 }

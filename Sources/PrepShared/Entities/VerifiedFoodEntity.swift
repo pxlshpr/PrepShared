@@ -151,7 +151,7 @@ public extension VerifiedFoodEntity {
     
     convenience init(_ record: CKRecord, _ context: NSManagedObjectContext) {
         self.init(context: context)
-        self.fill(with: record)
+        self.fill(with: record, in: context)
     }
 }
 

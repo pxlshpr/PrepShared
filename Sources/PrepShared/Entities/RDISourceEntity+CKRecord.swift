@@ -22,7 +22,7 @@ public extension RDISourceEntity {
 }
 
 public extension RDISourceEntity {
-    func fill(with record: CKRecord) {
+    func fill(with record: CKRecord, in context: NSManagedObjectContext) {
         self.id = record.id
         self.createdAt = record.createdAt
         self.updatedAt = record.updatedAt

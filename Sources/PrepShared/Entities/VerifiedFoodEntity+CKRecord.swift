@@ -11,7 +11,7 @@ public extension VerifiedFoodEntity {
         entity(in: context, with: record.id!)
     }
     
-    func fill(with record: CKRecord) {
+    func fill(with record: CKRecord, in context: NSManagedObjectContext) {
         
         id = record.id!
         

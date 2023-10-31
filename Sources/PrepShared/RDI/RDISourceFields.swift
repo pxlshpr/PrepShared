@@ -3,14 +3,14 @@ import Foundation
 public struct RDISourceFields: Hashable, Equatable {
     public var abbreviation: String
     public var name: String
-    public var detail: String?
-    public var url: String?
+    public var detail: String
+    public var url: String
     
     init(
         abbreviation: String = "",
         name: String = "",
-        detail: String? = nil,
-        url: String? = nil
+        detail: String = "",
+        url: String = ""
     ) {
         self.abbreviation = abbreviation
         self.name = name
@@ -29,7 +29,7 @@ public extension RDISourceFields {
     mutating func fill(with rdiSource: RDISource) {
         abbreviation = rdiSource.abbreviation
         name = rdiSource.name
-        detail = rdiSource.detail
-        url = rdiSource.url
+        detail = rdiSource.detail ?? ""
+        url = rdiSource.url ?? ""
     }
 }

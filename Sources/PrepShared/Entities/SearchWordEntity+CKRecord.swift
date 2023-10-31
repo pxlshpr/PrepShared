@@ -15,7 +15,7 @@ public extension SearchWordEntity {
         try await PublicDatabase.record(matching: entity.asSearchWord)
     }
     
-    func fill(with record: CKRecord) {
+    func fill(with record: CKRecord, in context: NSManagedObjectContext) {
         self.id = record.id
         self.singular = record.singular
         self.spellings = record.spellings
@@ -35,7 +35,7 @@ public extension SearchWordEntity {
         /// (to account for situations such as the network not being available).*
         if isLessRecent(than: record) {
             /// Use all its values, discarding our changes (singular might change too if it had a diacritic)
-            fill(with: record)
+            fill(with: record, in: context)
 
             /// Make sure we're not setting this to be synced any more in case it was set to `false` by changes we have now discarded
             isSynced = true
