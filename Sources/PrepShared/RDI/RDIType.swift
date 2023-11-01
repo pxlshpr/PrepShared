@@ -21,6 +21,28 @@ public extension RDIType {
         case .percentageOfEnergy:   "Percentage per energy"
         }
     }
+    
+    var isQuantityPerEnergy: Bool {
+        switch self {
+        case .quantityPerEnergy:    true
+        default:                    false
+        }
+    }
+    
+    var isFixed: Bool {
+        switch self {
+        case .fixed:    true
+        default:        false
+        }
+    }
+
+    var isPercentageOfEnergy: Bool {
+        switch self {
+        case .percentageOfEnergy:   true
+        default:                    false
+        }
+    }
+
 }
 
 extension RDIType: Pickable {
