@@ -45,6 +45,16 @@ public struct RDISource: Identifiable, Codable, Hashable, Equatable {
     }
 }
 
+public extension RDISource {
+    var displayName: String {
+        if let abbreviation, !abbreviation.isEmpty {
+            abbreviation
+        } else {
+            name
+        }
+    }
+}
+
 import CloudKit
 
 public extension RDISource {
