@@ -10,7 +10,7 @@ public struct RDIFields: Hashable, Equatable {
     
     public var unit: NutrientUnit
     public var type: RDIType
-    public var url: String?
+    public var url: String
     public var values: [RDIValue]
     public var source: RDISource?
     
@@ -18,7 +18,7 @@ public struct RDIFields: Hashable, Equatable {
         micro: Micro? = nil,
         unit: NutrientUnit? = nil,
         type: RDIType = .default,
-        url: String? = nil,
+        url: String = "",
         values: [RDIValue] = [],
         source: RDISource? = nil
     ) {
@@ -42,7 +42,7 @@ public extension RDIFields {
         micro = rdi.micro
         unit = rdi.unit
         type = rdi.type
-        url = rdi.url
+        url = rdi.url ?? ""
         values = rdi.values
         source = rdi.source
     }
