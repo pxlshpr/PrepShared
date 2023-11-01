@@ -61,10 +61,3 @@ public extension RDISource {
         )
     }
 }
-
-extension RDISource: Pickable {
-    public var pickedTitle: String { abbreviation ?? name }
-    public var menuTitle: String { name }
-    public static var `default`: RDISource { .init(name: "Unnamed Source") }
-    public static var allCases: [RDISource] { [] }
-}
