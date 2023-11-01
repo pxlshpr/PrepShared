@@ -18,7 +18,7 @@ public extension RDIType {
         switch self {
         case .fixed:                "Fixed"
         case .quantityPerEnergy:    "Quantity per energy"
-        case .percentageOfEnergy:   "Percentage per energy"
+        case .percentageOfEnergy:   "Percentage of energy"
         }
     }
     
