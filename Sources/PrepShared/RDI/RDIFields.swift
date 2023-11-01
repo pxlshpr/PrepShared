@@ -12,7 +12,7 @@ public struct RDIFields: Hashable, Equatable {
     public var type: RDIType
     public var url: String?
     public var values: [RDIValue]
-    public var source: RDISource?
+    public var source: RDISource
     
     public init(
         micro: Micro? = nil,
@@ -20,7 +20,7 @@ public struct RDIFields: Hashable, Equatable {
         type: RDIType = .default,
         url: String? = nil,
         values: [RDIValue] = [],
-        source: RDISource? = nil
+        source: RDISource = .default
     ) {
         self.micro = micro
         self.unit = unit ?? .mg
@@ -39,11 +39,12 @@ public extension RDIFields {
     }
     
     mutating func fill(with rdi: RDI) {
+        guard let source = rdi.source else { return }
         micro = rdi.micro
         unit = rdi.unit
         type = rdi.type
         url = rdi.url
         values = rdi.values
-        source = rdi.source
+        self.source = source
     }
 }
