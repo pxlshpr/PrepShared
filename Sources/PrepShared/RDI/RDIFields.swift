@@ -2,8 +2,13 @@ import Foundation
 
 public struct RDIFields: Hashable, Equatable {
 
-    public var micro: Micro?
-    public var unit: NutrientUnit?
+    public var micro: Micro? {
+        didSet {
+            unit = micro?.defaultUnit ?? .mg
+        }
+    }
+    
+    public var unit: NutrientUnit
     public var type: RDIType
     public var url: String?
     public var values: [RDIValue]
@@ -18,7 +23,7 @@ public struct RDIFields: Hashable, Equatable {
         source: RDISource? = nil
     ) {
         self.micro = micro
-        self.unit = unit
+        self.unit = unit ?? .mg
         self.type = type
         self.url = url
         self.values = values
@@ -30,7 +35,6 @@ public extension RDIFields {
     
     var canBeSaved: Bool {
         micro != nil
-        && unit != nil
         && !values.isEmpty
     }
     
