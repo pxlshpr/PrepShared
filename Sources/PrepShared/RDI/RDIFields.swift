@@ -14,7 +14,7 @@ public struct RDIFields: Hashable, Equatable {
         unit: NutrientUnit? = nil,
         type: RDIType = .default,
         url: String? = nil,
-        values: [RDIValue],
+        values: [RDIValue] = [],
         source: RDISource? = nil
     ) {
         self.micro = micro
