@@ -3,7 +3,7 @@ import Foundation
 public struct RDIFields: Hashable, Equatable {
 
     public var micro: Micro?
-    public var unit: NutrientUnit
+    public var unit: NutrientUnit?
     public var type: RDIType
     public var url: String?
     public var values: [RDIValue]
@@ -11,8 +11,8 @@ public struct RDIFields: Hashable, Equatable {
     
     public init(
         micro: Micro? = nil,
-        unit: NutrientUnit,
-        type: RDIType,
+        unit: NutrientUnit? = nil,
+        type: RDIType = .default,
         url: String? = nil,
         values: [RDIValue],
         source: RDISource? = nil
@@ -29,8 +29,9 @@ public struct RDIFields: Hashable, Equatable {
 public extension RDIFields {
     
     var canBeSaved: Bool {
-        //TODO: Write this
-        false
+        micro != nil
+        && unit != nil
+        && !values.isEmpty
     }
     
     mutating func fill(with rdi: RDI) {

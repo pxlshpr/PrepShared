@@ -14,9 +14,13 @@ public extension RDIEntity {
 
 public extension RDIEntity {
     func fill(fields: RDIFields) {
-        guard let micro = fields.micro else { return }
+        guard 
+            let micro = fields.micro,
+            let unit = fields.unit
+        else { return }
+        
         self.micro = micro
-        self.unit = fields.unit
+        self.unit = unit
         self.type = fields.type
         self.url = fields.url
         self.values = fields.values
