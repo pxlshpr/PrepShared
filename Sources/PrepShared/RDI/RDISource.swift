@@ -37,10 +37,10 @@ public struct RDISource: Identifiable, Codable, Hashable, Equatable {
             createdAt: entity.createdAt!,
             updatedAt: entity.updatedAt!,
             isTrashed: entity.isTrashed,
-            abbreviation: entity.abbreviation,
+            abbreviation: entity.abbreviation?.isEmpty == true ? nil : entity.abbreviation,
             name: entity.name!,
-            detail: entity.detail,
-            url: entity.url
+            detail: entity.detail?.isEmpty == true ? nil : entity.detail,
+            url: entity.url?.isEmpty == true ? nil : entity.url
         )
     }
 }
@@ -54,10 +54,10 @@ public extension RDISource {
             createdAt: record.createdAt!,
             updatedAt: record.updatedAt!,
             isTrashed: record.isTrashed!,
-            abbreviation: record.abbreviation,
+            abbreviation: record.abbreviation?.isEmpty == true ? nil : record.abbreviation,
             name: record.name!,
-            detail: record.detail,
-            url: record.url
+            detail: record.detail?.isEmpty == true ? nil : record.detail,
+            url: record.url?.isEmpty == true ? nil : record.url
         )
     }
 }
