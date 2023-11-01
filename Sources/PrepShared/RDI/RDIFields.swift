@@ -2,15 +2,15 @@ import Foundation
 
 public struct RDIFields: Hashable, Equatable {
 
-    public var micro: Micro
+    public var micro: Micro?
     public var unit: NutrientUnit
     public var type: RDIType
     public var url: String?
     public var values: [RDIValue]
     public var source: RDISource?
     
-    init(
-        micro: Micro,
+    public init(
+        micro: Micro? = nil,
         unit: NutrientUnit,
         type: RDIType,
         url: String? = nil,
