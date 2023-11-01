@@ -49,7 +49,7 @@ public struct MenuPicker<T: Pickable>: View {
     
     @ViewBuilder
     var noneContent: some View {
-        if let none = T.noneOption {
+        if let none = T.noneOption, options.contains(none) {
             Text(none.menuTitle)
                 .font(.body)
                 .textCase(.none)
