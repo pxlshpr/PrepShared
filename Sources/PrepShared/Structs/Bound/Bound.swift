@@ -1,6 +1,6 @@
 import Foundation
 
-public struct GoalBound: Hashable, Codable {
+public struct Bound: Hashable, Codable {
     public var lower: Double?
     public var upper: Double?
     
@@ -9,7 +9,7 @@ public struct GoalBound: Hashable, Codable {
         self.upper = upper
     }
     
-    public init?(_ type: GoalBoundType, _ lower: Double, _ upper: Double) {
+    public init?(_ type: BoundType, _ lower: Double, _ upper: Double) {
         switch type {
         case .none:
             return nil
@@ -26,7 +26,7 @@ public struct GoalBound: Hashable, Codable {
     }
 }
 
-public extension GoalBound {
+public extension Bound {
     var isValid: Bool {
         switch (lower, upper) {
         case (.some(let lower), .some(let upper)):
@@ -41,8 +41,8 @@ public extension GoalBound {
     }
 }
 
-public extension GoalBound {
-    var type: GoalBoundType {
+public extension Bound {
+    var type: BoundType {
         switch (lower, upper) {
         case (.some, .some):    .closed
         case (.some, .none):    .lower
@@ -52,7 +52,7 @@ public extension GoalBound {
     }
 }
 
-public extension GoalBound {
+public extension Bound {
     func contains(_ value: Double) -> Bool {
         switch (lower, upper) {
         case (.some(let lower), .some(let upper)):

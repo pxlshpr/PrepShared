@@ -15,7 +15,7 @@ func assertEqual(_ goal: Goal, _ other: Goal) {
     assertEqual(goal.calculatedBound, other.calculatedBound)
 }
 
-func assertEqual(_ bound: GoalBound, _ other: GoalBound) {
+func assertEqual(_ bound: Bound, _ other: Bound) {
     assertEqual(bound.lower, other.lower)
     assertEqual(bound.upper, other.upper)
 }

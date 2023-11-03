@@ -115,7 +115,7 @@ public extension Array where Element == Goal {
         /// Gather all macro goals
         guard manualMacroGoals.count == 3 else { return nil }
 
-        let bound: GoalBound
+        let bound: Bound
         if allMacroGoalsAreClosed {
             
             guard
@@ -128,14 +128,14 @@ public extension Array where Element == Goal {
             let lower = EnergyUnit.kcal.convert(lowerInKcal, to: unit)
             let upper = EnergyUnit.kcal.convert(upperInKcal, to: unit)
             
-            guard let energyBound = GoalBound(.closed, lower, upper) else {
+            guard let energyBound = Bound(.closed, lower, upper) else {
                 return nil
             }
             bound = energyBound
         } else if allMacroGoalsHaveUpper {
-            bound = GoalBound(upper: manualMacroGoals.upperEnergyInKcal)
+            bound = Bound(upper: manualMacroGoals.upperEnergyInKcal)
         } else if allMacroGoalsHaveLower {
-            bound = GoalBound(lower: manualMacroGoals.lowerEnergyInKcal)
+            bound = Bound(lower: manualMacroGoals.lowerEnergyInKcal)
         } else {
             return nil
         }

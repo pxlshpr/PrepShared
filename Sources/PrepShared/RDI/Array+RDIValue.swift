@@ -66,8 +66,8 @@ extension Array where Element == RDIValue {
         && contains { $0.isSmoker == false }
     }
     
-    var groupedByAgeRange: [GoalBound: [RDIValue]] {
-        var dict: [GoalBound: [RDIValue]] = [:]
+    var groupedByAgeRange: [Bound: [RDIValue]] {
+        var dict: [Bound: [RDIValue]] = [:]
         for value in self {
             guard let ageRange = value.ageRange else { return [:] }
             if let existing = dict[ageRange] {

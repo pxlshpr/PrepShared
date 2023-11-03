@@ -12,7 +12,7 @@ extension Plan {
 
 extension Goal {
     static func fixedEnergy(_ values: (Double?, Double?)) -> Goal {
-        let bound = GoalBound(lower: values.0, upper: values.1)
+        let bound = Bound(lower: values.0, upper: values.1)
         return self.init(
             type: .energy(.fixed(energyUnit)),
             bound: bound,
@@ -21,7 +21,7 @@ extension Goal {
     }
 
     static func fixedMacro(_ macro: Macro, _ values: (Double?, Double?)) -> Goal {
-        let bound = GoalBound(lower: values.0, upper: values.1)
+        let bound = Bound(lower: values.0, upper: values.1)
         return self.init(
             type: .macro(.fixed, macro),
             bound: bound,

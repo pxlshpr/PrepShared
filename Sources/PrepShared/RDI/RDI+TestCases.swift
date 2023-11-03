@@ -58,8 +58,8 @@ public let fiber_eatRight = RDI(
 //MARK: - Helpers
 
 public func v(
-    _ bound: GoalBound,
-    ageRange: GoalBound? = nil,
+    _ bound: Bound,
+    ageRange: Bound? = nil,
     gender: BiometricSex? = nil,
     pregnancyStatus: PregnancyStatus? = nil,
     smoker: Bool? = nil
@@ -73,14 +73,14 @@ public func v(
     )
 }
 
-public func b(_ lower: Double, _ upper: Double) -> GoalBound {
-    GoalBound(lower: lower, upper: upper)
+public func b(_ lower: Double, _ upper: Double) -> Bound {
+    Bound(lower: lower, upper: upper)
 }
 
-public func l(_ lower: Double) -> GoalBound {
-    GoalBound(lower: lower)
+public func l(_ lower: Double) -> Bound {
+    Bound(lower: lower)
 }
 
-public func u(_ upper: Double) -> GoalBound {
-    GoalBound(upper: upper)
+public func u(_ upper: Double) -> Bound {
+    Bound(upper: upper)
 }

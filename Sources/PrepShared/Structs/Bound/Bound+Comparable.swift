@@ -1,7 +1,7 @@
 import Foundation
 
-extension GoalBound: Comparable {
-    public static func <(lhs: GoalBound, rhs: GoalBound) -> Bool {
+extension Bound: Comparable {
+    public static func <(lhs: Bound, rhs: Bound) -> Bool {
         /// Test this
         /**
          b(0, 0.5)

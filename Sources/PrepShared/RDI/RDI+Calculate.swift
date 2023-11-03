@@ -22,7 +22,7 @@ public extension RDI {
     func bound(
         params: RDIParams = .init(),
         energyInKcal: Double? = nil
-    ) -> GoalBound? {
+    ) -> Bound? {
         
         /// If the goal type is based on energy and we don't have one, stop here
         if type.usesEnergy {
@@ -57,16 +57,16 @@ public extension RDI {
                 
                 return switch (value.bound.lower, value.bound.upper) {
                 case (.some(let lower), .some(let upper)):
-                    GoalBound(
+                    Bound(
                         lower: (lower * energyInKcal) / converted,
                         upper: (upper * energyInKcal) / converted
                     )
                 case (.some(let lower), nil):
-                    GoalBound(
+                    Bound(
                         lower: (lower * energyInKcal) / converted
                     )
                 case (nil, .some(let upper)):
-                    GoalBound(
+                    Bound(
                         upper: (upper * energyInKcal) / converted
                     )
                 case (.none, .none):
@@ -85,16 +85,16 @@ public extension RDI {
                 
                 return switch (value.bound.lower, value.bound.upper) {
                 case (.some(let lower), .some(let upper)):
-                    GoalBound(
+                    Bound(
                         lower: ((lower/100.0) * energyInKcal) / kcalsPerGram,
                         upper: ((upper/100.0) * energyInKcal) / kcalsPerGram
                     )
                 case (.some(let lower), nil):
-                    GoalBound(
+                    Bound(
                         lower: ((lower/100.0) * energyInKcal) / kcalsPerGram
                     )
                 case (nil, .some(let upper)):
-                    GoalBound(
+                    Bound(
                         upper: ((upper/100.0) * energyInKcal) / kcalsPerGram
                     )
                 case (.none, .none):

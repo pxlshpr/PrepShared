@@ -1,6 +1,6 @@
 import Foundation
 
-extension Array where Element == GoalBound {
+extension Array where Element == Bound {
     var spansZeroToInfinity: Bool {
         /// -[ ] Now check that we cover values from 0 to infinity, each upper bound should have another value with a lower bound
         let sorted = self

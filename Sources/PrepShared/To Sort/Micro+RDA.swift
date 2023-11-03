@@ -7,7 +7,7 @@ public extension Micro {
         var lower: Double? = nil, upper: Double? = nil
         if let dailyValue { lower = dailyValue.1.convert(dailyValue.0, to: defaultUnit) }
         if let dailyValueMax { upper = dailyValueMax.1.convert(dailyValueMax.0, to: defaultUnit) }
-        let bound = GoalBound(lower: lower, upper: upper)
+        let bound = Bound(lower: lower, upper: upper)
 
         /// Make sure the bound is valid (has at least one side)
         guard bound.isValid else { return nil }

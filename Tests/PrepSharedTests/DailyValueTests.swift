@@ -51,13 +51,13 @@ struct RDITestCase {
     let dailyValue: RDI
     let params: RDIParams
     let energyInKcal: Double?
-    let expectedBound: GoalBound?
+    let expectedBound: Bound?
     
     init(
         dailyValue: RDI,
         params: RDIParams = .init(),
         energyInKcal: Double? = nil,
-        expectedBound: GoalBound?
+        expectedBound: Bound?
     ) {
         self.dailyValue = dailyValue
         self.params = params
