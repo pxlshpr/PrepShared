@@ -121,11 +121,11 @@ extension Array where Element == RDIValue {
         }
         
         var withoutGender: Bool {
-            if !containsSmokingStatus {
+            if containsSmokingStatus {
+                hasAllSmokingStatusCombos
+            } else {
                 /// No params, so only 1 value is allowed, returning true if not empty
                 !isEmpty
-            } else {
-                hasAllSmokingStatusCombos
             }
         }
         

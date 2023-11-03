@@ -18,9 +18,12 @@ extension Array where Element == Bound {
         guard last.type == .lower else { return false }
 
         /// Go through each other one and ensure that each upper bound is the next value's lower bound (until the last value)
-        for (i, bound) in self.dropLast().enumerated() {
-            guard bound.upper == self[i+1].lower else { return false }
+        for (i, bound) in sorted.dropLast().enumerated() {
+            guard bound.upper == sorted[i+1].lower else {
+                return false
+            }
         }
-        return false
+        
+        return true
     }
 }
