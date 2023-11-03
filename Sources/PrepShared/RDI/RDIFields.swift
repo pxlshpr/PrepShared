@@ -36,6 +36,7 @@ public extension RDIFields {
     var canBeSaved: Bool {
         micro != nil
         && !values.isEmpty
+        && values.hasAllParamCombos
     }
     
     mutating func fill(with rdi: RDI) {
