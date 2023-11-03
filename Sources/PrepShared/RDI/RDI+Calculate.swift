@@ -39,11 +39,8 @@ public extension RDI {
             if let gender = value.gender {
                 guard params.gender == gender else { continue }
             }
-            if let isPregnant = value.isPregnant {
-                guard params.isPregnant == isPregnant else { continue }
-            }
-            if let isLactating = value.isLactating {
-                guard params.isLactating == isLactating else { continue }
+            if let pregnancyStatus = value.pregnancyStatus {
+                guard params.pregnancyStatus == pregnancyStatus else { continue }
             }
             if let isSmoker = value.isSmoker {
                 guard params.isSmoker == isSmoker else { continue }

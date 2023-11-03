@@ -12,15 +12,15 @@ public let vitaminC_nih = RDI(
         v(b(25, 650), ageRange: b(4, 9)),
         v(b(45, 1200), ageRange: b(9, 14)),
         v(b(75, 1800), ageRange: b(14, 19), gender: .male),
-        v(b(65, 1800), ageRange: b(14, 19), gender: .female, pregnant: false, lactating: false),
-        v(b(80, 1800), ageRange: b(14, 19), gender: .female, pregnant: true, lactating: false),
-        v(b(115, 1800), ageRange: b(14, 19), gender: .female, pregnant: false, lactating: true),
+        v(b(65, 1800), ageRange: b(14, 19), gender: .female, pregnancyStatus: .notPregnantOrLactating),
+        v(b(80, 1800), ageRange: b(14, 19), gender: .female, pregnancyStatus: .pregnant),
+        v(b(115, 1800), ageRange: b(14, 19), gender: .female, pregnancyStatus: .lactating),
         v(b(90, 2000), ageRange: l(19), gender: .male, smoker: false),
         v(b(125, 2000), ageRange: l(19), gender: .male, smoker: true),
-        v(b(75, 2000), ageRange: l(19), gender: .female, pregnant: false, lactating: false, smoker: false),
-        v(b(110, 2000), ageRange: l(19), gender: .female, pregnant: false, lactating: false, smoker: true),
-        v(b(85, 2000), ageRange: l(19), gender: .female, pregnant: true, lactating: false, smoker: false),
-        v(b(120, 2000), ageRange: l(19), gender: .female, pregnant: false, lactating: true, smoker: false),
+        v(b(75, 2000), ageRange: l(19), gender: .female, pregnancyStatus: .notPregnantOrLactating, smoker: false),
+        v(b(110, 2000), ageRange: l(19), gender: .female, pregnancyStatus: .notPregnantOrLactating, smoker: true),
+        v(b(85, 2000), ageRange: l(19), gender: .female, pregnancyStatus: .pregnant, smoker: false),
+        v(b(120, 2000), ageRange: l(19), gender: .female, pregnancyStatus: .lactating, smoker: false),
     ]
 )
 
@@ -61,16 +61,14 @@ public func v(
     _ bound: GoalBound,
     ageRange: GoalBound? = nil,
     gender: BiometricSex? = nil,
-    pregnant: Bool? = nil,
-    lactating: Bool? = nil,
+    pregnancyStatus: PregnancyStatus? = nil,
     smoker: Bool? = nil
 ) -> RDIValue {
     RDIValue(
         bound: bound,
         ageRange: ageRange,
         gender: gender,
-        isPregnant: pregnant,
-        isLactating: lactating,
+        pregnancyStatus: pregnancyStatus,
         isSmoker: smoker
     )
 }

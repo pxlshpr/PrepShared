@@ -42,7 +42,7 @@ let testCases: [RDITestCase] = [
     ),
     .init(
         dailyValue: vitaminC_nih,
-        params: .init(age: 17, gender: .female, isPregnant: false, isLactating: true),
+        params: .init(age: 17, gender: .female, pregnancyStatus: .lactating),
         expectedBound: b(115, 1800)
     ),
 ]

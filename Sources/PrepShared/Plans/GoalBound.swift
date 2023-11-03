@@ -51,3 +51,18 @@ public extension GoalBound {
         }
     }
 }
+
+public extension GoalBound {
+    func contains(_ value: Double) -> Bool {
+        switch (lower, upper) {
+        case (.some(let lower), .some(let upper)):
+            value >= lower && value < upper
+        case (.some(let lower), nil):
+            value >= lower
+        case (nil, .some(let upper)):
+            upper < upper
+        case (.none, .none):
+            false
+        }
+    }
+}
