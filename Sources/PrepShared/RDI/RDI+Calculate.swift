@@ -36,8 +36,8 @@ public extension RDI {
             if let ageRange = value.ageRange {
                 guard let age = params.age, ageRange.contains(age) else { continue }
             }
-            if let gender = value.gender {
-                guard params.gender == gender else { continue }
+            if let sex = value.sex {
+                guard params.sex == sex else { continue }
             }
             if let pregnancyStatus = value.pregnancyStatus {
                 guard params.pregnancyStatus == pregnancyStatus else { continue }

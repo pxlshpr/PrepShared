@@ -28,8 +28,8 @@ private let HasAllParamCombosTestCases: [([RDIValue], Bool)] = [
     (fiber_eatRight.values, true),
     
     ([
-        v(b(21, 25), gender: .female),
-        v(b(30, 38), gender: .female),
+        v(b(21, 25), sex: .female),
+        v(b(30, 38), sex: .female),
     ], false),
     
     ([
@@ -38,15 +38,15 @@ private let HasAllParamCombosTestCases: [([RDIValue], Bool)] = [
         v(b(15, 400), ageRange: b(1, 4)),
         v(b(25, 650), ageRange: b(4, 9)),
         v(b(45, 1200), ageRange: b(9, 14)),
-        v(b(75, 1800), ageRange: b(14, 19), gender: .male),
-        v(b(65, 1800), ageRange: b(14, 19), gender: .female, pregnancyStatus: .notPregnantOrLactating),
-        v(b(80, 1800), ageRange: b(14, 19), gender: .female, pregnancyStatus: .pregnant),
-        v(b(115, 1800), ageRange: b(14, 19), gender: .female, pregnancyStatus: .lactating),
-        v(b(90, 2000), ageRange: l(19), gender: .male, smoker: false),
-        v(b(75, 2000), ageRange: l(19), gender: .female, pregnancyStatus: .notPregnantOrLactating, smoker: false),
-        v(b(110, 2000), ageRange: l(19), gender: .female, pregnancyStatus: .notPregnantOrLactating, smoker: true),
-        v(b(85, 2000), ageRange: l(19), gender: .female, pregnancyStatus: .pregnant, smoker: false),
-        v(b(120, 2000), ageRange: l(19), gender: .female, pregnancyStatus: .lactating, smoker: false),
+        v(b(75, 1800), ageRange: b(14, 19), sex: .male),
+        v(b(65, 1800), ageRange: b(14, 19), sex: .female, pregnancyStatus: .notPregnantOrLactating),
+        v(b(80, 1800), ageRange: b(14, 19), sex: .female, pregnancyStatus: .pregnant),
+        v(b(115, 1800), ageRange: b(14, 19), sex: .female, pregnancyStatus: .lactating),
+        v(b(90, 2000), ageRange: l(19), sex: .male, smoker: false),
+        v(b(75, 2000), ageRange: l(19), sex: .female, pregnancyStatus: .notPregnantOrLactating, smoker: false),
+        v(b(110, 2000), ageRange: l(19), sex: .female, pregnancyStatus: .notPregnantOrLactating, smoker: true),
+        v(b(85, 2000), ageRange: l(19), sex: .female, pregnancyStatus: .pregnant, smoker: false),
+        v(b(120, 2000), ageRange: l(19), sex: .female, pregnancyStatus: .lactating, smoker: false),
     ], false)
 ]
 
@@ -58,26 +58,26 @@ private let CalculatedBoundsTestCases: [RDITestCase] = [
     ),
     .init(
         rdi: fiber_mayoClinic,
-        params: .init(gender: .male),
+        params: .init(sex: .male),
         expectedBound: b(30, 38)
     ),
     .init(
         rdi: fiber_mayoClinic,
-        expectedBound: nil /// no gender so we're unable to infer this
+        expectedBound: nil /// no sex so we're unable to infer this
     ),
     .init(
         rdi: vitaminC_nih,
-        params: .init(age: 36, gender: .male, isSmoker: false),
+        params: .init(age: 36, sex: .male, isSmoker: false),
         expectedBound: b(90, 2000)
     ),
     .init(
         rdi: vitaminC_nih,
-        params: .init(age: 36, gender: .male),
+        params: .init(age: 36, sex: .male),
         expectedBound: nil /// smoking status is required
     ),
     .init(
         rdi: vitaminC_nih,
-        params: .init(age: 17, gender: .female, pregnancyStatus: .lactating),
+        params: .init(age: 17, sex: .female, pregnancyStatus: .lactating),
         expectedBound: b(115, 1800)
     ),
 ]

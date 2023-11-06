@@ -10,7 +10,7 @@ public extension Array where Element == RDIValue {
             let grouped = groupedByAgeRange
 
             for (_, values) in grouped {
-                /// For each group, if have gender (and optionally pregnancyStatus) or isSmoker, check that we have all combinations, otherwise fail early
+                /// For each group, if have sex (and optionally pregnancyStatus) or isSmoker, check that we have all combinations, otherwise fail early
                 guard values.hasAllParamCombosWithoutAgeRange else { return false }
             }
 
@@ -26,10 +26,10 @@ public extension Array where Element == RDIValue {
         
         //TODO: Change how we do this:
         /// -[ ] Write a function that adds a value to the array of values, doing the following checks
-        /// -[ ] If there is an age range—make sure the range does not overlap with one that we already have, unless its providing a param that does not exist (ie different gender, smoking or pregnancy status)
+        /// -[ ] If there is an age range—make sure the range does not overlap with one that we already have, unless its providing a param that does not exist (ie different sex, smoking or pregnancy status)
         /// -[ ] ?
         /// -[ ] If any of these checks fail, don’t add the value and return an error that we present to the user, as a validation check for ourselves when entering these
-        /// -[ ] RDIForm.ValueForm should allow turning off gender and smoker (when specifying infants, for example)
+        /// -[ ] RDIForm.ValueForm should allow turning off sex and smoker (when specifying infants, for example)
         
     }
     
@@ -49,7 +49,7 @@ extension Array where Element == RDIValue {
     }
     
     var containsGender: Bool {
-        contains { $0.gender != nil }
+        contains { $0.sex != nil }
     }
     
     var containsSmokingStatus: Bool {
@@ -82,8 +82,8 @@ extension Array where Element == RDIValue {
     var hasAllParamCombosWithoutAgeRange: Bool {
         
         var withGender: Bool {
-            let male = filter { $0.gender == .male }
-            let female = filter { $0.gender == .female }
+            let male = filter { $0.sex == .male }
+            let female = filter { $0.sex == .female }
             
             /// Check that we have at least 1 value for both genders
             guard !male.isEmpty, !female.isEmpty else {
