@@ -42,7 +42,8 @@ public let fiber_mayoClinic = RDI(
     values: [
         v(b(21, 25), sex: .female),
         v(b(30, 38), sex: .male),
-    ]
+    ],
+    source: RDISource(name: "Mayo Clinic", url: "https://www.mayoclinic.org/healthy-lifestyle/nutrition-and-healthy-eating/basics/nutrition-basics/hlv-20049477")
 )
 
 public let fiber_eatRight = RDI(
@@ -52,7 +53,8 @@ public let fiber_eatRight = RDI(
     type: .quantityPerEnergy(1000, .kcal),
     values: [
         v(l(14)),
-    ]
+    ],
+    source: RDISource(name: "Academy of Nutrition and Dietetics", url: "https://www.eatright.org")
 )
 
 //MARK: - Helpers
