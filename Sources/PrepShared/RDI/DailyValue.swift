@@ -1,11 +1,11 @@
 import Foundation
 
-public struct DailyValue: Codable {
+public struct DailyValue: Codable, Hashable {
     public let type: DailyValueType
     public let rdi: RDI?
     public let customValue: CustomValue?
     
-    public struct CustomValue: Codable {
+    public struct CustomValue: Codable, Hashable {
         public let bound: Bound
         public let unit: NutrientUnit
         
