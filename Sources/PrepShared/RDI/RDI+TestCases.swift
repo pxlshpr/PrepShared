@@ -31,7 +31,8 @@ public let transFat_who = RDI(
     type: .percentageOfEnergy,
     values: [
         v(u(1)),
-    ]
+    ],
+    source: RDISource(abbreviation: "WHO", name: "World Health Organization", url: "https://www.who.int")
 )
 
 public let fiber_mayoClinic = RDI(
