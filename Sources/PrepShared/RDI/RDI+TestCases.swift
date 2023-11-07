@@ -26,7 +26,7 @@ public let vitaminC_nih = RDI(
 
 public let transFat_who = RDI(
     micro: .transFat,
-    unit: .g,
+    unit: .p,
     url: "https://www.who.int/news-room/questions-and-answers/item/nutrition-trans-fat",
     type: .percentageOfEnergy,
     values: [
