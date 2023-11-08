@@ -3,7 +3,7 @@ import Foundation
 public enum Sex: Int16, Codable, CaseIterable {
     case female = 1
     case male
-//    case notSpecified
+    case other
 }
 
 public extension Sex {
@@ -12,7 +12,7 @@ public extension Sex {
         switch self {
         case .female:   "Female"
         case .male:     "Male"
-//        case .notSpecified: "Not specified"
+        case .other: "Not specified"
         }
     }
 }
@@ -22,16 +22,16 @@ import HealthKit
 extension Sex: Pickable {
     public var pickedTitle: String { self.name }
     public var menuTitle: String { self.name }
-    public static var `default`: Sex { .female }
-//    public static var noneOption: Sex? { .notSpecified }
+    public static var `default`: Sex { .other }
+//    public static var noneOption: Sex? { .other }
 }
 
 public extension Sex {
     var healthKitSex: HKBiologicalSex {
         switch self {
-        case .female:       .female
-        case .male:         .male
-//        default:            .other
+        case .female:   .female
+        case .male:     .male
+        case .other:    .other
         }
     }
 }
@@ -41,7 +41,7 @@ public extension HKBiologicalSex {
         switch self {
         case .female:   .female
         case .male:     .male
-//        case .other:    .notSpecified
+        case .other:    .other
         default:        nil
         }
     }
