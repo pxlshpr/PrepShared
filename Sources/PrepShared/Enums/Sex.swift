@@ -12,7 +12,7 @@ public extension Sex {
         switch self {
         case .female:   "Female"
         case .male:     "Male"
-        case .other: "Not specified"
+        case .other:    "Other"
         }
     }
 }
@@ -23,7 +23,6 @@ extension Sex: Pickable {
     public var pickedTitle: String { self.name }
     public var menuTitle: String { self.name }
     public static var `default`: Sex { .other }
-//    public static var noneOption: Sex? { .other }
 }
 
 public extension Sex {
