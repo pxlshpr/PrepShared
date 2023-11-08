@@ -5,18 +5,18 @@ public struct MenuPicker<T: Pickable>: View {
     let options: [T]
     let binding: Binding<T>
     
-    public init(_ options: [T], _ binding: Binding<T>) {
-        self.options = options
+//    public init(_ options: [T], _ binding: Binding<T>) {
+//        self.options = options
+//        self.binding = binding
+//    }
+
+    public init(_ options: [T]? = nil, _ binding: Binding<T>) {
+        self.options = options ?? T.allCases as! [T]
         self.binding = binding
     }
 
-    public init(_ binding: Binding<T>) {
-        self.options = T.allCases as! [T]
-        self.binding = binding
-    }
-
-    public init(_ binding: Binding<T?>) {
-        self.options = T.allCases as! [T]
+    public init(_ options: [T]? = nil, _ binding: Binding<T?>) {
+        self.options = options ?? T.allCases as! [T]
         self.binding = Binding<T>(
             get: { binding.wrappedValue ?? T.noneOption ?? T.default },
             set: { binding.wrappedValue = $0 }
