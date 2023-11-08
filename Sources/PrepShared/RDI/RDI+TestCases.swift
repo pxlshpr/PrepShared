@@ -63,7 +63,7 @@ public let fiber_eatRight = RDI(
 public func v(
     _ bound: Bound,
     ageRange: Bound? = nil,
-    sex: BiometricSex? = nil,
+    sex: Sex? = nil,
     pregnancyStatus: PregnancyStatus? = nil,
     smoker: Bool? = nil
 ) -> RDIValue {

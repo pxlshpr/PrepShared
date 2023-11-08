@@ -10,7 +10,7 @@ extension DayEntity {
         return NSFetchRequest<DayEntity>(entityName: "DayEntity")
     }
 
-    @NSManaged public var biometricsData: Data?
+    @NSManaged public var healthData: Data?
     @NSManaged public var carb: Double
     @NSManaged public var createdAt: Date?
     @NSManaged public var dateString: String?

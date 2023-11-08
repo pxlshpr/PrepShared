@@ -50,7 +50,7 @@ public extension Goal {
         type.identifyingHashValue
     }
     
-//    var unit: any BiometricUnit {
+//    var unit: any HealthUnit {
 //        switch type {
 //        case .energy(let type):
 //            switch type {

@@ -1,12 +1,12 @@
 import Foundation
 
-public enum BiometricSex: Int16, Codable, CaseIterable {
+public enum Sex: Int16, Codable, CaseIterable {
     case female = 1
     case male
     case notSpecified
 }
 
-public extension BiometricSex {
+public extension Sex {
     
     var name: String {
         switch self {
@@ -19,15 +19,15 @@ public extension BiometricSex {
 
 import HealthKit
 
-extension BiometricSex: Pickable {
+extension Sex: Pickable {
     public var pickedTitle: String { self.name }
     public var menuTitle: String { self.name }
-    public static var `default`: BiometricSex { .notSpecified }
-    public static var noneOption: BiometricSex? { .notSpecified }
+    public static var `default`: Sex { .notSpecified }
+    public static var noneOption: Sex? { .notSpecified }
 }
 
-public extension BiometricSex {
-    var hkBiologicalSex: HKBiologicalSex {
+public extension Sex {
+    var healthKitSex: HKBiologicalSex {
         switch self {
         case .female:       .female
         case .male:         .male
@@ -37,7 +37,7 @@ public extension BiometricSex {
 }
 
 public extension HKBiologicalSex {
-    var biometricSex: BiometricSex? {
+    var sex: Sex? {
         switch self {
         case .female:   .female
         case .male:     .male

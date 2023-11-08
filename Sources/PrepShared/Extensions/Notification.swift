@@ -36,8 +36,8 @@ public extension Notification {
         case safeArea = "safeArea"
         case foodIDToRemove = "foodIDToRemove"
 
-        case isCurrentBiometrics = "isCurrentBiometrics"
-        case biometrics = "biometrics"
+        case isCurrentHealth = "isCurrentHealth"
+        case health = "health"
         case plan = "plan"
     }
 }
@@ -62,8 +62,8 @@ public extension Notification {
         value(for: .food) as? Food
     }
     
-    var isCurrentBiometrics: Bool? {
-        value(for: .isCurrentBiometrics) as? Bool
+    var isCurrentHealth: Bool? {
+        value(for: .isCurrentHealth) as? Bool
     }    
 }
 

@@ -17,7 +17,7 @@ public extension Double {
 
 public extension Double {
     
-    var biometricString: String {
+    var healthString: String {
         rounded(toPlaces: 1).clean
     }
     

@@ -1,15 +1,15 @@
 import Foundation
 
 public enum BodyMassSource: Codable, Hashable {
-    case biometrics
+    case health
     case custom
 }
 
 public extension BodyMassSource {
     var name: String {
         switch self {
-        case .biometrics:   "Biometrics"
-        case .custom:       "Custom"
+        case .health:   "Health"
+        case .custom:   "Custom"
         }
     }
 }
@@ -17,5 +17,5 @@ public extension BodyMassSource {
 extension BodyMassSource: Pickable {
     public var pickedTitle: String { name }
     public var menuTitle: String { name }
-    public static var `default`: BodyMassSource { .biometrics }
+    public static var `default`: BodyMassSource { .health }
 }

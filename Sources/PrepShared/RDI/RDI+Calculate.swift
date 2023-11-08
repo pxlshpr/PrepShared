@@ -14,8 +14,8 @@ import Foundation
 /// [ ] Design how we will display each one when Choosing and setting cell
 /// [x] Consider packaging this up in a separate package that we can test etc
 /// [ ] Store the sources and DailyValue's themselves in the Public Database and have them synced to user devices (with metadata like isTrashed etc)
-/// [ ] When viewing previous days—always use closest biometrics leading up to this day if available (as params)
-/// [ ] Include the DailyValueParams fields in Biometrics, and have a quick accessor for it, returning the values stored in it and also a dynamic age if possible
+/// [ ] When viewing previous days—always use closest health leading up to this day if available (as params)
+/// [ ] Include the DailyValueParams fields in Health, and have a quick accessor for it, returning the values stored in it and also a dynamic age if possible
 ///
 public extension RDI {
     

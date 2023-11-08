@@ -1,14 +1,14 @@
 public struct RDIValue: Hashable, Codable, Equatable {
     public var bound: Bound
     public var ageRange: Bound? = nil
-    public var sex: BiometricSex? = nil
+    public var sex: Sex? = nil
     public var pregnancyStatus: PregnancyStatus? = nil
     public var isSmoker: Bool? = nil
     
     public init(
         bound: Bound,
         ageRange: Bound? = nil,
-        sex: BiometricSex? = nil,
+        sex: Sex? = nil,
         pregnancyStatus: PregnancyStatus? = nil,
         isSmoker: Bool? = nil
     ) {

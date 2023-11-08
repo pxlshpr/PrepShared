@@ -1,6 +1,6 @@
 import SwiftUI
 
-public let BiometricFont = Font.system(.body, design: .monospaced, weight: .bold)
+public let HealthFont = Font.system(.body, design: .monospaced, weight: .bold)
 
 public struct NumberTextField: View {
 
@@ -35,7 +35,7 @@ public struct NumberTextField: View {
     public var body: some View {
         textField
             .textFieldStyle(.plain)
-            .font(BiometricFont)
+            .font(HealthFont)
             .multilineTextAlignment(.trailing)
             .keyboardType(roundUp ? .numberPad : .decimalPad)
             .simultaneousGesture(textSelectionTapGesture)
