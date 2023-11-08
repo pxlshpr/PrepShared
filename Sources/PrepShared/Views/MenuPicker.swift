@@ -23,7 +23,7 @@ public struct MenuPicker<T: Pickable>: View {
         )
     }
 
-    public init(options: [T], _ binding: Binding<T?>) {
+    public init(_ options: [T], _ binding: Binding<T?>) {
         self.options = options
         self.binding = Binding<T>(
             get: { binding.wrappedValue ?? T.noneOption ?? T.default },
