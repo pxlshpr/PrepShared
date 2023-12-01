@@ -12,34 +12,48 @@ public struct NumberTextField: View {
     
     let intBinding: Binding<Int>?
     
+    let isFocusedBinding: Binding<Bool>
+    
+    @FocusState var isFocused: Bool
+    
     public init(
         placeholder: String = "",
         roundUp: Bool = false,
-        binding: Binding<Double>
+        binding: Binding<Double>,
+        isFocused: Binding<Bool>? = nil
     ) {
         self.placeholder = placeholder
         self.roundUp = roundUp
         self.doubleBinding = binding
         self.intBinding = nil
+        self.isFocusedBinding = isFocused ?? .constant(false)
     }
 
     public init(
         placeholder: String = "",
-        binding: Binding<Int>
+        binding: Binding<Int>,
+        isFocused: Binding<Bool>? = nil
     ) {
         self.placeholder = placeholder
         self.roundUp = true
         self.intBinding = binding
         self.doubleBinding = nil
+        self.isFocusedBinding = isFocused ?? .constant(false)
     }
 
     public var body: some View {
         textField
+            .focused($isFocused)
             .textFieldStyle(.plain)
             .font(NumberFont)
             .multilineTextAlignment(.trailing)
             .keyboardType(roundUp ? .numberPad : .decimalPad)
             .simultaneousGesture(textSelectionTapGesture)
+            .onChange(of: isFocusedBinding.wrappedValue, isFocusedBindingChanged)
+    }
+    
+    func isFocusedBindingChanged(old: Bool, new: Bool) {
+        if new { isFocused = true }
     }
     
     @ViewBuilder
