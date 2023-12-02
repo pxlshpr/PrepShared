@@ -51,15 +51,15 @@ public struct NumberField: View {
     
     public var body: some View {
         textField
-            .focused($isFocused)
+//            .focused($isFocused)
             .textFieldStyle(.plain)
             .font(NumberFont)
             .multilineTextAlignment(.trailing)
-            .toolbar { keyboardToolbarContent }
+//            .toolbar { keyboardToolbarContent }
             .keyboardType(roundUp ? .numberPad : .decimalPad)
             .simultaneousGesture(textSelectionTapGesture)
-            .onChange(of: isFocusedBinding.wrappedValue, isFocusedBindingChanged)
-            .onChange(of: isFocused, isFocusedChanged)
+//            .onChange(of: isFocusedBinding.wrappedValue, isFocusedBindingChanged)
+//            .onChange(of: isFocused, isFocusedChanged)
     }
 
     func isFocusedChanged(old: Bool, new: Bool) {
