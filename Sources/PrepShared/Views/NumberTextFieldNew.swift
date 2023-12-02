@@ -1,16 +1,13 @@
 import SwiftUI
 
-//public let NumberFont = Font.system(.body, design: .monospaced, weight: .bold)
-public let NumberFont = Font.system(.body)
-
-public struct NumberTextField: View {
-
+public struct NumberTextFieldNew: View {
+    
     let placeholder: String
     
     let roundUp: Bool
-    let doubleBinding: Binding<Double>?
+    let doubleBinding: Binding<Double?>?
     
-    let intBinding: Binding<Int>?
+    let intBinding: Binding<Int?>?
     
     let isFocusedBinding: Binding<Bool>
     
@@ -19,7 +16,7 @@ public struct NumberTextField: View {
     public init(
         placeholder: String = "",
         roundUp: Bool = false,
-        binding: Binding<Double>,
+        binding: Binding<Double?>,
         isFocused: Binding<Bool>? = nil
     ) {
         self.placeholder = placeholder
@@ -28,10 +25,10 @@ public struct NumberTextField: View {
         self.intBinding = nil
         self.isFocusedBinding = isFocused ?? .constant(false)
     }
-
+    
     public init(
         placeholder: String = "",
-        binding: Binding<Int>,
+        binding: Binding<Int?>,
         isFocused: Binding<Bool>? = nil
     ) {
         self.placeholder = placeholder
@@ -40,7 +37,7 @@ public struct NumberTextField: View {
         self.doubleBinding = nil
         self.isFocusedBinding = isFocused ?? .constant(false)
     }
-
+    
     public var body: some View {
         textField
             .focused($isFocused)
@@ -60,11 +57,11 @@ public struct NumberTextField: View {
     var textField: some View {
         let textBinding = Binding<String>(
             get: {
-                if let doubleBinding {
+                if let doubleBinding, let value = doubleBinding.wrappedValue {
                     let formatter = NumberFormatter.input(roundUp ? 0 : 2)
-                    return formatter.string(from: NSNumber(value: doubleBinding.wrappedValue)) ?? ""
-                } else if let intBinding {
-                    return "\(intBinding.wrappedValue)"
+                    return formatter.string(from: NSNumber(value: value)) ?? ""
+                } else if let intBinding, let value = intBinding.wrappedValue {
+                    return "\(value)"
                 } else {
                     return ""
                 }
@@ -79,11 +76,6 @@ public struct NumberTextField: View {
         )
         
         return TextField("", text: textBinding)
-//            .keyboardType(.numberPad)
-//            .multilineTextAlignment(.trailing)
-//            .simultaneousGesture(textSelectionTapGesture)
-//            .focused($isFocused)
-//            .toolbar { keyboardToolbarContent }
     }
     
     var keyboardToolbarContent: some ToolbarContent {
@@ -97,48 +89,4 @@ public struct NumberTextField: View {
             }
         }
     }
-    
-    @ViewBuilder
-    var textField_old: some View {
-        if let doubleBinding {
-            TextField(
-                placeholder,
-                value: doubleBinding,
-                formatter: NumberFormatter.input(roundUp ? 0 : 2)
-            )
-            .contentTransition(.numericText(value: doubleBinding.wrappedValue))
-            .animation(.default, value: doubleBinding.wrappedValue)
-        } else if let intBinding {
-            TextField(
-                placeholder,
-                value: intBinding,
-                formatter: NumberFormatter.input(0)
-            )
-            .contentTransition(.numericText(value: Double(intBinding.wrappedValue)))
-            .animation(.default, value: intBinding.wrappedValue)
-        }
-    }
-}
-
-
-
-struct NumberTextFieldTest: View {
-    @State var value: Int = 0
-    var body: some View {
-        NavigationStack {
-            Form {
-                HStack {
-                    Spacer()
-                    NumberTextField(
-                        placeholder: "Placeholder",
-                        binding: $value
-                    )
-                }
-            }
-        }
-    }
-}
-
-#Preview {
-    NumberTextFieldTest()
 }
