@@ -1,6 +1,9 @@
 import SwiftUI
 
-public struct NumberTextFieldNew: View {
+//public let NumberFont = Font.system(.body, design: .monospaced, weight: .bold)
+public let NumberFont = Font.system(.body)
+
+public struct NumberField: View {
     
     let placeholder: String
     
@@ -118,7 +121,7 @@ public struct NumberTextFieldNew: View {
 
 
 
-struct NumberTextFieldTest: View {
+struct NumberFieldTest: View {
     
     @State var value: Double? = 500
     
@@ -127,7 +130,7 @@ struct NumberTextFieldTest: View {
             Form {
                 HStack {
                     Spacer()
-                    NumberTextFieldNew(
+                    NumberField(
                         placeholder: "Placeholder",
                         binding: $value
                     )
@@ -138,5 +141,5 @@ struct NumberTextFieldTest: View {
 }
 
 #Preview {
-    NumberTextFieldTest()
+    NumberFieldTest()
 }
