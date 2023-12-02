@@ -59,11 +59,16 @@ public struct NumberTextFieldNew: View {
     var textField: some View {
         let textBinding = Binding<String>(
             get: {
-                if let doubleBinding, let value = doubleBinding.wrappedValue {
-                    let formatter = NumberFormatter.input(roundUp ? 0 : 2)
-                    let number = NSNumber(value: value)
-                    let string = formatter.string(from: number) ?? ""
-                    print("Getting string for number: \(number) -> \(string)")
+                if let doubleBinding {
+                    
+                    let string: String
+                    if let value = doubleBinding.wrappedValue {
+                        let formatter = NumberFormatter.input(roundUp ? 0 : 2)
+                        let number = NSNumber(value: value)
+                        string = formatter.string(from: number) ?? ""
+                    } else {
+                        string = ""
+                    }
                     return string + "\(includeTrailingPeriod ? "." : "")"
                 } else if let intBinding, let value = intBinding.wrappedValue {
                     return "\(value)"
@@ -74,8 +79,8 @@ public struct NumberTextFieldNew: View {
             set: { newValue in
                 if let doubleBinding {
                     
-                    /// Cleanup by removing any extra periods
-                    var newValue = newValue.sanitizedDouble
+                    /// Cleanup by removing any extra periods and non-numbers
+                    let newValue = newValue.sanitizedDouble
                     
                     /// If we haven't already set the flag for the trailing period, and the string has period as its last character, set it so that its displayed
                     if !includeTrailingPeriod, newValue.last == "." {
