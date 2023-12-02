@@ -18,29 +18,35 @@ public struct NumberField: View {
     
     @FocusState var isFocused: Bool
     
+    let onFocusLoss: (() -> ())?
+    
     public init(
         placeholder: String = "",
         roundUp: Bool = false,
         binding: Binding<Double?>,
-        isFocused: Binding<Bool>? = nil
+        isFocused: Binding<Bool>? = nil,
+        onFocusLoss: (() -> ())? = nil
     ) {
         self.placeholder = placeholder
         self.roundUp = roundUp
         self.doubleBinding = binding
         self.intBinding = nil
         self.isFocusedBinding = isFocused ?? .constant(false)
+        self.onFocusLoss = onFocusLoss
     }
     
     public init(
         placeholder: String = "",
         binding: Binding<Int?>,
-        isFocused: Binding<Bool>? = nil
+        isFocused: Binding<Bool>? = nil,
+        onFocusLoss: (() -> ())? = nil
     ) {
         self.placeholder = placeholder
         self.roundUp = true
         self.intBinding = binding
         self.doubleBinding = nil
         self.isFocusedBinding = isFocused ?? .constant(false)
+        self.onFocusLoss = onFocusLoss
     }
     
     public var body: some View {
@@ -53,8 +59,13 @@ public struct NumberField: View {
             .keyboardType(roundUp ? .numberPad : .decimalPad)
             .simultaneousGesture(textSelectionTapGesture)
             .onChange(of: isFocusedBinding.wrappedValue, isFocusedBindingChanged)
+            .onChange(of: isFocused, isFocusedChanged)
     }
-    
+
+    func isFocusedChanged(old: Bool, new: Bool) {
+        if new == false { onFocusLoss?() }
+    }
+
     func isFocusedBindingChanged(old: Bool, new: Bool) {
         if new { isFocused = true }
     }
@@ -95,7 +106,6 @@ public struct NumberField: View {
                     }
                     
                     let double = Double(newValue)
-                    print("Setting double with \(newValue) cast as double: \(double)")
                     doubleBinding.wrappedValue = double
                 } else if let intBinding {
                     intBinding.wrappedValue = Int(newValue)
