@@ -16,7 +16,10 @@ final class StringTests: XCTestCase {
             
             ("2.35.", "2.35"),
             ("2.35.25", "2.35"),
-            ("2.3a5", "`2.3"),
+            ("2.3a5", "2.3"),
+            
+//            ("-2.5", "-2.5"),
+//            ("-.5", "-.5"),
         ]
         
         for testCase in testCases {

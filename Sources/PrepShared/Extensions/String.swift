@@ -75,19 +75,29 @@ public extension String {
     var sanitizedDouble: String {
         var chars: [Character] = []
         var hasPeriod: Bool = false
-        for char in self {
+        forLoop: for (index, char) in self.enumerated() {
             
-            /// If we already have period and
-            if char == "." {
+            switch char {
+            case ".":
+                /// Only allow period once, otherwise ignoring it and rest of string
                 if hasPeriod {
-                    break
+                    break forLoop
                 } else {
                     hasPeriod = true
                     chars.append(char)
                 }
-            } else {
+                
+            case "-":
+                /// Only allow negative sign if first character, otherwise ignoring it and rest of string
+                guard index == 0 else {
+                    break forLoop
+                }
+                chars.append(char)
+                
+            default:
+                /// Only allow numbers
                 guard char.isNumber else {
-                    break
+                    break forLoop
                 }
                 chars.append(char)
             }
