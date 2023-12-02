@@ -47,6 +47,7 @@ public struct NumberTextField: View {
             .textFieldStyle(.plain)
             .font(NumberFont)
             .multilineTextAlignment(.trailing)
+            .toolbar { keyboardToolbarContent }
             .keyboardType(roundUp ? .numberPad : .decimalPad)
             .simultaneousGesture(textSelectionTapGesture)
             .onChange(of: isFocusedBinding.wrappedValue, isFocusedBindingChanged)
@@ -56,14 +57,54 @@ public struct NumberTextField: View {
         if new { isFocused = true }
     }
     
-    @ViewBuilder
     var textField: some View {
+        let textBinding = Binding<String>(
+            get: {
+                if let doubleBinding {
+                    let formatter = NumberFormatter.input(roundUp ? 0 : 2)
+                    return formatter.string(from: NSNumber(value: doubleBinding.wrappedValue)) ?? ""
+                } else if let intBinding {
+                    return "\(intBinding.wrappedValue)"
+                } else {
+                    return ""
+                }
+            },
+            set: { newValue in
+                if let doubleBinding {
+                    doubleBinding.wrappedValue = Double(newValue) ?? 0
+                } else if let intBinding {
+                    intBinding.wrappedValue = Int(newValue) ?? 0
+                }
+            }
+        )
+        
+        return TextField("", text: textBinding)
+//            .keyboardType(.numberPad)
+//            .multilineTextAlignment(.trailing)
+//            .simultaneousGesture(textSelectionTapGesture)
+//            .focused($isFocused)
+//            .toolbar { keyboardToolbarContent }
+    }
+    
+    var keyboardToolbarContent: some ToolbarContent {
+        ToolbarItemGroup(placement: .keyboard) {
+            HStack {
+                Spacer()
+                Button("Done") {
+                    isFocused = false
+                }
+                .fontWeight(.semibold)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    var textField_old: some View {
         if let doubleBinding {
             TextField(
                 placeholder,
                 value: doubleBinding,
-//                formatter: NumberFormatter.input(roundUp ? 0 : 2)
-                format: .number
+                formatter: NumberFormatter.input(roundUp ? 0 : 2)
             )
             .contentTransition(.numericText(value: doubleBinding.wrappedValue))
             .animation(.default, value: doubleBinding.wrappedValue)
