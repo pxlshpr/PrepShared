@@ -11,6 +11,8 @@ public struct NumberTextFieldNew: View {
     
     let isFocusedBinding: Binding<Bool>
     
+    @State var includeTrailingPeriod: Bool = false
+    
     @FocusState var isFocused: Bool
     
     public init(
@@ -59,7 +61,10 @@ public struct NumberTextFieldNew: View {
             get: {
                 if let doubleBinding, let value = doubleBinding.wrappedValue {
                     let formatter = NumberFormatter.input(roundUp ? 0 : 2)
-                    return formatter.string(from: NSNumber(value: value)) ?? ""
+                    let number = NSNumber(value: value)
+                    let string = formatter.string(from: number) ?? ""
+                    print("Getting string for number: \(number) -> \(string)")
+                    return string + "\(includeTrailingPeriod ? "." : "")"
                 } else if let intBinding, let value = intBinding.wrappedValue {
                     return "\(value)"
                 } else {
@@ -68,7 +73,22 @@ public struct NumberTextFieldNew: View {
             },
             set: { newValue in
                 if let doubleBinding {
-                    doubleBinding.wrappedValue = Double(newValue)
+                    
+                    /// Cleanup by removing any extra periods
+                    var newValue = newValue.sanitizedDouble
+                    
+                    /// If we haven't already set the flag for the trailing period, and the string has period as its last character, set it so that its displayed
+                    if !includeTrailingPeriod, newValue.last == "." {
+                        includeTrailingPeriod = true
+                    } 
+                    /// If we have set the flag for the trailing period and the last character isn't it—unset it
+                    else if includeTrailingPeriod, newValue.last != "." {
+                        includeTrailingPeriod = false
+                    }
+                    
+                    let double = Double(newValue)
+                    print("Setting double with \(newValue) cast as double: \(double)")
+                    doubleBinding.wrappedValue = double
                 } else if let intBinding {
                     intBinding.wrappedValue = Int(newValue)
                 }
@@ -90,6 +110,7 @@ public struct NumberTextFieldNew: View {
         }
     }
 }
+
 
 
 struct NumberTextFieldTest: View {

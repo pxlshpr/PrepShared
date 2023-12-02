@@ -70,3 +70,28 @@ public extension String {
         String("⤵️⤴️🍽️⚖️🏝🏋🏽🚴🏽🍩🍪🥛".randomElement()!)
     }
 }
+
+public extension String {
+    var sanitizedDouble: String {
+        var chars: [Character] = []
+        var hasPeriod: Bool = false
+        for char in self {
+            
+            /// If we already have period and
+            if char == "." {
+                if hasPeriod {
+                    break
+                } else {
+                    hasPeriod = true
+                    chars.append(char)
+                }
+            } else {
+                guard char.isNumber else {
+                    break
+                }
+                chars.append(char)
+            }
+        }
+        return String(chars)
+    }
+}
