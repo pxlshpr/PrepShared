@@ -62,7 +62,8 @@ public struct NumberTextField: View {
             TextField(
                 placeholder,
                 value: doubleBinding,
-                formatter: NumberFormatter.input(roundUp ? 0 : 2)
+//                formatter: NumberFormatter.input(roundUp ? 0 : 2)
+                format: .number
             )
             .contentTransition(.numericText(value: doubleBinding.wrappedValue))
             .animation(.default, value: doubleBinding.wrappedValue)
@@ -76,4 +77,25 @@ public struct NumberTextField: View {
             .animation(.default, value: intBinding.wrappedValue)
         }
     }
+}
+
+struct NumberTextFieldTest: View {
+    @State var value: Int = 0
+    var body: some View {
+        NavigationStack {
+            Form {
+                HStack {
+                    Spacer()
+                    NumberTextField(
+                        placeholder: "Placeholder",
+                        binding: $value
+                    )
+                }
+            }
+        }
+    }
+}
+
+#Preview {
+    NumberTextFieldTest()
 }
