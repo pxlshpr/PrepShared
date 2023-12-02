@@ -68,9 +68,9 @@ public struct NumberTextFieldNew: View {
             },
             set: { newValue in
                 if let doubleBinding {
-                    doubleBinding.wrappedValue = Double(newValue) ?? 0
+                    doubleBinding.wrappedValue = Double(newValue)
                 } else if let intBinding {
-                    intBinding.wrappedValue = Int(newValue) ?? 0
+                    intBinding.wrappedValue = Int(newValue)
                 }
             }
         )
@@ -89,4 +89,28 @@ public struct NumberTextFieldNew: View {
             }
         }
     }
+}
+
+
+struct NumberTextFieldTest: View {
+    
+    @State var value: Double? = 500
+    
+    var body: some View {
+        NavigationStack {
+            Form {
+                HStack {
+                    Spacer()
+                    NumberTextFieldNew(
+                        placeholder: "Placeholder",
+                        binding: $value
+                    )
+                }
+            }
+        }
+    }
+}
+
+#Preview {
+    NumberTextFieldTest()
 }

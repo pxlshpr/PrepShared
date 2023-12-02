@@ -119,26 +119,3 @@ public struct NumberTextField: View {
         }
     }
 }
-
-
-
-struct NumberTextFieldTest: View {
-    @State var value: Int = 0
-    var body: some View {
-        NavigationStack {
-            Form {
-                HStack {
-                    Spacer()
-                    NumberTextField(
-                        placeholder: "Placeholder",
-                        binding: $value
-                    )
-                }
-            }
-        }
-    }
-}
-
-#Preview {
-    NumberTextFieldTest()
-}
