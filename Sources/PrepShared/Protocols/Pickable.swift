@@ -4,6 +4,7 @@ public protocol Pickable: Hashable, CaseIterable {
     var pickedTitle: String { get }
     var menuTitle: String { get }
     var menuImage: String { get }
+    var detail: String? { get }
     static var `default`: Self { get }
     
     /// An optional option that is identified as "None", which would be placed in its own section
@@ -11,6 +12,7 @@ public protocol Pickable: Hashable, CaseIterable {
 }
 
 public extension Pickable {
+    var detail: String? { nil }
     var menuImage: String { "" }
     static var noneOption: Self? { nil }
 }
