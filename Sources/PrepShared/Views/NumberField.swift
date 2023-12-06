@@ -20,11 +20,14 @@ public struct NumberField: View {
     
     let onFocusLoss: (() -> ())?
     
+    let font: Font?
+    
     public init(
         placeholder: String = "",
         roundUp: Bool = false,
         binding: Binding<Double?>,
         isFocused: Binding<Bool>? = nil,
+        font: Font? = nil,
         onFocusLoss: (() -> ())? = nil
     ) {
         self.placeholder = placeholder
@@ -32,6 +35,7 @@ public struct NumberField: View {
         self.doubleBinding = binding
         self.intBinding = nil
         self.isFocusedBinding = isFocused ?? .constant(false)
+        self.font = font
         self.onFocusLoss = onFocusLoss
     }
     
@@ -39,6 +43,7 @@ public struct NumberField: View {
         placeholder: String = "",
         binding: Binding<Int?>,
         isFocused: Binding<Bool>? = nil,
+        font: Font? = nil,
         onFocusLoss: (() -> ())? = nil
     ) {
         self.placeholder = placeholder
@@ -46,6 +51,7 @@ public struct NumberField: View {
         self.intBinding = binding
         self.doubleBinding = nil
         self.isFocusedBinding = isFocused ?? .constant(false)
+        self.font = font
         self.onFocusLoss = onFocusLoss
     }
     
@@ -53,7 +59,7 @@ public struct NumberField: View {
         textField
 //            .focused($isFocused)
             .textFieldStyle(.plain)
-            .font(NumberFont)
+            .font(font ?? NumberFont)
             .multilineTextAlignment(.trailing)
 //            .toolbar { keyboardToolbarContent }
             .keyboardType(roundUp ? .numberPad : .decimalPad)
