@@ -89,7 +89,7 @@ public struct MenuPicker<T: Pickable>: View {
                 .imageScale(.small)
         }
         .font(.body)
-        .foregroundStyle(foregroundColor)
+//        .foregroundStyle(foregroundColor)
     }
     
     var foregroundColor: Color {
