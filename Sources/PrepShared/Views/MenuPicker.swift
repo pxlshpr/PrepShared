@@ -4,15 +4,23 @@ public struct MenuPicker<T: Pickable>: View {
 
     let options: [T]
     let binding: Binding<T>
+    let isPlural: Bool
     
-    public init(_ options: [T], _ binding: Binding<T>) {
+    //MARK: - Initializers
+    
+    public init(
+        _ options: [T],
+        _ binding: Binding<T>
+    ) {
         self.options = options
         self.binding = binding
+        self.isPlural = false
     }
 
-    public init(_ binding: Binding<T>) {
+    public init(_ binding: Binding<T>, isPlural: Bool = false) {
         self.options = T.allCases as! [T]
         self.binding = binding
+        self.isPlural = isPlural
     }
 
     public init(_ binding: Binding<T?>) {
@@ -21,6 +29,7 @@ public struct MenuPicker<T: Pickable>: View {
             get: { binding.wrappedValue ?? T.noneOption ?? T.default },
             set: { binding.wrappedValue = $0 }
         )
+        self.isPlural = false
     }
 
     public init(_ options: [T], _ binding: Binding<T?>) {
@@ -29,8 +38,11 @@ public struct MenuPicker<T: Pickable>: View {
             get: { binding.wrappedValue ?? T.noneOption ?? T.default },
             set: { binding.wrappedValue = $0 }
         )
+        self.isPlural = false
     }
 
+    //MARK: - Body
+    
     public var body: some View {
         Menu {
             Picker(selection: binding, label: EmptyView()) {
@@ -58,7 +70,7 @@ public struct MenuPicker<T: Pickable>: View {
     @ViewBuilder
     var noneContent: some View {
         if let none = T.noneOption, options.contains(none) {
-            Text(none.menuTitle)
+            Text(isPlural ? none.pluralMenuTitle : none.menuTitle)
                 .font(.body)
                 .textCase(.none)
                 .tag(none)
@@ -70,7 +82,7 @@ public struct MenuPicker<T: Pickable>: View {
         ForEach(optionsWithoutNone, id: \.self) { option in
             Group {
                 if option.menuImage.isEmpty {
-                    Text(option.menuTitle)
+                    Text(isPlural ? option.pluralMenuTitle : option.menuTitle)
                 } else {
                     Label(option.menuTitle, systemImage: option.menuImage)
                 }
@@ -83,13 +95,14 @@ public struct MenuPicker<T: Pickable>: View {
     
     var label: some View {
         HStack(spacing: 4) {
-            Text(binding.wrappedValue.pickedTitle)
+            Text(isPlural ? binding.wrappedValue.pluralPickedTitle : binding.wrappedValue.pickedTitle)
                 .textCase(.none)
             Image(systemName: "chevron.up.chevron.down")
                 .imageScale(.small)
         }
         .font(.body)
 //        .foregroundStyle(foregroundColor)
+        .foregroundStyle(Color(.label))
     }
     
     var foregroundColor: Color {
@@ -97,6 +110,15 @@ public struct MenuPicker<T: Pickable>: View {
             Color(.tertiaryLabel)
         } else {
             Color(.secondaryLabel)
+        }
+    }
+}
+
+#Preview {
+    @State var period: HealthPeriod = .day
+    return NavigationStack {
+        Form {
+            MenuPicker($period, isPlural: true)
         }
     }
 }
