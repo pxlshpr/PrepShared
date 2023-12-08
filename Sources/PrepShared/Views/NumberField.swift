@@ -15,7 +15,9 @@ public struct NumberField: View {
     let isFocusedBinding: Binding<Bool>
     
     @State var includeTrailingPeriod: Bool = false
-    
+    @State var includeTrailingZero: Bool = false
+    @State var numberOfTrailingZeros: Int = 0
+
     @FocusState var isFocused: Bool
     
     let onFocusLoss: (() -> ())?
@@ -81,15 +83,24 @@ public struct NumberField: View {
             get: {
                 if let doubleBinding {
                     
-                    let string: String
+                    var string: String
+                    
                     if let value = doubleBinding.wrappedValue {
-                        let formatter = NumberFormatter.input(roundUp ? 0 : 2)
-                        let number = NSNumber(value: value)
-                        string = formatter.string(from: number) ?? ""
+                        
+                        if includeTrailingZero {
+                            string = "0.0"
+                        } else {
+                            let formatter = NumberFormatter.input(roundUp ? 0 : 2)
+                            let number = NSNumber(value: value)
+                            string = formatter.string(from: number) ?? ""
+                        }
+                        
                     } else {
                         string = ""
                     }
-                    return string + "\(includeTrailingPeriod ? "." : "")"
+                    string = string + "\(includeTrailingPeriod ? "." : "")"
+                    print("Returning \(string)")
+                    return string
                 } else if let intBinding, let value = intBinding.wrappedValue {
                     return "\(value)"
                 } else {
@@ -102,13 +113,22 @@ public struct NumberField: View {
                     /// Cleanup by removing any extra periods and non-numbers
                     let newValue = newValue.sanitizedDouble
                     
+                    print("newValue: \(newValue)")
                     /// If we haven't already set the flag for the trailing period, and the string has period as its last character, set it so that its displayed
                     if !includeTrailingPeriod, newValue.last == "." {
+                        print("setting includeTrailingPeriod to true")
                         includeTrailingPeriod = true
                     } 
                     /// If we have set the flag for the trailing period and the last character isn't it—unset it
                     else if includeTrailingPeriod, newValue.last != "." {
+                        print("setting includeTrailingPeriod to false")
                         includeTrailingPeriod = false
+                    }
+                    
+                    if newValue == ".0" {
+                        includeTrailingZero = true
+                    } else {
+                        includeTrailingZero = false
                     }
                     
                     let double = Double(newValue)
