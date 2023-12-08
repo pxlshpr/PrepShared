@@ -90,9 +90,13 @@ public struct NumberField: View {
                         if includeTrailingZero {
                             string = "0.0"
                         } else {
-                            let formatter = NumberFormatter.input(roundUp ? 0 : 2)
-                            let number = NSNumber(value: value)
-                            string = formatter.string(from: number) ?? ""
+                            if roundUp {
+                                let formatter = NumberFormatter.input(0)
+                                let number = NSNumber(value: value)
+                                string = formatter.string(from: number) ?? ""
+                            } else {
+                                string = "\(NSNumber(value: value).decimalValue)"
+                            }
                         }
                         
                     } else {
