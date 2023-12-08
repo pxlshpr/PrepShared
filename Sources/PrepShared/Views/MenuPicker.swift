@@ -10,11 +10,12 @@ public struct MenuPicker<T: Pickable>: View {
     
     public init(
         _ options: [T],
-        _ binding: Binding<T>
+        _ binding: Binding<T>,
+        isPlural: Bool = false
     ) {
         self.options = options
         self.binding = binding
-        self.isPlural = false
+        self.isPlural = isPlural
     }
 
     public init(_ binding: Binding<T>, isPlural: Bool = false) {
@@ -23,22 +24,22 @@ public struct MenuPicker<T: Pickable>: View {
         self.isPlural = isPlural
     }
 
-    public init(_ binding: Binding<T?>) {
+    public init(_ binding: Binding<T?>, isPlural: Bool = false) {
         self.options = T.allCases as! [T]
         self.binding = Binding<T>(
             get: { binding.wrappedValue ?? T.noneOption ?? T.default },
             set: { binding.wrappedValue = $0 }
         )
-        self.isPlural = false
+        self.isPlural = isPlural
     }
 
-    public init(_ options: [T], _ binding: Binding<T?>) {
+    public init(_ options: [T], _ binding: Binding<T?>, isPlural: Bool = false) {
         self.options = options
         self.binding = Binding<T>(
             get: { binding.wrappedValue ?? T.noneOption ?? T.default },
             set: { binding.wrappedValue = $0 }
         )
-        self.isPlural = false
+        self.isPlural = isPlural
     }
 
     //MARK: - Body
@@ -110,15 +111,6 @@ public struct MenuPicker<T: Pickable>: View {
             Color(.tertiaryLabel)
         } else {
             Color(.secondaryLabel)
-        }
-    }
-}
-
-#Preview {
-    @State var period: HealthPeriod = .day
-    return NavigationStack {
-        Form {
-            MenuPicker($period, isPlural: true)
         }
     }
 }

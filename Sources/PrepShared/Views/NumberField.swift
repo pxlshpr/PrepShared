@@ -159,35 +159,3 @@ struct NumberFieldTest: View {
 #Preview {
     NumberFieldTest()
 }
-
-public enum HealthPeriod: Int16, Codable, CaseIterable {
-    case day = 1
-    case week
-    case month
-    
-    var name: String {
-        switch self {
-        case .day:      "day"
-        case .week:     "week"
-        case .month:    "month"
-        }
-    }
-    
-    var plural: String {
-        switch self {
-        case .day:      "days"
-        case .week:     "weeks"
-        case .month:    "months"
-        }
-    }
-}
-
-extension HealthPeriod: Pickable {
-    public var pickedTitle: String { name }
-    public var menuTitle: String { name }
-    public var pluralPickedTitle: String { plural }
-    public var pluralMenuTitle: String { plural }
-    public static var `default`: HealthPeriod { .week }
-}
-
-
