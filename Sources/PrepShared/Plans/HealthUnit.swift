@@ -13,24 +13,25 @@ public extension HealthUnit {
     static var decimalPlaces: Int { 1 }
     static var secondaryUnit: String? { nil }
     var hasTwoComponents: Bool { false }
-    func intComponent(_ value: Double, in other: Self) -> Int? { nil }
-    func doubleComponent(_ value: Double, in other: Self) -> Double { value }
 }
 
 extension EnergyUnit: HealthUnit {
     public static var decimalPlaces: Int { 0 }
+    public func intComponent(_ value: Double, in other: Self) -> Int? { nil }
+    public func doubleComponent(_ value: Double, in other: Self) -> Double { value }
 }
 
-extension HeightUnit: HealthUnit {
-    public static var secondaryUnit: String? { "in" }
-    public var hasTwoComponents: Bool { self == .ft }
-}
-
-extension BodyMassUnit: HealthUnit {
-    public static var secondaryUnit: String? { "lb" }
-    public var hasTwoComponents: Bool { self == .st }
-}
+//extension HeightUnit: HealthUnit {
+//    public static var secondaryUnit: String? { "in" }
+//    public var hasTwoComponents: Bool { self == .ft }
+//}
+//
+//extension BodyMassUnit: HealthUnit {
+//    public static var secondaryUnit: String? { "lb" }
+//    public var hasTwoComponents: Bool { self == .st }
+//}
 
 extension NutrientUnit: HealthUnit {
-        
+    public func intComponent(_ value: Double, in other: Self) -> Int? { nil }
+    public func doubleComponent(_ value: Double, in other: Self) -> Double { value }
 }
