@@ -5,16 +5,16 @@ public protocol HealthUnit: Pickable {
     static var secondaryUnit: String? { get }
     var hasTwoComponents: Bool { get }
     var abbreviation: String { get }
-    func intComponent(_ value: Double, in other: some HealthUnit) -> Int?
-    func doubleComponent(_ value: Double, in other: some HealthUnit) -> Double
+    func intComponent(_ value: Double, in other: Self) -> Int?
+    func doubleComponent(_ value: Double, in other: Self) -> Double
 }
 
 public extension HealthUnit {
     static var decimalPlaces: Int { 1 }
     static var secondaryUnit: String? { nil }
     var hasTwoComponents: Bool { false }
-    func intComponent(_ value: Double, in other: some HealthUnit) -> Int? { nil }
-    func doubleComponent(_ value: Double, in other: some HealthUnit) -> Double { value }
+    func intComponent(_ value: Double, in other: Self) -> Int? { nil }
+    func doubleComponent(_ value: Double, in other: Self) -> Double { value }
 }
 
 extension EnergyUnit: HealthUnit {
