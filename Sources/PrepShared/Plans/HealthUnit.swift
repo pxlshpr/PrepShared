@@ -7,6 +7,9 @@ public protocol HealthUnit: Pickable {
     var abbreviation: String { get }
     func intComponent(_ value: Double, in other: Self) -> Int?
     func doubleComponent(_ value: Double, in other: Self) -> Double
+    
+    var intUnitString: String? { get }
+    var doubleUnitString: String  { get }
 }
 
 public extension HealthUnit {
@@ -19,6 +22,8 @@ extension EnergyUnit: HealthUnit {
     public static var decimalPlaces: Int { 0 }
     public func intComponent(_ value: Double, in other: Self) -> Int? { nil }
     public func doubleComponent(_ value: Double, in other: Self) -> Double { value }
+    public var intUnitString: String? { nil }
+    public var doubleUnitString: String  { self.abbreviation }
 }
 
 //extension HeightUnit: HealthUnit {
@@ -34,4 +39,6 @@ extension EnergyUnit: HealthUnit {
 extension NutrientUnit: HealthUnit {
     public func intComponent(_ value: Double, in other: Self) -> Int? { nil }
     public func doubleComponent(_ value: Double, in other: Self) -> Double { value }
+    public var intUnitString: String? { nil }
+    public var doubleUnitString: String  { self.abbreviation }
 }
