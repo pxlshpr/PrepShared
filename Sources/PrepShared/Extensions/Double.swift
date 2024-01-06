@@ -87,7 +87,8 @@ public extension Double {
     
     /// uses commas, rounds it off
     var formattedEnergy: String {
-        let rounded = self.rounded()
+        let rounded = self
+            .rounded(.towardZero) /// Because Apple Health does the same
         
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
