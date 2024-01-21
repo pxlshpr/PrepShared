@@ -91,31 +91,61 @@ public extension HealthDetails.ReplacementsForMissing {
 public struct DatedWeight: Hashable, Codable {
     public let date: Date
     public var weight: HealthDetails.Weight
+    
+    public init(date: Date, weight: HealthDetails.Weight) {
+        self.date = date
+        self.weight = weight
+    }
 }
 
 public struct DatedMaintenance: Hashable, Codable {
     public let date: Date
     public var maintenance: HealthDetails.Maintenance
+    
+    public init(date: Date, maintenance: HealthDetails.Maintenance) {
+        self.date = date
+        self.maintenance = maintenance
+    }
 }
 
 public struct DatedHeight: Hashable, Codable {
     public let date: Date
     public var height: HealthDetails.Height
+    
+    public init(date: Date, height: HealthDetails.Height) {
+        self.date = date
+        self.height = height
+    }
 }
 
 public struct DatedLeanBodyMass: Hashable, Codable {
     public let date: Date
     public var leanBodyMass: HealthDetails.LeanBodyMass
+    
+    public init(date: Date, leanBodyMass: HealthDetails.LeanBodyMass) {
+        self.date = date
+        self.leanBodyMass = leanBodyMass
+    }
 }
 
 public struct DatedFatPercentage: Hashable, Codable {
     public let date: Date
     public var fatPercentage: HealthDetails.FatPercentage
+    
+    public init(date: Date, fatPercentage: HealthDetails.FatPercentage) {
+        self.date = date
+        self.fatPercentage = fatPercentage
+    }
 }
 
 public struct DatedPregnancyStatus: Hashable, Codable {
     public let date: Date
     public var pregnancyStatus: PregnancyStatus
+
+    public init(date: Date, pregnancyStatus: PregnancyStatus) {
+        self.date = date
+        self.pregnancyStatus = pregnancyStatus
+    }
 }
 
 public extension Dictionary where Key == HealthDetail, Value == DatedHealthData {
