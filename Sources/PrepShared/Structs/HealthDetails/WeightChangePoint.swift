@@ -7,7 +7,7 @@ public struct WeightChangePoint: Hashable, Codable {
     
     public var movingAverageInterval: HealthInterval? = .init(7, .day)
 
-    init(
+    public init(
         date: Date,
         kg: Double? = nil,
         movingAverageInterval: HealthInterval? = .init(7, .day)
@@ -18,7 +18,7 @@ public struct WeightChangePoint: Hashable, Codable {
     }
 }
 
-extension Array where Element == HealthDetails.Weight {
+public extension Array where Element == HealthDetails.Weight {
     var average: Double? {
         let values = self
             .compactMap { $0.weightInKg }
