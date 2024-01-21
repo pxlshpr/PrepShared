@@ -5,7 +5,9 @@ public enum WeightChangeType: Int, Hashable, Codable, CaseIterable, Identifiable
     case manual
     
     public var id: Int { rawValue }
-    
+}
+
+public extension WeightChangeType {
     var name: String {
         switch self {
         case .manual: "Manual"
