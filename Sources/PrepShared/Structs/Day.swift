@@ -48,3 +48,13 @@ public struct Day: Codable, Hashable {
         self.dietaryEnergyPoint = dietaryEnergyPoint
     }
 }
+
+public extension Day {
+    var energyInKcal: Double? {
+        energy
+    }
+    
+    var date: Date? {
+        Date(fromDateString: dateString)
+    }
+}
