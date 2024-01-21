@@ -12,6 +12,8 @@ public protocol HealthUnit: Pickable {
     var doubleUnitString: String  { get }
     
     static var upperSecondaryUnitValue: Double? { get }
+    
+    func convert(_ value: Double, to other: Self) -> Double
 }
 
 public extension HealthUnit {
