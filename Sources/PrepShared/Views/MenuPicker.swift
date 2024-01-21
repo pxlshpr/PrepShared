@@ -5,7 +5,7 @@ public struct MenuPicker<T: Pickable>: View {
     let options: [T]
     let binding: Binding<T>
     let isPlural: Bool
-    
+
     //MARK: - Initializers
     
     public init(
@@ -18,13 +18,19 @@ public struct MenuPicker<T: Pickable>: View {
         self.isPlural = isPlural
     }
 
-    public init(_ binding: Binding<T>, isPlural: Bool = false) {
+    public init(
+        _ binding: Binding<T>,
+        isPlural: Bool = false
+    ) {
         self.options = T.allCases as! [T]
         self.binding = binding
         self.isPlural = isPlural
     }
 
-    public init(_ binding: Binding<T?>, isPlural: Bool = false) {
+    public init(
+        _ binding: Binding<T?>,
+        isPlural: Bool = false
+    ) {
         self.options = T.allCases as! [T]
         self.binding = Binding<T>(
             get: { binding.wrappedValue ?? T.noneOption ?? T.default },
@@ -33,7 +39,11 @@ public struct MenuPicker<T: Pickable>: View {
         self.isPlural = isPlural
     }
 
-    public init(_ options: [T], _ binding: Binding<T?>, isPlural: Bool = false) {
+    public init(
+        _ options: [T],
+        _ binding: Binding<T?>,
+        isPlural: Bool = false
+    ) {
         self.options = options
         self.binding = Binding<T>(
             get: { binding.wrappedValue ?? T.noneOption ?? T.default },
@@ -102,15 +112,6 @@ public struct MenuPicker<T: Pickable>: View {
                 .imageScale(.small)
         }
         .font(.body)
-//        .foregroundStyle(foregroundColor)
-        .foregroundStyle(Color(.label))
-    }
-    
-    var foregroundColor: Color {
-        if let none = T.noneOption, binding.wrappedValue == none {
-            Color(.tertiaryLabel)
-        } else {
-            Color(.secondaryLabel)
-        }
+        .foregroundStyle(Color.accentColor)
     }
 }
