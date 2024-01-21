@@ -4,6 +4,9 @@ public enum MeasurementSource: Int, Codable, Hashable {
     case healthKit = 1
     case equation
     case manual
+}
+
+public extension MeasurementSource {
     
     static var formCases: [MeasurementSource] {
         [ .manual, .equation]
