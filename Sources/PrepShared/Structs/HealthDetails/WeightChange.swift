@@ -20,19 +20,19 @@ public struct WeightChange: Hashable, Codable {
         public var start: WeightChangePoint
         public var end: WeightChangePoint
         
-        init(date: Date, interval: HealthInterval) {
+        public init(date: Date, interval: HealthInterval) {
             self.end = .init(date: date)
             self.start = .init(date: interval.startDate(with: date))
         }
         
-        var weightChangeInKg: Double? {
+        public var weightChangeInKg: Double? {
             guard let endKg = end.kg, let startKg = start.kg else { return nil }
             return endKg - startKg
         }
     }
 }
 
-extension WeightChange {
+public extension WeightChange {
     
     var isEmpty: Bool {
         kg == nil
