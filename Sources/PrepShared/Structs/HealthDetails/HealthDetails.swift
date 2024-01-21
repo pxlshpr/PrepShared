@@ -74,7 +74,7 @@ extension HealthDetails {
     }
 }
 
-extension HealthDetails.ReplacementsForMissing {
+public extension HealthDetails.ReplacementsForMissing {
     func has(_ healthDetail: HealthDetail) -> Bool {
         switch healthDetail {
         case .weight:           datedWeight != nil
