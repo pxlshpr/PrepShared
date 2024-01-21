@@ -7,7 +7,7 @@ public struct HeightMeasurement: Hashable, Identifiable, Codable {
     public let date: Date
     public let heightInCm: Double
     
-    init(
+    public init(
         id: UUID = UUID(),
         date: Date,
         heightInCm: Double,
@@ -16,7 +16,7 @@ public struct HeightMeasurement: Hashable, Identifiable, Codable {
         self.init(id: id, date: date, value: heightInCm, healthKitUUID: healthKitUUID)
     }
 
-    init(
+    public init(
         id: UUID = UUID(),
         date: Date,
         value: Double,

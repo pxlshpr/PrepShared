@@ -10,7 +10,7 @@ public struct LeanBodyMassMeasurement: Hashable, Identifiable, Codable {
     public var leanBodyMassInKg: Double
     public let isConvertedFromFatPercentage: Bool
 
-    init(
+    public init(
         id: UUID,
         date: Date,
         value: Double,
@@ -29,7 +29,7 @@ public struct LeanBodyMassMeasurement: Hashable, Identifiable, Codable {
         self.isConvertedFromFatPercentage = false
     }
     
-    init(
+    public init(
         id: UUID = UUID(),
         date: Date,
         leanBodyMassInKg: Double,

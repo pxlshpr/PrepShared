@@ -7,7 +7,7 @@ public struct WeightMeasurement: Hashable, Identifiable, Codable {
     public let date: Date
     public let weightInKg: Double
 
-    init(
+    public init(
         id: UUID = UUID(),
         date: Date,
         weightInKg: Double,
@@ -16,7 +16,7 @@ public struct WeightMeasurement: Hashable, Identifiable, Codable {
         self.init(id: id, date: date, value: weightInKg, healthKitUUID: healthKitUUID)
     }
 
-    init(
+    public init(
         id: UUID = UUID(),
         date: Date,
         value: Double,

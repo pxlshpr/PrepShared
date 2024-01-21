@@ -10,7 +10,7 @@ public struct FatPercentageMeasurement: Hashable, Identifiable, Codable {
     public var percent: Double
     public let isConvertedFromLeanBodyMass: Bool
 
-    init(
+    public init(
         id: UUID,
         date: Date,
         value: Double,
@@ -29,7 +29,7 @@ public struct FatPercentageMeasurement: Hashable, Identifiable, Codable {
         self.isConvertedFromLeanBodyMass = false
     }
     
-    init(
+    public init(
         id: UUID = UUID(),
         date: Date,
         percent: Double,
