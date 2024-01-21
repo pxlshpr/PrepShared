@@ -1,6 +1,6 @@
 import Foundation
 
-public enum HealthDetail: Int, Identifiable, CaseIterable, Codable {
+enum HealthDetail: Int, Identifiable, CaseIterable, Codable {
     case maintenance = 1
     
     case age
@@ -11,9 +11,6 @@ public enum HealthDetail: Int, Identifiable, CaseIterable, Codable {
     case height
     case preganancyStatus
     case smokingStatus
-}
-
-public extension HealthDetail {
     
     var id: Int { rawValue }
 
@@ -56,12 +53,12 @@ public extension HealthDetail {
 }
 
 extension HealthDetail: Comparable {
-    public static func < (lhs: HealthDetail, rhs: HealthDetail) -> Bool {
+    static func < (lhs: HealthDetail, rhs: HealthDetail) -> Bool {
         lhs.rawValue < rhs.rawValue
     }
 }
 
-public extension Array where Element == HealthDetail {
+extension Array where Element == HealthDetail {
     var nonTemporalHealthDetails: [HealthDetail] {
         filter{ $0.isNonTemporal }.sorted()
     }
