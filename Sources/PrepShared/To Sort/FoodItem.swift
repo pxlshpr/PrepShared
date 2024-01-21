@@ -260,3 +260,55 @@ public extension FoodItem {
 ////        return value * nutrientScaleFactor
 //    }
 //}
+
+public extension FoodItem {
+    
+    init?(_ entity: MealItemEntity) {
+        self.init(
+            id: entity.id!,
+            amount: entity.amount,
+            food: entity.food,
+            mealID: entity.mealID,
+            energy: entity.energy,
+            energyUnit: entity.energyUnit,
+            carb: entity.carb,
+            fat: entity.fat,
+            protein: entity.protein,
+            micros: entity.micros,
+            largestEnergyInKcal: entity.largestEnergyInKcal,
+            energyRatio: entity.energyRatio,
+            sortPosition: Int(entity.sortPosition),
+            eatenAt: entity.eatenAt,
+            updatedAt: entity.updatedAt!,
+            createdAt: entity.createdAt!
+        )
+    }
+    
+    init?(_ entity: IngredientItemEntity) {
+        self.init(
+            id: entity.id!,
+            amount: entity.amount,
+            food: entity.food,
+            recipeFoodID: entity.recipeFoodEntity?.id,
+            energy: entity.energy,
+            energyUnit: entity.energyUnit,
+            carb: entity.carb,
+            fat: entity.fat,
+            protein: entity.protein,
+            micros: entity.micros,
+            largestEnergyInKcal: entity.largestEnergyInKcal,
+            energyRatio: entity.energyRatio,
+            sortPosition: Int(entity.sortPosition),
+            eatenAt: entity.eatenAt,
+            updatedAt: entity.updatedAt!,
+            createdAt: entity.createdAt!
+        )
+    }
+}
+
+public extension MealItemEntity {
+
+    var mealID: UUID {
+        mealEntity!.id!
+    }
+}
