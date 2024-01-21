@@ -4,9 +4,19 @@ public struct DietaryEnergyPoint: Hashable, Codable {
     public var date: Date
     public var kcal: Double?
     public var source: DietaryEnergyPointSource
+    
+    public init(
+        date: Date,
+        kcal: Double? = nil,
+        source: DietaryEnergyPointSource
+    ) {
+        self.date = date
+        self.kcal = kcal
+        self.source = source
+    }
 }
 
-extension Array where Element == DietaryEnergyPoint {
+public extension Array where Element == DietaryEnergyPoint {
     mutating func fillAverages() {
         guard let averageOfPointsNotUsingAverage else { return }
         for i in 0..<count {
