@@ -1,6 +1,5 @@
 //import SwiftUI
 //
-////public let NumberFont = Font.system(.body, design: .monospaced, weight: .bold)
 //public let NumberFont = Font.system(.body)
 //
 //public struct NumberField: View {
