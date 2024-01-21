@@ -23,6 +23,17 @@ public extension HealthUnit {
     static var upperSecondaryUnitValue: Double? { nil }
 }
 
+public extension HealthUnit {
+    func convert(_ int: Int, _ double: Double, to other: Self) -> Double {
+        let value = if self.hasTwoComponents, let upper = Self.upperSecondaryUnitValue {
+            Double(int) + (double / upper)
+        } else {
+            double
+        }
+        return self.convert(value, to: other)
+    }
+}
+
 extension EnergyUnit: HealthUnit {
     public static var decimalPlaces: Int { 0 }
     public func intComponent(_ value: Double, in other: Self) -> Int? { nil }
