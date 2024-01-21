@@ -11,14 +11,14 @@ public protocol HealthUnit: Pickable {
     var intUnitString: String? { get }
     var doubleUnitString: String  { get }
     
-    var upperSecondaryUnitValue: Double? { get }
+    static var upperSecondaryUnitValue: Double? { get }
 }
 
 public extension HealthUnit {
     static var decimalPlaces: Int { 1 }
     static var secondaryUnit: String? { nil }
     var hasTwoComponents: Bool { false }
-    var upperSecondaryUnitValue: Double? { nil }
+    static var upperSecondaryUnitValue: Double? { nil }
 }
 
 extension EnergyUnit: HealthUnit {
