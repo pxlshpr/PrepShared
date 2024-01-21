@@ -128,7 +128,7 @@ extension HealthDetails {
 
 public let MinimumAdaptiveEnergyInKcal: Double = 1000
 
-extension HealthDetails.Maintenance.Adaptive {
+public extension HealthDetails.Maintenance.Adaptive {
     static func calculate(
         interval: HealthInterval,
         weightChange: WeightChange,
