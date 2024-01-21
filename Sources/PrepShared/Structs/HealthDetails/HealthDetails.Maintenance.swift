@@ -49,17 +49,17 @@ extension HealthDetails {
             public struct DietaryEnergy: Hashable, Codable {
                 public var kcalPerDay: Double?
 
-                init(kcalPerDay: Double? = nil) {
+                public init(kcalPerDay: Double? = nil) {
                     self.kcalPerDay = kcalPerDay
                 }
                 
-                init(points: [DietaryEnergyPoint]) {
+                public init(points: [DietaryEnergyPoint]) {
                     var points = points
                     points.fillAverages()
                     self.kcalPerDay = points.kcalPerDay
                 }
                 
-                static func calculateKcalPerDay(for points: [DietaryEnergyPoint]) -> Double? {
+                public static func calculateKcalPerDay(for points: [DietaryEnergyPoint]) -> Double? {
                     var points = points
                     points.fillAverages()
                     return points.kcalPerDay
