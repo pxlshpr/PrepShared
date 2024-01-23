@@ -93,6 +93,21 @@ public enum Micro: Int, CaseIterable, Codable {
 }
 
 public extension Micro {
+    var isForInternalUse: Bool {
+        switch self {
+        case .energyWithoutDietaryFibre, .water, .freeSugars, .ash, .preformedVitaminARetinol, .betaCarotene, .provitaminABetaCaroteneEquivalents, .niacinDerivedEquivalents, .totalFolates, .dietaryFolateEquivalents, .alphaTocopherol, .tryptophan, .linoleicAcid, .alphaLinolenicAcid, .eicosapentaenoicAcid, .docosapentaenoicAcid, .docosahexaenoicAcid:
+            true
+        default:
+            false
+        }
+    }
+    
+    static var supportedCases: [Micro] {
+        allCases.filter { !$0.isForInternalUse }
+    }
+}
+
+public extension Micro {
     var name: String {
         switch self {
         case .saturatedFat:
