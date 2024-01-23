@@ -23,6 +23,9 @@ extension DayEntity {
     @NSManaged public var updatedAt: Date?
     @NSManaged public var mealEntities: NSSet?
 
+    @NSManaged public var dietaryEnergyPointData: Data?
+    @NSManaged public var dailyValuesData: Data?
+    @NSManaged public var useDailyValues: Bool
 }
 
 

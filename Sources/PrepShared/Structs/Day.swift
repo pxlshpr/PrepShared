@@ -18,6 +18,9 @@ public struct Day: Codable, Hashable {
     
     public var dietaryEnergyPoint: DietaryEnergyPoint?
 
+    public var useDailyValues: Bool
+    public var dailyValues: [Micro : DailyValue]
+    
     public init() {
         self.init(dateString: Date.now.dateString)
     }
@@ -33,7 +36,9 @@ public struct Day: Codable, Hashable {
         meals: [Meal] = [],
         plan: Plan? = nil,
         healthDetails: HealthDetails? = nil,
-        dietaryEnergyPoint: DietaryEnergyPoint? = nil
+        dietaryEnergyPoint: DietaryEnergyPoint? = nil,
+        useDailyValues: Bool = false,
+        dailyValues: [Micro : DailyValue] = [:]
     ) {
         self.dateString = dateString
         self.energy = energy
@@ -46,6 +51,8 @@ public struct Day: Codable, Hashable {
         self.plan = plan
         self.healthDetails = healthDetails
         self.dietaryEnergyPoint = dietaryEnergyPoint
+        self.useDailyValues = useDailyValues
+        self.dailyValues = dailyValues
     }
 }
 
