@@ -5,30 +5,36 @@ public struct MenuPicker<T: Pickable>: View {
     let options: [T]
     let binding: Binding<T>
     let isPlural: Bool
+    let foregroundColor: Color
 
     //MARK: - Initializers
     
     public init(
         _ options: [T],
         _ binding: Binding<T>,
+        foregroundColor: Color = .accentColor,
         isPlural: Bool = false
     ) {
         self.options = options
         self.binding = binding
+        self.foregroundColor = foregroundColor
         self.isPlural = isPlural
     }
 
     public init(
         _ binding: Binding<T>,
+        foregroundColor: Color = .accentColor,
         isPlural: Bool = false
     ) {
         self.options = T.allCases as! [T]
         self.binding = binding
+        self.foregroundColor = foregroundColor
         self.isPlural = isPlural
     }
 
     public init(
         _ binding: Binding<T?>,
+        foregroundColor: Color = .accentColor,
         isPlural: Bool = false
     ) {
         self.options = T.allCases as! [T]
@@ -36,12 +42,14 @@ public struct MenuPicker<T: Pickable>: View {
             get: { binding.wrappedValue ?? T.noneOption ?? T.default },
             set: { binding.wrappedValue = $0 }
         )
+        self.foregroundColor = foregroundColor
         self.isPlural = isPlural
     }
 
     public init(
         _ options: [T],
         _ binding: Binding<T?>,
+        foregroundColor: Color = .accentColor,
         isPlural: Bool = false
     ) {
         self.options = options
@@ -49,6 +57,7 @@ public struct MenuPicker<T: Pickable>: View {
             get: { binding.wrappedValue ?? T.noneOption ?? T.default },
             set: { binding.wrappedValue = $0 }
         )
+        self.foregroundColor = foregroundColor
         self.isPlural = isPlural
     }
 
@@ -112,6 +121,6 @@ public struct MenuPicker<T: Pickable>: View {
                 .imageScale(.small)
         }
         .font(.body)
-        .foregroundStyle(Color.accentColor)
+        .foregroundStyle(foregroundColor)
     }
 }
