@@ -70,7 +70,7 @@ public func v(
     RDIValue(
         bound: bound,
         ageRange: ageRange,
-        sex: sex,
+        biologicalSex: sex,
         pregnancyStatus: pregnancyStatus,
         isSmoker: smoker
     )
