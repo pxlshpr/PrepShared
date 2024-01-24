@@ -49,7 +49,7 @@ extension Array where Element == RDIValue {
     }
     
     var containsGender: Bool {
-        contains { $0.sex != nil }
+        contains { $0.biologicalSex != nil }
     }
     
     var containsSmokingStatus: Bool {
@@ -82,8 +82,8 @@ extension Array where Element == RDIValue {
     var hasAllParamCombosWithoutAgeRange: Bool {
         
         var withGender: Bool {
-            let male = filter { $0.sex == .male }
-            let female = filter { $0.sex == .female }
+            let male = filter { $0.biologicalSex == .male }
+            let female = filter { $0.biologicalSex == .female }
             
             /// Check that we have at least 1 value for both genders
             guard !male.isEmpty, !female.isEmpty else {
