@@ -96,7 +96,9 @@ private let ValidateTestCases: [(RDI, RDIError?)] = [
             values: [
                 v(b(21, 25), sex: .female),
                 v(b(30, 38), sex: .female),
-            ]
+            ],
+            source: .init(name: "NIH"),
+            url: "https://ods.od.nih.gov/factsheets/VitaminC-Consumer/"
         ), .value(.duplicate)
     ),
     
@@ -120,7 +122,9 @@ private let ValidateTestCases: [(RDI, RDIError?)] = [
                 v(b(110, 2000), ageRange: l(19), sex: .female, pregnancyStatus: .notPregnantOrLactating, smoker: true),
                 v(b(85, 2000), ageRange: l(19), sex: .female, pregnancyStatus: .pregnant, smoker: false),
                 v(b(120, 2000), ageRange: l(19), sex: .female, pregnancyStatus: .lactating, smoker: false),
-            ]
+            ],
+            source: .init(name: "NIH"),
+            url: "https://ods.od.nih.gov/factsheets/VitaminC-Consumer/"
         ), .incompleteValues
     )
 ]

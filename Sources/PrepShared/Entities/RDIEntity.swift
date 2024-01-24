@@ -85,17 +85,18 @@ public extension RDIEntity {
 }
 
 public extension RDIEntity {
-    var asRDI: RDI {
-        RDI(
+    var asRDI: RDI? {
+        guard let source, let url else { return nil }
+        return RDI(
             id: id!,
             createdAt: createdAt!,
             updatedAt: updatedAt!,
             micro: micro,
             unit: unit,
-            url: url,
             type: type,
             values: values,
-            source: source!
+            source: source,
+            url: url
         )
     }
 }

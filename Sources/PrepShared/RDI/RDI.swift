@@ -10,10 +10,11 @@ public struct RDI: Codable, Hashable, Equatable {
     public let micro: Micro
     public let unit: NutrientUnit
     public let type: RDIType
-    public let url: String?
+    
     public let values: [RDIValue]
 
-    public let source: RDISource?
+    public let source: RDISource
+    public let url: String
 
     public init(
         id: UUID = UUID(),
@@ -22,10 +23,10 @@ public struct RDI: Codable, Hashable, Equatable {
         isTrashed: Bool = false,
         micro: Micro,
         unit: NutrientUnit,
-        url: String? = nil,
         type: RDIType,
         values: [RDIValue],
-        source: RDISource? = nil
+        source: RDISource,
+        url: String
     ) {
         self.id = id
         self.createdAt = createdAt

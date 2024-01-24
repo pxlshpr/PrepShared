@@ -21,11 +21,12 @@ let vitaminCValues: [RDIValue] = [
 public let vitaminC_nih = RDI(
     micro: .vitaminC_ascorbicAcid,
     unit: .mg,
-    url: "https://ods.od.nih.gov/factsheets/VitaminC-Consumer/",
     type: .fixed,
     
-    values: vitaminCValues.sanitized()
-    
+    values: vitaminCValues.sanitized(),
+    source: .init(name: "NIH"),
+    url: "https://ods.od.nih.gov/factsheets/VitaminC-Consumer/"
+
 //    values: [
 //        v(l(40), ageRange: b(0, 0.5), sex: .notSet, pregnancyStatus: .notSet, smoker: false),
 //        v(l(50), ageRange: b(0.5, 1.0), sex: .notSet, pregnancyStatus: .notSet, smoker: false),
@@ -48,35 +49,35 @@ public let vitaminC_nih = RDI(
 public let transFat_who = RDI(
     micro: .transFat,
     unit: .p,
-    url: "https://www.who.int/news-room/questions-and-answers/item/nutrition-trans-fat",
     type: .percentageOfEnergy,
     values: [
         v(u(1)),
     ],
-    source: RDISource(abbreviation: "WHO", name: "World Health Organization", url: "https://www.who.int")
+    source: RDISource(abbreviation: "WHO", name: "World Health Organization", url: "https://www.who.int"),
+    url: "https://www.who.int/news-room/questions-and-answers/item/nutrition-trans-fat"
 )
 
 public let fiber_mayoClinic = RDI(
     micro: .dietaryFiber,
     unit: .g,
-    url: "https://www.mayoclinic.org/healthy-lifestyle/nutrition-and-healthy-eating/in-depth/high-fiber-foods/art-20050948",
     type: .fixed,
     values: [
         v(b(21, 25), sex: .female),
         v(b(30, 38), sex: .male),
     ],
-    source: RDISource(name: "Mayo Clinic", url: "https://www.mayoclinic.org/healthy-lifestyle/nutrition-and-healthy-eating/basics/nutrition-basics/hlv-20049477")
+    source: RDISource(name: "Mayo Clinic", url: "https://www.mayoclinic.org/healthy-lifestyle/nutrition-and-healthy-eating/basics/nutrition-basics/hlv-20049477"),
+    url: "https://www.mayoclinic.org/healthy-lifestyle/nutrition-and-healthy-eating/in-depth/high-fiber-foods/art-20050948"
 )
 
 public let fiber_eatRight = RDI(
     micro: .dietaryFiber,
     unit: .g,
-    url: "https://www.eatright.org/health/essential-nutrients/carbohydrates/fiber",
     type: .quantityPerEnergy(1000, .kcal),
     values: [
         v(l(14)),
     ],
-    source: RDISource(name: "Academy of Nutrition and Dietetics", url: "https://www.eatright.org")
+    source: RDISource(name: "Academy of Nutrition and Dietetics", url: "https://www.eatright.org"),
+    url: "https://www.eatright.org/health/essential-nutrients/carbohydrates/fiber"
 )
 
 //MARK: - Helpers
