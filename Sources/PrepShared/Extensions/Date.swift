@@ -48,6 +48,16 @@ public extension Date {
         return dateFormatter.string(from: self).lowercased()
     }
 
+    var shortDateString: String {
+        let formatter = DateFormatter()
+        if self.year == Date().year {
+            formatter.dateFormat = "d MMM"
+        } else {
+            formatter.dateFormat = "d MMM yyyy"
+        }
+        return formatter.string(from: self)
+    }
+
 //    var year: Int {
 //        Calendar.current.dateComponents([.year], from: self).year ?? 0
 //    }
