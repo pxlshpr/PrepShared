@@ -20,6 +20,7 @@ let package = Package(
         .package(url: "https://github.com/pxlshpr/VisionSugar", from: "0.0.80"),
         .package(url: "https://github.com/pxlshpr/ColorSugar", from: "0.0.8"),
         .package(url: "https://github.com/marmelroy/Zip", from: "2.1.2"),
+        .package(url: "https://github.com/siteline/swiftUI-introspect", from: "1.1.1"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -32,6 +33,7 @@ let package = Package(
                 .product(name: "VisionSugar", package: "VisionSugar"),
                 .product(name: "ColorSugar", package: "ColorSugar"),
                 .product(name: "Zip", package: "Zip"),
+                .product(name: "SwiftUIIntrospect", package: "swiftui-introspect"),
             ]
         ),
         .testTarget(

@@ -1,7 +1,7 @@
 import SwiftUI
-import PrepShared
+import SwiftUIIntrospect
 
-public struct DoubleTextField: View {
+public struct DoubleTextFieldSection: View {
     
     let title: String
     let footerString: String?
@@ -57,7 +57,7 @@ public struct DoubleTextField: View {
     }
 }
 
-extension DoubleTextField {
+extension DoubleTextFieldSection {
     
     @ViewBuilder
     var footer: some View {

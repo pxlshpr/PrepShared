@@ -18,15 +18,9 @@ import SwiftUI
         self.string = double?.clean ?? ""
         self.automaticallySubmitsValues = automaticallySubmitsValues
     }
-    
-    public func setDouble(_ double: Double?) {
-        self.double = double
-        self.stringAsDouble = double
-        self.string = double?.clean ?? ""
-    }
 }
 
-extension DoubleInput {
+public extension DoubleInput {
     
     var binding: Binding<String> {
         Binding<String>(
@@ -36,7 +30,13 @@ extension DoubleInput {
             }
         )
     }
-    
+
+    func setDouble(_ double: Double?) {
+        self.double = double
+        self.stringAsDouble = double
+        self.string = double?.clean ?? ""
+    }
+
     func setNewValue(_ newValue: String) {
         /// Cleanup by removing any extra periods and non-numbers
         let newValue = newValue.sanitizedDouble

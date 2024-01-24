@@ -21,21 +21,10 @@ import SwiftUI
         self.automaticallySubmitsValues = automaticallySubmitsValues
     }
     
-    public func setInt(_ int: Int?) {
-        self.int = int
-        stringAsInt = int
-        string = if let int {
-            "\(int)"
-        } else {
-            ""
-        }
-        if automaticallySubmitsValues {
-            submitValue()
-        }
-    }
+   
 }
 
-extension IntInput {
+public extension IntInput {
     
     var binding: Binding<String> {
         Binding<String>(
@@ -47,7 +36,20 @@ extension IntInput {
             }
         )
     }
-
+    
+    func setInt(_ int: Int?) {
+        self.int = int
+        stringAsInt = int
+        string = if let int {
+            "\(int)"
+        } else {
+            ""
+        }
+        if automaticallySubmitsValues {
+            submitValue()
+        }
+    }
+    
     func setNewValue(_ string: String) {
         let int = Int(string)
         setInt(int)
