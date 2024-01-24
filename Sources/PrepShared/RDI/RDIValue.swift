@@ -8,13 +8,13 @@ public struct RDIValue: Hashable, Codable, Equatable {
     public init(
         bound: Bound,
         ageRange: Bound? = nil,
-        sex: BiologicalSex? = nil,
+        biologicalSex: BiologicalSex? = nil,
         pregnancyStatus: PregnancyStatus? = nil,
         isSmoker: Bool? = nil
     ) {
         self.bound = bound
         self.ageRange = ageRange
-        self.biologicalSex = sex
+        self.biologicalSex = biologicalSex
         self.pregnancyStatus = pregnancyStatus
         self.isSmoker = isSmoker
     }
