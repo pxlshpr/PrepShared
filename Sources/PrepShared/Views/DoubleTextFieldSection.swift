@@ -7,7 +7,6 @@ public struct DoubleTextFieldSection: View {
     
     @Binding var doubleInput: DoubleInput
     @Binding var hasFocused: Bool
-    @Binding var focusDelay: Double
     let delayFocus: Bool
     let handleChanges: () -> ()
     let handleLostFocus: (() -> ())?
@@ -19,13 +18,11 @@ public struct DoubleTextFieldSection: View {
         doubleInput: Binding<DoubleInput>,
         hasFocused: Binding<Bool>,
         delayFocus: Bool = false,
-        focusDelay: Binding<Double> = .constant(0.05),
         footer: String? = nil,
         handleChanges: @escaping () -> (),
         handleLostFocus: (() -> ())? = nil
     ) {
         self.title = title
-        _focusDelay = focusDelay
         _doubleInput = doubleInput
         _hasFocused = hasFocused
         self.delayFocus = delayFocus
@@ -44,7 +41,6 @@ public struct DoubleTextFieldSection: View {
                     doubleInput: $doubleInput,
                     hasFocused: $hasFocused,
                     delayFocus: delayFocus,
-                    focusDelay: $focusDelay,
                     handleChanges: handleChanges,
                     handleLostFocus: handleLostFocus
                 )
