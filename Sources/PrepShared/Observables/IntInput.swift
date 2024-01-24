@@ -9,7 +9,7 @@ import SwiftUI
     
     let automaticallySubmitsValues: Bool
     
-    public init(int: Int? = nil, automaticallySubmitsValues: Bool = false) {
+    public init(int: Int? = nil, automaticallySubmitsValues: Bool = true) {
         self.int = int
         self.stringAsInt = int
         self.string = if let int {

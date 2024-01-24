@@ -12,7 +12,7 @@ import SwiftUI
     private var numberOfTrailingZeros: Int = 0
     private let automaticallySubmitsValues: Bool
     
-    public init(double: Double? = nil, automaticallySubmitsValues: Bool = false) {
+    public init(double: Double? = nil, automaticallySubmitsValues: Bool = true) {
         self.double = double
         self.stringAsDouble = double
         self.string = double?.clean ?? ""
