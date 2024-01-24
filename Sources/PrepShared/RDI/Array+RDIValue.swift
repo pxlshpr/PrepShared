@@ -48,8 +48,8 @@ extension Array where Element == RDIValue {
         contains { $0.ageRange != nil }
     }
     
-    var containsGender: Bool {
-        contains { $0.biologicalSex != nil }
+    var containsBiologicalSex: Bool {
+        contains { $0.biologicalSex != nil && $0.biologicalSex != .notSet }
     }
     
     var containsSmokingStatus: Bool {
@@ -129,7 +129,7 @@ extension Array where Element == RDIValue {
             }
         }
         
-        return if !containsGender {
+        return if !containsBiologicalSex {
             withoutGender
         } else {
             withGender

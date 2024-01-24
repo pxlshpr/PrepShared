@@ -1,18 +1,5 @@
 import Foundation
 
-public struct RDIFormValue: Hashable, Codable, Equatable {
-    public var value: RDIValue
-    public var isValid: Bool
-    
-    public init(
-        value: RDIValue,
-        isValid: Bool
-    ) {
-        self.value = value
-        self.isValid = isValid
-    }
-}
-
 public struct RDIFields: Hashable, Equatable {
 
     public var micro: Micro? {

@@ -61,7 +61,7 @@ public let fiber_eatRight = RDI(
 //MARK: - Helpers
 
 public func v(
-    _ bound: Bound,
+    _ bound: Bound = b(0, 0),
     ageRange: Bound? = nil,
     sex: BiologicalSex? = nil,
     pregnancyStatus: PregnancyStatus? = nil,

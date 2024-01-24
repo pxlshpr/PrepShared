@@ -13,13 +13,32 @@ final class RDITests: XCTestCase {
     }
     
     func testHasAllParamCombos() throws {
-        for (bound, hasAllParamCombos) in HasAllParamCombosTestCases {
-            XCTAssertEqual(bound.hasAllParamCombos, hasAllParamCombos)
+        for (bound, expected) in HasAllParamCombosTestCases {
+            XCTAssertEqual(bound.hasAllParamCombos, expected)
+        }
+    }
+
+    func testSanitizeValues() throws {
+        for (array, expected) in SanitizeTestCases {
+            XCTAssertEqual(array.sanitized(), expected)
+        }
+    }
+    
+    func testIsValidAfterAddingValue() throws {
+        for (array, value, expected) in IsValidAfterAddingValueTestCases {
+            XCTAssertEqual(array.isValidAfterAdding(value), expected)
         }
     }
 }
 
 //MARK: - Test Cases
+
+private let SanitizeTestCases: [([RDIValue], [RDIValue])] = [
+    ([v(sex: .notSet)], [v()])
+]
+private let IsValidAfterAddingValueTestCases: [([RDIValue], RDIValue, Bool)] = [
+    ([v(sex: .female)], v(sex: .female), false)
+]
 
 private let HasAllParamCombosTestCases: [([RDIValue], Bool)] = [
     (vitaminC_nih.values, true),
