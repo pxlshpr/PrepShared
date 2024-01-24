@@ -20,7 +20,7 @@ public extension RDIEntity {
         self.unit = unit
         self.type = fields.type
         self.url = fields.url
-        self.values = fields.values
+        self.values = fields.formValues.map { $0.value }
         //TODO: Handle source!
 //        self.source = fields.source
     }

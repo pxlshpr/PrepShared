@@ -1,5 +1,18 @@
 import Foundation
 
+public struct RDIFormValue: Hashable, Codable, Equatable {
+    public var value: RDIValue
+    public var isValid: Bool
+    
+    public init(
+        value: RDIValue,
+        isValid: Bool
+    ) {
+        self.value = value
+        self.isValid = isValid
+    }
+}
+
 public struct RDIFields: Hashable, Equatable {
 
     public var micro: Micro? {
@@ -11,7 +24,7 @@ public struct RDIFields: Hashable, Equatable {
     public var unit: NutrientUnit
     public var type: RDIType
     public var url: String
-    public var values: [RDIValue]
+    public var formValues: [RDIFormValue]
     public var source: RDISource?
     
     public init(
@@ -19,14 +32,14 @@ public struct RDIFields: Hashable, Equatable {
         unit: NutrientUnit? = nil,
         type: RDIType = .default,
         url: String = "",
-        values: [RDIValue] = [],
+        formValues: [RDIFormValue] = [],
         source: RDISource? = nil
     ) {
         self.micro = micro
         self.unit = unit ?? .mg
         self.type = type
         self.url = url
-        self.values = values
+        self.formValues = formValues
         self.source = source
     }
 }
@@ -35,8 +48,8 @@ public extension RDIFields {
     
     var canBeSaved: Bool {
         micro != nil
-        && !values.isEmpty
-        && values.hasAllParamCombos
+        && !formValues.isEmpty
+        && formValues.allSatisfy({ $0.isValid })
     }
     
     mutating func fill(with rdi: RDI) {
@@ -44,7 +57,7 @@ public extension RDIFields {
         unit = rdi.unit
         type = rdi.type
         url = rdi.url ?? ""
-        values = rdi.values
+        formValues = rdi.values.map { .init(value: $0, isValid: true) }
         source = rdi.source
     }
 }
