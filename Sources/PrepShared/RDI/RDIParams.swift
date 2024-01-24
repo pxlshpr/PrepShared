@@ -1,4 +1,6 @@
-public struct RDIParams {
+import Foundation
+
+public struct RDIParams: Equatable {
     public var age: Double? = nil
     public var sex: BiologicalSex? = nil
     public var pregnancyStatus: PregnancyStatus? = nil

@@ -1,27 +1,48 @@
 import Foundation
 
+let vitaminCValues: [RDIValue] = [
+    v(l(40), ageRange: b(0, 0.5)),
+    v(l(50), ageRange: b(0.5, 1.0)),
+    v(b(15, 400), ageRange: b(1, 4)),
+    v(b(25, 650), ageRange: b(4, 9)),
+    v(b(45, 1200), ageRange: b(9, 14)),
+    v(b(75, 1800), ageRange: b(14, 19), sex: .male),
+    v(b(65, 1800), ageRange: b(14, 19), sex: .female, pregnancyStatus: .notPregnantOrLactating),
+    v(b(80, 1800), ageRange: b(14, 19), sex: .female, pregnancyStatus: .pregnant),
+    v(b(115, 1800), ageRange: b(14, 19), sex: .female, pregnancyStatus: .lactating),
+    v(b(90, 2000), ageRange: l(19), sex: .male, smoker: false),
+    v(b(125, 2000), ageRange: l(19), sex: .male, smoker: true),
+    v(b(75, 2000), ageRange: l(19), sex: .female, pregnancyStatus: .notPregnantOrLactating, smoker: false),
+    v(b(110, 2000), ageRange: l(19), sex: .female, pregnancyStatus: .notPregnantOrLactating, smoker: true),
+    v(b(85, 2000), ageRange: l(19), sex: .female, pregnancyStatus: .pregnant, smoker: false),
+    v(b(120, 2000), ageRange: l(19), sex: .female, pregnancyStatus: .lactating, smoker: false),
+]
+
 public let vitaminC_nih = RDI(
     micro: .vitaminC_ascorbicAcid,
     unit: .mg,
     url: "https://ods.od.nih.gov/factsheets/VitaminC-Consumer/",
     type: .fixed,
-    values: [
-        v(l(40), ageRange: b(0, 0.5)),
-        v(l(50), ageRange: b(0.5, 1.0)),
-        v(b(15, 400), ageRange: b(1, 4)),
-        v(b(25, 650), ageRange: b(4, 9)),
-        v(b(45, 1200), ageRange: b(9, 14)),
-        v(b(75, 1800), ageRange: b(14, 19), sex: .male),
-        v(b(65, 1800), ageRange: b(14, 19), sex: .female, pregnancyStatus: .notPregnantOrLactating),
-        v(b(80, 1800), ageRange: b(14, 19), sex: .female, pregnancyStatus: .pregnant),
-        v(b(115, 1800), ageRange: b(14, 19), sex: .female, pregnancyStatus: .lactating),
-        v(b(90, 2000), ageRange: l(19), sex: .male, smoker: false),
-        v(b(125, 2000), ageRange: l(19), sex: .male, smoker: true),
-        v(b(75, 2000), ageRange: l(19), sex: .female, pregnancyStatus: .notPregnantOrLactating, smoker: false),
-        v(b(110, 2000), ageRange: l(19), sex: .female, pregnancyStatus: .notPregnantOrLactating, smoker: true),
-        v(b(85, 2000), ageRange: l(19), sex: .female, pregnancyStatus: .pregnant, smoker: false),
-        v(b(120, 2000), ageRange: l(19), sex: .female, pregnancyStatus: .lactating, smoker: false),
-    ]
+    
+    values: vitaminCValues.sanitized()
+    
+//    values: [
+//        v(l(40), ageRange: b(0, 0.5), sex: .notSet, pregnancyStatus: .notSet, smoker: false),
+//        v(l(50), ageRange: b(0.5, 1.0), sex: .notSet, pregnancyStatus: .notSet, smoker: false),
+//        v(b(15, 400), ageRange: b(1, 4), sex: .notSet, pregnancyStatus: .notSet, smoker: false),
+//        v(b(25, 650), ageRange: b(4, 9), sex: .notSet, pregnancyStatus: .notSet, smoker: false),
+//        v(b(45, 1200), ageRange: b(9, 14), sex: .notSet, pregnancyStatus: .notSet, smoker: false),
+//        v(b(75, 1800), ageRange: b(14, 19), sex: .male, pregnancyStatus: .notSet, smoker: false),
+//        v(b(65, 1800), ageRange: b(14, 19), sex: .female, pregnancyStatus: .notPregnantOrLactating, smoker: false),
+//        v(b(80, 1800), ageRange: b(14, 19), sex: .female, pregnancyStatus: .pregnant, smoker: false),
+//        v(b(115, 1800), ageRange: b(14, 19), sex: .female, pregnancyStatus: .lactating, smoker: false),
+//        v(b(90, 2000), ageRange: l(19), sex: .male, pregnancyStatus: .notSet, smoker: false),
+//        v(b(125, 2000), ageRange: l(19), sex: .male, pregnancyStatus: .notSet, smoker: true),
+//        v(b(75, 2000), ageRange: l(19), sex: .female, pregnancyStatus: .notPregnantOrLactating, smoker: false),
+//        v(b(110, 2000), ageRange: l(19), sex: .female, pregnancyStatus: .notPregnantOrLactating, smoker: true),
+//        v(b(85, 2000), ageRange: l(19), sex: .female, pregnancyStatus: .pregnant, smoker: false),
+//        v(b(120, 2000), ageRange: l(19), sex: .female, pregnancyStatus: .lactating, smoker: false),
+//    ]
 )
 
 public let transFat_who = RDI(

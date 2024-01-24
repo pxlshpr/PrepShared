@@ -1,138 +1,234 @@
 import Foundation
 
-public extension Array where Element == RDIValue {
-    
-    var hasAllParamCombos: Bool {
-        
-        guard isValid else { return false }
-        
-        var withAgeRange: Bool {
-            let grouped = groupedByAgeRange
-
-            for (_, values) in grouped {
-                /// For each group, if have sex (and optionally pregnancyStatus) or isSmoker, check that we have all combinations, otherwise fail early
-                guard values.hasAllParamCombosWithoutAgeRange else { return false }
-            }
-
-            let ageRanges = grouped.map { $0.key }
-            return ageRanges.spansZeroToInfinity
-        }
-        
-        return if !containsAgeRange {
-            hasAllParamCombosWithoutAgeRange
-        } else {
-            withAgeRange
-        }
-        
-        //TODO: Change how we do this:
-        /// -[ ] Write a function that adds a value to the array of values, doing the following checks
-        /// -[ ] If there is an age range—make sure the range does not overlap with one that we already have, unless its providing a param that does not exist (ie different sex, smoking or pregnancy status)
-        /// -[ ] ?
-        /// -[ ] If any of these checks fail, don’t add the value and return an error that we present to the user, as a validation check for ourselves when entering these
-        /// -[ ] RDIForm.ValueForm should allow turning off sex and smoker (when specifying infants, for example)
-        
+extension PregnancyStatus {
+    static var femaleOptions: [PregnancyStatus] {
+        [.pregnant, .lactating, .notPregnantOrLactating]
     }
     
-    var isValid: Bool {
-        /// Ensure age range is in all if specified
-        if containsAgeRange {
-            guard allSatisfy({ $0.ageRange != nil  }) else { return false }
+    static func options(for biologicalSex: BiologicalSex) -> [PregnancyStatus] {
+        switch biologicalSex {
+        case .female:   femaleOptions
+        default:        [.notSet]
         }
-        return true
     }
 }
 
-extension Array where Element == RDIValue {
-    
-    var containsAgeRange: Bool {
-        contains { $0.ageRange != nil }
+extension BiologicalSex {
+    static var options: [BiologicalSex] {
+        [.male, .female]
     }
-    
-    var containsBiologicalSex: Bool {
-        contains { $0.biologicalSex != nil && $0.biologicalSex != .notSet }
-    }
-    
-    var containsSmokingStatus: Bool {
-        contains { $0.isSmoker != nil }
-    }
-    
-    var containsPregnancyStatus: Bool {
-        contains { $0.pregnancyStatus != nil }
-    }
-    
-    var hasAllSmokingStatusCombos: Bool {
-        count == 2
-        && contains { $0.isSmoker == true }
-        && contains { $0.isSmoker == false }
-    }
-    
-    var groupedByAgeRange: [Bound: [RDIValue]] {
-        var dict: [Bound: [RDIValue]] = [:]
-        for value in self {
-            guard let ageRange = value.ageRange else { return [:] }
-            if let existing = dict[ageRange] {
-                dict[ageRange] = existing + [value]
-            } else {
-                dict[ageRange] = [value]
+}
+
+extension Bool {
+    static func isSmokerOptions(_ biologicalSex: BiologicalSex = .male, _ pregnancyStatus: PregnancyStatus = .notSet) -> [Bool] {
+        switch biologicalSex {
+        case .female:
+            switch pregnancyStatus {
+            case .pregnant, .lactating: [false]
+            default:                    [true, false]
             }
+        default:
+            [true, false]
         }
-        return dict
     }
+
+}
+
+extension RDIParams {
+    static func allCombos(
+        withAgeRanges ageRanges: [Bound],
+        withIsSmoker: Bool = true,
+        withPregnancyStatus: Bool = true,
+        withBiologicalSex: Bool = true
+    ) -> [RDIParams] {
+        var params: [RDIParams] = []
+        for ageRange in ageRanges {
     
-    var hasAllParamCombosWithoutAgeRange: Bool {
-        
-        var withGender: Bool {
-            let male = filter { $0.biologicalSex == .male }
-            let female = filter { $0.biologicalSex == .female }
-            
-            /// Check that we have at least 1 value for both genders
-            guard !male.isEmpty, !female.isEmpty else {
-                return false
-            }
-            
-            /// For male, check if we have all smoker combinations if we have the value
-            if male.containsSmokingStatus {
-                guard male.hasAllSmokingStatusCombos else { return false }
-            }
-            
-            /// Then for female, check if any has pregnancyStatus
-            if female.containsPregnancyStatus {
+            if withBiologicalSex {
                 
-                /// If any has pregnancy status, check that we have both .lactating and .pregnant first
-                guard female.contains(where: { $0.pregnancyStatus == .lactating }),
-                      female.contains(where: { $0.pregnancyStatus == .pregnant }) else {
-                    return false
+                for biologicalSex in BiologicalSex.options {
+                    if withPregnancyStatus {
+                        for pregnancyStatus in PregnancyStatus.options(for: biologicalSex) {
+                            if withIsSmoker {
+                                for isSmoker in Bool.isSmokerOptions(biologicalSex, pregnancyStatus) {
+                                    params.append(.init(
+                                        age: ageRange.lower,
+                                        sex: biologicalSex,
+                                        pregnancyStatus: pregnancyStatus,
+                                        isSmoker: isSmoker
+                                    ))
+                                }
+                            } else {
+                                params.append(.init(
+                                    age: ageRange.lower,
+                                    sex: biologicalSex,
+                                    pregnancyStatus: pregnancyStatus
+                                ))
+                            }
+                        }
+                    } else {
+                        if withIsSmoker {
+                            for isSmoker in Bool.isSmokerOptions(biologicalSex) {
+                                params.append(.init(
+                                    age: ageRange.lower,
+                                    sex: biologicalSex,
+                                    isSmoker: isSmoker
+                                ))
+                            }
+                        } else {
+                            params.append(.init(
+                                age: ageRange.lower,
+                                sex: biologicalSex
+                            ))
+                        }
+                    }
                 }
                 
-                /// Then check that we have notPregnantOrLactating, (filter them out) and do the smoking check on them like above
-                let notPregnantOrLactating = female.filter { $0.pregnancyStatus == .notPregnantOrLactating }
-                guard !notPregnantOrLactating.isEmpty else { return false }
-                if notPregnantOrLactating.containsSmokingStatus {
-                    guard notPregnantOrLactating.hasAllSmokingStatusCombos else { return false }
+            } else {
+                
+                if withIsSmoker {
+                    for isSmoker in Bool.isSmokerOptions() {
+                        params.append(.init(
+                            age: ageRange.lower,
+                            isSmoker: isSmoker
+                        ))
+                    }
+                } else {
+                    params.append(.init(
+                        age: ageRange.lower
+                    ))
                 }
                 
-            } else if female.containsSmokingStatus {
-                /// If none has pregnancy status, simply check the smoking check like with male
-                guard female.hasAllSmokingStatusCombos else { return false }
+            }
+        }
+        return params
+    }
+    
+    static func allCombosWithoutAgeRanges(
+        withIsSmoker: Bool = true,
+        withPregnancyStatus: Bool = true,
+        withBiologicalSex: Bool = true
+    ) -> [RDIParams] {
+        var params: [RDIParams] = []
+        if withBiologicalSex {
+            
+            for biologicalSex in BiologicalSex.options {
+                if withPregnancyStatus {
+                    for pregnancyStatus in PregnancyStatus.options(for: biologicalSex) {
+                        if withIsSmoker {
+                            for isSmoker in Bool.isSmokerOptions(biologicalSex, pregnancyStatus) {
+                                params.append(.init(
+                                    sex: biologicalSex,
+                                    pregnancyStatus: pregnancyStatus,
+                                    isSmoker: isSmoker
+                                ))
+                            }
+                        } else {
+                            params.append(.init(
+                                sex: biologicalSex,
+                                pregnancyStatus: pregnancyStatus
+                            ))
+                        }
+                    }
+                } else {
+                    if withIsSmoker {
+                        for isSmoker in Bool.isSmokerOptions(biologicalSex) {
+                            params.append(.init(
+                                sex: biologicalSex,
+                                isSmoker: isSmoker
+                            ))
+                        }
+                    } else {
+                        params.append(.init(
+                            sex: biologicalSex
+                        ))
+                    }
+                }
             }
             
-            /// If we reach this point, then all available params have been provided
-            return true
-        }
-        
-        var withoutGender: Bool {
-            if containsSmokingStatus {
-                hasAllSmokingStatusCombos
-            } else {
-                /// No params, so only 1 value is allowed, returning true if not empty
-                !isEmpty
-            }
-        }
-        
-        return if !containsBiologicalSex {
-            withoutGender
         } else {
-            withGender
+            
+            if withIsSmoker {
+                for isSmoker in Bool.isSmokerOptions() {
+                    params.append(.init(
+                        isSmoker: isSmoker
+                    ))
+                }
+            } else {
+                /// No params to test
+            }
+            
         }
+        return params
     }
+}
+
+public extension Array where Element == RDIValue {
+
+    var allAgeRanges: [Bound] {
+        groupedByAgeRange.map { $0.key }
+    }
+    
+    func allParamCombos() -> Result<[RDIParams], RDIError> {
+        let ageRanges: [Bound]? = containsAgeRange ? allAgeRanges : nil
+        if let ageRanges {
+            guard ageRanges.spansZeroToInfinity else {
+                //TODO: Return an error saying age ranges don't span
+                return .failure(.missingAgeRange)
+            }
+        }
+        
+        let params = if let ageRanges {
+            RDIParams.allCombos(
+                withAgeRanges: ageRanges,
+                withIsSmoker: containsSmokingStatus,
+                withPregnancyStatus: containsPregnancyStatus,
+                withBiologicalSex: containsBiologicalSex
+            )
+        } else {
+            RDIParams.allCombosWithoutAgeRanges(
+                withIsSmoker: containsSmokingStatus,
+                withPregnancyStatus: containsPregnancyStatus,
+                withBiologicalSex: containsBiologicalSex
+            )
+        }
+        return .success(params)
+    }
+    
+//    var hasAllParamCombos_: Bool {
+//        guard isValid else { return false }
+//        
+//        var withAgeRange: Bool {
+//            let grouped = groupedByAgeRange
+//
+//            for (_, values) in grouped {
+//                /// For each group, if have sex (and optionally pregnancyStatus) or isSmoker, check that we have all combinations, otherwise fail early
+//                guard values.hasAllParamCombosWithoutAgeRange else { return false }
+//            }
+//
+//            let ageRanges = grouped.map { $0.key }
+//            return ageRanges.spansZeroToInfinity
+//        }
+//        
+//        return if !containsAgeRange {
+//            hasAllParamCombosWithoutAgeRange
+//        } else {
+//            withAgeRange
+//        }
+//        
+//        //TODO: Change how we do this:
+//        /// -[ ] Write a function that adds a value to the array of values, doing the following checks
+//        /// -[ ] If there is an age range—make sure the range does not overlap with one that we already have, unless its providing a param that does not exist (ie different sex, smoking or pregnancy status)
+//        /// -[ ] ?
+//        /// -[ ] If any of these checks fail, don’t add the value and return an error that we present to the user, as a validation check for ourselves when entering these
+//        /// -[ ] RDIForm.ValueForm should allow turning off sex and smoker (when specifying infants, for example)
+//    }
+    
+//    var isValid: Bool {
+//        /// Ensure age range is in all if specified
+//        if containsAgeRange {
+//            guard allSatisfy({ $0.ageRange != nil  }) else { return false }
+//        }
+//        return true
+//    }
 }

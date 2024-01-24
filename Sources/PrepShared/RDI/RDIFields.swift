@@ -44,7 +44,7 @@ public extension RDIFields {
         unit = rdi.unit
         type = rdi.type
         url = rdi.url ?? ""
-        formValues = rdi.values.map { .init(value: $0, isValid: true) }
+        formValues = rdi.values.map { .init(value: $0) }
         source = rdi.source
     }
 }
