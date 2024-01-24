@@ -3,7 +3,7 @@ import SwiftUIIntrospect
 
 public struct IntTextField: View {
     
-    @Binding var intInput: DoubleInput
+    @Binding var intInput: IntInput
     @Binding var hasFocused: Bool
     let placeholder: String
     let delayFocus: Bool
@@ -13,7 +13,7 @@ public struct IntTextField: View {
     @FocusState var focused: Bool
 
     public init(
-        intInput: Binding<DoubleInput>,
+        intInput: Binding<IntInput>,
         placeholder: String = "",
         hasFocused: Binding<Bool>,
         delayFocus: Bool = false,
