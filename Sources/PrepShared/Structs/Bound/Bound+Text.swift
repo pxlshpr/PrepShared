@@ -3,11 +3,14 @@ import SwiftSugar
 
 //public let DefaultGoalBoundFormatter: ((Double) -> (String)) = { "\($0.cleanAmount)" }
 
+//let DefaultBoundNumberFont: Font = .system(.body, design: .monospaced, weight: .bold)
+public let DefaultBoundNumberFont: Font = .system(.body)
+
 /// -[ ] In Prep, make sure we're placing it in an HStack to account for removing the maxWidth frame modifier
 public extension Bound {
     func text(
-        foregroundStyle: some ShapeStyle = Color(.secondaryLabel),
-        font: Font = .system(.body, design: .monospaced, weight: .bold),
+        foregroundStyle: some ShapeStyle = Color(.label),
+        font: Font = DefaultBoundNumberFont,
         formatter: (Double) -> (String) = { "\($0.cleanAmount)" },
         allowZeroLowerBound: Bool = false,
         unitString: String? = nil,
