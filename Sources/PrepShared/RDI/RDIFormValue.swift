@@ -240,10 +240,8 @@ public extension Array where Element == RDIValue {
         switch result {
         case .success(let combos):
             for params in combos {
-                if params == RDIParams(age: 9, sex: .male, pregnancyStatus: .notSet, isSmoker: true) {
-                    print("We here")
-                }
                 guard compatibleValue(for: params) != nil else {
+                    print("Couldn't get compatible values for: \(params)")
                     return .incompleteValues
                 }
             }
