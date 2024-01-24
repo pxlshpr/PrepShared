@@ -7,10 +7,34 @@ import SwiftSugar
 public let DefaultBoundNumberFont: Font = .system(.body)
 
 /// -[ ] In Prep, make sure we're placing it in an HStack to account for removing the maxWidth frame modifier
+
+public enum BoundNameStyle {
+    case minMax
+    case upToFrom
+    case symbols
+    
+    var upperString: String {
+        switch self {
+        case .minMax:   "Maximum"
+        case .upToFrom: "Up to"
+        case .symbols:  "≤"
+        }
+    }
+    
+    var lowerString: String {
+        switch self {
+        case .minMax:   "Minimum"
+        case .upToFrom: "From"
+        case .symbols:  "≥"
+        }
+    }
+}
+
 public extension Bound {
     func text(
         foregroundStyle: some ShapeStyle = Color(.label),
         font: Font = DefaultBoundNumberFont,
+        style: BoundNameStyle = .minMax,
         formatter: (Double) -> (String) = { "\($0.cleanAmount)" },
         allowZeroLowerBound: Bool = false,
         unitString: String? = nil,
@@ -51,15 +75,15 @@ public extension Bound {
         
         var maximum: some View {
             Group {
-                text("Maximum")
+                text(style.upperString)
                 upperText()
             }
         }
         
-        return HStack {
+        return HStack(spacing: 4) {
             switch type {
             case .lower:
-                text("Minimum")
+                text(style.lowerString)
                 lowerText()
             case .upper:
                 maximum
@@ -75,10 +99,31 @@ public extension Bound {
                 }
             case .none:
                 emptyView
-//                EmptyView()
-//                DisabledLabel()
             }
         }
-//        .frame(maxWidth: .infinity, alignment: .trailing)
+    }
+}
+
+func ageFormatter(_ age: Double) -> String {
+    switch age {
+    case 0.nextUp...1:  "\(age.cleanAmount)"
+    default:            "\(Int(age))"
+    }
+}
+
+#Preview {
+    NavigationView {
+        Form {
+            ForEach([Bound(upper: 19), Bound(lower: 19), Bound(lower: 14, upper: 19)], id: \.self) {
+                $0.text(
+                    foregroundStyle: Color(.label),
+                    font: .system(.body),
+                    style: .symbols,
+                    formatter: ageFormatter,
+                    allowZeroLowerBound: true,
+                    unitString: "years"
+                )
+            }
+        }
     }
 }
