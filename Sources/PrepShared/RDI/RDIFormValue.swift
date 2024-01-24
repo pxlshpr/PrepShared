@@ -135,11 +135,16 @@ extension Array where Element == RDIValue {
     }
     
     var containsSmokingStatus: Bool {
-        contains { $0.isSmoker != nil }
+        contains {
+            $0.isSmoker == true
+        }
     }
     
     var containsPregnancyStatus: Bool {
-        contains { $0.pregnancyStatus != nil }
+        contains {
+            $0.pregnancyStatus != nil
+            && $0.pregnancyStatus != .notSet
+        }
     }
     
     var hasAllSmokingStatusCombos: Bool {
