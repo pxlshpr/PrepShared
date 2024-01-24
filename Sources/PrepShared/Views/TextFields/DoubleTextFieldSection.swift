@@ -54,6 +54,4 @@ public struct DoubleTextFieldSection: View {
             Text(footerString)
         }
     }
-
 }
-
