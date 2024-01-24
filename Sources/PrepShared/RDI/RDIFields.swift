@@ -34,7 +34,9 @@ public struct RDIFields: Hashable, Equatable {
 public extension RDIFields {
     
     var canBeSaved: Bool {
-        micro != nil
+        source != nil
+        && !url.isEmpty
+        && micro != nil
         && !formValues.isEmpty
         && formValues.allSatisfy({ $0.isValid })
     }
@@ -43,7 +45,7 @@ public extension RDIFields {
         micro = rdi.micro
         unit = rdi.unit
         type = rdi.type
-        url = rdi.url ?? ""
+        url = rdi.url
         formValues = rdi.values.map { .init(value: $0) }
         source = rdi.source
     }
