@@ -1,6 +1,9 @@
 import Foundation
 
 public extension Notification.Name {
+    
+    static var cloudKitImportCompleted: Notification.Name { .init("cloudKitImportCompleted") }
+
     static var didUpdateFood: Notification.Name { return .init("didUpdateFood") }
     static var didUpdateWord: Notification.Name { return .init("didUpdateWord") }
     static var didUpdateRDISource: Notification.Name { return .init("didUpdateRDISource") }
