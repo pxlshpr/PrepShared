@@ -45,6 +45,11 @@ public extension Array where Element == RDIValue {
             if allSatisfy({ $0.isSmoker == false || $0.isSmoker == nil }) {
                 self[index].isSmoker = nil
             }
+            
+            /// If all pregnancy statuses are nil, notSet or notPregnantOrLactating, set the all to nil
+            if allSatisfy({ $0.pregnancyStatus == nil || $0.pregnancyStatus == .notSet || $0.pregnancyStatus == .notPregnantOrLactating }) {
+                self[index].pregnancyStatus = nil
+            }
         }
     }
 
