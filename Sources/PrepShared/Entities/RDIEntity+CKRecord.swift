@@ -61,7 +61,7 @@ public extension RDIEntity {
     
     var asCKRecord: CKRecord {
         
-        let record = CKRecord(recordType: RecordType.searchWord.name)
+        let record = CKRecord(recordType: RecordType.rdi.name)
 
         if let id { record[.id] = id.uuidString as CKRecordValue }
         if let createdAt { record[.createdAt] = createdAt as CKRecordValue }

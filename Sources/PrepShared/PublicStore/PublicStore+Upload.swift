@@ -4,7 +4,7 @@ import CloudKit
 import OSLog
 import SwiftSugar
 
-private let UploadPollInterval: TimeInterval = 3
+private let UploadPollIntervalInSeconds: TimeInterval = 3
 
 extension PublicStore {
     
@@ -22,7 +22,7 @@ extension PublicStore {
                 /// Only continue polling if we haven't completed the update (in case it failed from the network being lost etc)
                 guard !didComplete else { break }
                 
-                try await sleepTask(UploadPollInterval, tolerance: 1)
+                try await sleepTask(UploadPollIntervalInSeconds, tolerance: 1)
                 try Task.checkCancellation()
             }
         }
