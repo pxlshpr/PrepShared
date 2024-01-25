@@ -101,7 +101,22 @@ private let ValidateTestCases: [(RDI, RDIError?)] = [
             url: "https://ods.od.nih.gov/factsheets/VitaminC-Consumer/"
         ), .value(.duplicate)
     ),
+
+    (
+        RDI(
+            micro: .dietaryFiber,
+            unit: .g,
+            type: .fixed,
+            values: [
+                v(b(21, 25), sex: .female, smoker: false),
+                v(b(30, 38), sex: .male, smoker: false),
+            ],
+            source: .init(name: "NIH"),
+            url: "https://ods.od.nih.gov/factsheets/VitaminC-Consumer/"
+        ), nil
+    ),
     
+
     (
         RDI(
             micro: .vitaminC_ascorbicAcid,

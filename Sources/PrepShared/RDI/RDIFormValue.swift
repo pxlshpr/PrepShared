@@ -41,12 +41,10 @@ public extension Array where Element == RDIValue {
                 }
             }
             
-            /// If we contain any smoking status, convert all the nil ones to be `false`
-//            if containsSmokingStatus {
-//                if value.isSmoker == nil {
-//                    self[index].isSmoker = false
-//                }
-//            }
+            /// If all smoking statuses are false, set them all to nil
+            if allSatisfy({ $0.isSmoker == false || $0.isSmoker == nil }) {
+                self[index].isSmoker = nil
+            }
         }
     }
 
