@@ -39,4 +39,19 @@ public struct RDI: Codable, Hashable, Equatable {
         self.url = url
         self.source = source
     }
+    
+    public init(from entity: RDIEntity) {
+        self.init(
+            id: entity.id!,
+            createdAt: entity.createdAt!,
+            updatedAt: entity.updatedAt!,
+            isTrashed: entity.isTrashed,
+            micro: entity.micro,
+            unit: entity.unit,
+            type: entity.type,
+            values: entity.values,
+            source: entity.source!,
+            url: entity.url!
+        )
+    }
 }
