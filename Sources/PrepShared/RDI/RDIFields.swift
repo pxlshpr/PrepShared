@@ -18,7 +18,7 @@ public struct RDIFields: Hashable, Equatable {
         source: RDISource? = nil
     ) {
         self.micro = micro
-        self.unit = unit ?? .mg
+        self.unit = unit ?? micro.defaultUnit
         self.type = type
         self.url = url
         self.formValues = formValues
