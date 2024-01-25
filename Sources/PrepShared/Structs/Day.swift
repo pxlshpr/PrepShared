@@ -14,7 +14,7 @@ public struct Day: Codable, Hashable {
     public var meals: [Meal]
     
     public var plan: Plan?
-    public var healthDetails: HealthDetails?
+    public var healthDetails: HealthDetails
     
     public var dietaryEnergyPoint: DietaryEnergyPoint?
 
@@ -49,7 +49,7 @@ public struct Day: Codable, Hashable {
         self.micros = micros
         self.meals = meals
         self.plan = plan
-        self.healthDetails = healthDetails
+        self.healthDetails = healthDetails ?? HealthDetails(date: Date(fromDateString: dateString)!)
         self.dietaryEnergyPoint = dietaryEnergyPoint
         self.useDailyValues = useDailyValues
         self.dailyValues = dailyValues
@@ -61,7 +61,7 @@ public extension Day {
         energy
     }
     
-    var date: Date? {
-        Date(fromDateString: dateString)
+    var date: Date {
+        Date(fromDateString: dateString)!
     }
 }
