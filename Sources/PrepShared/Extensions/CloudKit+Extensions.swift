@@ -155,13 +155,18 @@ public extension CKDatabase {
 }
 
 public extension NSPredicate {
+    
     static func recordsToDownload(for recordType: RecordType) -> NSPredicate {
+    
         if let latestModificationDate = recordType.latestModificationDate {
             /// Always fetch records 1/1000 of a second after the latest one to ensure we don't keep fetching that one
             let date = latestModificationDate.addingTimeInterval(0.001)
+            
             PublicStore.logger.debug("Fetching \(recordType.name) records modified after: \(date)")
+            
             let predicate = NSPredicate(format: "modificationDate > %@", date as NSDate)
             return predicate
+            
         } else {
             PublicStore.logger.debug("Fetching all \(recordType.name) records")
             return NSPredicate(format: "TRUEPREDICATE")

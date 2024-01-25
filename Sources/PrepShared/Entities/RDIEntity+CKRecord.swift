@@ -37,10 +37,12 @@ public extension RDIEntity {
         self.micro = record.rdiMicro!
         self.unit = record.rdiUnit!
         self.type = record.rdiType!
-        self.url = record.url!
+
         self.values = record.rdiValues!
+
+        self.url = record.url!
         
-        /// Every RDI requires a source, so this will fail if it doesn't exist
+        /// Every RDI requires a source, so this will fail if it doesn't already exist
         let sourceID = UUID(uuidString: record.rdiSourceID!)!
         let rdiSourceEntity = RDISourceEntity.entity(in: context, with: sourceID)!
         self.rdiSourceEntity = rdiSourceEntity
@@ -69,8 +71,13 @@ public extension RDIEntity {
         record[.rdiMicroValue] = microValue as CKRecordValue
         record[.rdiUnitValue] = unitValue as CKRecordValue
         if let typeData { record[.rdiTypeData] = typeData as CKRecordValue }
-        if let url { record[.url] = url as CKRecordValue }
+
         if let valuesData { record[.rdiValuesData] = valuesData as CKRecordValue }
+
+        if let url { record[.url] = url as CKRecordValue }
+        if let sourceID = rdiSourceEntity?.id?.uuidString {
+            record[.rdiSourceID] = sourceID as CKRecordValue
+        }
         
         return record
     }
