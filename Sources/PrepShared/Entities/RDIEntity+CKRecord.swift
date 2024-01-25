@@ -14,9 +14,7 @@ public extension RDIEntity {
 
 public extension RDIEntity {
     func fill(fields: RDIFields, rdiSourceEntity: RDISourceEntity) {
-        guard let micro = fields.micro else { return }
-        
-        self.micro = micro
+        self.micro = fields.micro
         self.unit = fields.unit
         self.type = fields.type
         
