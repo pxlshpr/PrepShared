@@ -73,14 +73,14 @@ public extension RDIEntity {
 }
 
 public extension RDIEntity {
-    convenience init(context: NSManagedObjectContext, fields: RDIFields) {
+    convenience init(context: NSManagedObjectContext, fields: RDIFields, rdiSourceEntity: RDISourceEntity) {
         self.init(context: context)
         self.id = UUID()
         self.createdAt = Date.now
         self.updatedAt = Date.now
         self.isTrashed = false
         self.isSynced = false
-        self.fill(fields: fields)
+        self.fill(fields: fields, rdiSourceEntity: rdiSourceEntity)
     }
 }
 

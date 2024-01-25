@@ -13,16 +13,17 @@ public extension RDIEntity {
 }
 
 public extension RDIEntity {
-    func fill(fields: RDIFields) {
+    func fill(fields: RDIFields, rdiSourceEntity: RDISourceEntity) {
         guard let micro = fields.micro else { return }
         
         self.micro = micro
         self.unit = unit
         self.type = fields.type
-        self.url = fields.url
+        
         self.values = fields.formValues.map { $0.value }
-        //TODO: Handle source!
-//        self.source = fields.source
+
+        self.rdiSourceEntity = rdiSourceEntity
+        self.url = fields.url
     }
 }
 
