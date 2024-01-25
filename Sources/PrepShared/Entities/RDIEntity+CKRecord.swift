@@ -17,7 +17,7 @@ public extension RDIEntity {
         guard let micro = fields.micro else { return }
         
         self.micro = micro
-        self.unit = unit
+        self.unit = fields.unit
         self.type = fields.type
         
         self.values = fields.formValues.map { $0.value }
